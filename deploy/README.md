@@ -33,8 +33,19 @@ card; sem ela e sem `SPACE_HOST`, o card mantém `localhost`).
 | `VITE_AGENT_URL` | `https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent` |
 | `VITE_MERCHANT_TRIGGER_URL` | `https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/merchant` |
 | `VITE_FLOW` | `card` |
+| `VITE_AUTO_POLL_MS` | opcional; padrão `60000` |
+
+`VITE_AUTO_POLL_MS` define, em milissegundos, o intervalo do "auto-poll
+fallback" de `code/web-client/src/hooks/useChat.ts`: enquanto o monitoramento
+está ativo, o navegador envia `check_product_now` ao agente nesse intervalo
+(cada envio é uma chamada ao LLM). `0` desliga esse envio. Valor ausente,
+vazio, negativo ou não numérico usa `60000`. A consulta a `/merchant/state` a
+cada 500 ms, que dispara `check_product_now` quando o estado do item muda, não
+depende dessa variável.
 
 As variáveis `VITE_*` entram no bundle do navegador: não coloque segredos nelas.
+São lidas no build; depois de alterar uma delas no Vercel, é preciso um novo
+deploy.
 
 ## Persistência no Supabase
 
@@ -59,6 +70,11 @@ Limitações conhecidas:
   homologação com dados fictícios; não usar este desenho com chaves reais.
 - Sessões do ADK (histórico de conversa) continuam em memória e são perdidas
   no restart do Space.
+- O monitoramento de preço depende da aba do web client aberta no navegador:
+  a consulta a `/merchant/state` (500 ms) e o auto-poll (`VITE_AUTO_POLL_MS`)
+  rodam no navegador. Com a aba fechada, o agente não verifica o produto e a
+  compra não acontece. Navegadores podem reduzir a frequência de timers em
+  abas em segundo plano.
 - O Space é reconstruído pelo workflow `.github/workflows/hf-space-rebuild.yml`
   em push no `homolog-deploy` que altere o backend, se o secret `HF_TOKEN`
   estiver cadastrado no GitHub. Sem o secret: *Settings → Factory rebuild* no

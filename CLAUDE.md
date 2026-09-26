@@ -122,6 +122,13 @@ Detalhes dos arquivos de deploy:
   - `VITE_AGENT_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent`
   - `VITE_MERCHANT_TRIGGER_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/merchant`
   - `VITE_FLOW=card`
+  - `VITE_AUTO_POLL_MS` (opcional, não cadastrada; padrão `60000`): intervalo
+    em ms do "auto-poll fallback" de `src/hooks/useChat.ts`, que envia
+    `check_product_now` ao agente (uma chamada ao LLM por envio) enquanto o
+    monitoramento está ativo. `0` desliga. Valor inválido usa `60000`. Lida em
+    `src/config.ts`. A consulta de 500 ms a `/merchant/state` não depende dela.
+    Até esta mudança o intervalo era fixo em 15000 ms.
+  - Variáveis `VITE_*` são lidas no build: alterar no Vercel exige novo deploy.
 - Deployment Protection: "Standard Protection" (padrão). Verificado que a URL
   de produção abre sem login (título da página: "Shopping Agent — AP2
   Human-Not-Present"). As URLs de preview exigem login do Vercel.
@@ -264,6 +271,14 @@ As sessões de conversa ficam em memória e são perdidas no restart.
 `get_fast_api_app` aceita `session_service_uri` (`postgresql://...`). Usar o
 Supabase exige a connection string com a senha do banco (secret) e um driver
 Postgres. Não implementado.
+
+### Limitação — monitoramento depende da aba aberta
+
+A consulta a `/merchant/state` (500 ms) e o auto-poll (`VITE_AUTO_POLL_MS`)
+rodam no navegador (`code/web-client/src/hooks/useChat.ts`). Com a aba do web
+client fechada, nada aciona o agente e a compra não acontece. Navegadores podem
+reduzir a frequência de timers em abas em segundo plano. Não há plano de
+correção definido.
 
 ### P7 — Rede do ambiente "AP2-Google"
 
