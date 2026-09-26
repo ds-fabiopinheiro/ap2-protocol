@@ -35,6 +35,7 @@ davecgh
 dcql
 Dcql
 DCQL
+dedup
 deviceauth
 Dfile
 dmypy
@@ -164,6 +165,7 @@ spyproject
 stablecoins
 stdr
 stretchr
+Sublabel
 superfences
 Truelayer
 Trulioo

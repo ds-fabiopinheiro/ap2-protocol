@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import {A2AClient} from '../a2aClient';
-import {AGENT_URL, MERCHANT_TRIGGER_URL} from '../config';
+import {AGENT_URL, AUTO_POLL_MS, MERCHANT_TRIGGER_URL} from '../config';
 import type {ChatMessage, InventoryMatch, InventoryOptionsArtifact, MandateApprovalData, MandateChainsFetched, MandateEntry, MandatesSigned, MonitoringStatus, OutgoingDataPayload, Part, ToolCallArtifact} from '../types';
 import {isFunctionResponsePart, isToolCallArtifact} from '../types';
 import {deriveMandateEntries} from '../utils/mandateEntries';
@@ -462,10 +462,13 @@ export function useChat() {
         loading, monitoringData, hasPurchaseComplete, sendToAgent, pendingTaskId
       ]);
 
-  // Auto-poll fallback (15s)
+  // Auto-poll fallback (AUTO_POLL_MS; 0 disables it)
   useEffect(
       () => {
-        if (!isMonitoring || hasPurchaseComplete || !pendingTaskId) return;
+        if (AUTO_POLL_MS <= 0 || !isMonitoring || hasPurchaseComplete ||
+            !pendingTaskId) {
+          return;
+        }
         const interval = setInterval(() => {
           if (!loadingRef.current) {
             const msg = monitoringData?.item_id != null &&
@@ -483,7 +486,7 @@ export function useChat() {
                 'Check price now';
             sendToAgent(msg, pendingTaskId);
           }
-        }, 15000);
+        }, AUTO_POLL_MS);
         return () => clearInterval(interval);
       },
       [
