@@ -170,7 +170,26 @@ _CONSENT_INSTRUCTION = (_PROMPTS_DIR / "consent_agent.md").read_text()
 _MONITORING_INSTRUCTION = (_PROMPTS_DIR / "monitoring_agent.md").read_text()
 _PURCHASE_INSTRUCTION = (_PROMPTS_DIR / "purchase_agent.md").read_text()
 
-_model = os.environ.get("AGENT_MODEL", "gemini-3.1-flash-lite-preview")
+def _resolve_model(model_name: str):
+  """Returns the model for the ADK agents.
+
+  Plain Gemini names (no "/") are passed as strings and use the native
+  Gemini client (GOOGLE_API_KEY). Names with a provider prefix, e.g.
+  "vercel_ai_gateway/google/gemini-3.1-flash-lite-preview" or
+  "anthropic/claude-...", are routed through LiteLLM, which reads the
+  provider key from its own environment variable
+  (VERCEL_AI_GATEWAY_API_KEY, ANTHROPIC_API_KEY, ...).
+  """
+  if "/" not in model_name:
+    return model_name
+  from google.adk.models.lite_llm import LiteLlm  # pylint: disable=g-import-not-at-top
+
+  return LiteLlm(model=model_name)
+
+
+_model_name = os.environ.get("AGENT_MODEL", "gemini-3.1-flash-lite-preview")
+_shopping_logger.info("AGENT_MODEL=%s", _model_name)
+_model = _resolve_model(_model_name)
 
 purchase_agent = Agent(
     name="purchase_agent",
