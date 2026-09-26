@@ -21,7 +21,7 @@ Todo o trabalho está no branch **`homolog-deploy`**. Não altere o `main`.
 
 | Plataforma | Recurso | Identificadores |
 |---|---|---|
-| GitHub | branch `homolog-deploy` | 9 commits acima do `main` (lista na seção 4 e P5) |
+| GitHub | branch `homolog-deploy` | commits listados na seção 4 e na P5; histórico completo com `git log --oneline main..homolog-deploy` |
 | Vercel | projeto `ap2-homolog-frontend` | team `fabiopinheiro-projects` (`team_TFJpulVK8Dcufy5SIecwChUh`), projeto `prj_ndPs9jLlb7NFC3agQqe4DoUEiz1H`, URL https://ap2-homolog-frontend.vercel.app |
 | Hugging Face | Space `ds-fabiopinheiro/ap2-homolog-backend` | SDK Docker, hardware CPU Basic (gratuito), público, URL https://ds-fabiopinheiro-ap2-homolog-backend.hf.space |
 | Supabase | projeto `ap2-homolog-db` | org `xrusgxpywgadhhgalcfs` (plano Pro), ref `vpermplrecflxtitndgd`, região `us-east-2` (Ohio), compute Micro, URL https://vpermplrecflxtitndgd.supabase.co |
@@ -212,22 +212,38 @@ Opcional: `VERCEL_AI_GATEWAY_API_KEY`, se `AGENT_MODEL` passar a usar
 6. Se o LLM não seguir o fluxo consent → monitoring → purchase, registrar o
    log do `shopping-agent` antes de mudar prompts.
 
-### P3 — URL do agent card
+### P3 — URL do agent card (código concluído; falta validar no Space)
 
-`code/samples/python/src/roles/shopping_agent_v2/shopping_agent/agent.json`
-tem `"url": "http://localhost:8080/a2a/shopping_agent"`. O web client não usa
-esse campo, mas clientes A2A que leem o card falham. Correção sugerida: em
-`start.sh`, antes de subir o agente, substituir a URL por uma variável
-`AP2_PUBLIC_BASE_URL` (ex.: `https://ds-fabiopinheiro-ap2-homolog-backend.hf.space`),
-sem alterar o comportamento local.
+`agent.json` do `shopping_agent_v2` tem
+`"url": "http://localhost:8080/a2a/shopping_agent"`. O `start.sh`, antes de
+subir os serviços, reescreve esse campo (com Python/`json`) para
+`$AP2_PUBLIC_BASE_URL/a2a/shopping_agent`. `AP2_PUBLIC_BASE_URL` tem como
+padrão `https://$SPACE_HOST` (variável definida pelo HF Spaces no container).
+Sem nenhuma das duas, o arquivo não é alterado. A reescrita muda a formatação
+do JSON (arrays em várias linhas) só dentro do container; os valores são os
+mesmos.
 
-### P4 — Rebuild automático do Space
+Teste local: com `SPACE_HOST=exemplo.hf.space`, o card em `:7860` retornou
+`https://exemplo.hf.space/a2a/shopping_agent`; sem a variável, retornou
+`http://localhost:8080/a2a/shopping_agent` e o arquivo não foi alterado.
 
-Hoje o Space só reconstrói com push no repositório do Space ou "Factory
-rebuild" manual. Opção: GitHub Action em `homolog-deploy` que chama
-`HfApi().restart_space("ds-fabiopinheiro/ap2-homolog-backend", factory_reboot=True)`
-com um secret `HF_TOKEN` (write) no GitHub. Requer autorização do usuário para
-criar o token e o secret.
+Falta: Factory rebuild do Space e conferir
+`https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent/.well-known/agent-card.json`
+(esperado: `"url": "https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent"`).
+
+### P4 — Rebuild automático do Space (workflow criado; depende do usuário)
+
+`.github/workflows/hf-space-rebuild.yml`: roda em push no `homolog-deploy`
+que altere `code/samples/python/**`, `code/sdk/**`, `deploy/hf-space/**` ou
+`pyproject.toml`, e manualmente (`workflow_dispatch`). Instala
+`huggingface_hub` e chama
+`HfApi(token=HF_TOKEN).restart_space("ds-fabiopinheiro/ap2-homolog-backend", factory_reboot=True)`.
+Falha com mensagem explícita se o secret não existir.
+
+Falta (ação do usuário): criar token fine-grained do HF com escrita só no
+Space, cadastrar como secret `HF_TOKEN` em GitHub → Settings → Secrets and
+variables → Actions, e confirmar que o GitHub Actions está habilitado no fork
+(aba Actions). Depois, disparar o workflow manualmente uma vez para validar.
 
 ### P5 — Proteção contra uso indevido (parcialmente feito)
 
@@ -268,8 +284,9 @@ peça ao usuário para liberar `*.hf.space`, `*.supabase.co`, `*.vercel.app` e
 - Não religar "Automatic branching" do Supabase nem trocar o compute sem
   autorização (custo).
 - Não commitar `uv.lock`.
-- Depois de mudar código do backend, é preciso "Factory rebuild" no Space
-  (até P4 ser feito).
+- Depois de mudar código do backend, é preciso "Factory rebuild" no Space.
+  Com o secret `HF_TOKEN` cadastrado (P4), o workflow `hf-space-rebuild.yml`
+  faz isso no push; sem o secret, o rebuild continua manual.
 
 ## 8. Teste local rápido
 

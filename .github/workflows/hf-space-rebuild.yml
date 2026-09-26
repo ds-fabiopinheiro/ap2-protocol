@@ -1,0 +1,47 @@
+name: HF Space rebuild
+
+# Reconstrói o Space ds-fabiopinheiro/ap2-homolog-backend quando o código do
+# backend muda no branch homolog-deploy. Requer o secret HF_TOKEN (token
+# fine-grained do Hugging Face com escrita só nesse Space).
+
+on:
+  push:
+    branches: [homolog-deploy]
+    paths:
+      - "code/samples/python/**"
+      - "code/sdk/**"
+      - "deploy/hf-space/**"
+      - "pyproject.toml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hf-space-rebuild
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install huggingface_hub
+        run: pip install --quiet huggingface_hub
+      - name: Factory rebuild
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import os
+          from huggingface_hub import HfApi
+
+          if not os.environ.get("HF_TOKEN"):
+              raise SystemExit("HF_TOKEN secret is not set")
+          runtime = HfApi(token=os.environ["HF_TOKEN"]).restart_space(
+              "ds-fabiopinheiro/ap2-homolog-backend", factory_reboot=True
+          )
+          print(f"Space stage: {runtime.stage}")
+          EOF

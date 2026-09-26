@@ -22,7 +22,9 @@ Cenário publicado: `code/samples/python/scenarios/a2a/human-not-present/cards`
 | `AGENT_MODEL` | Variable | `gemini-3.1-flash-lite-preview` ou `vercel_ai_gateway/google/gemini-3.1-flash-lite-preview` |
 
 Opcionais (já têm padrão em `hf-space/start.sh`): `FLOW=card`,
-`TEMP_DB_DIR=/tmp/ap2/temp-db`, `LOGS_DIR=/tmp/ap2/logs`, `AP2_SYNC_INTERVAL=2`.
+`TEMP_DB_DIR=/tmp/ap2/temp-db`, `LOGS_DIR=/tmp/ap2/logs`, `AP2_SYNC_INTERVAL=2`,
+`AP2_PUBLIC_BASE_URL=https://$SPACE_HOST` (URL gravada no campo `url` do agent
+card; sem ela e sem `SPACE_HOST`, o card mantém `localhost`).
 
 ### Vercel (Project → Settings → Environment Variables)
 
@@ -57,8 +59,10 @@ Limitações conhecidas:
   homologação com dados fictícios; não usar este desenho com chaves reais.
 - Sessões do ADK (histórico de conversa) continuam em memória e são perdidas
   no restart do Space.
-- O Space não reconstrói sozinho quando o GitHub muda: é preciso
-  *Settings → Factory rebuild* no HF (ou um push no repositório do Space).
+- O Space é reconstruído pelo workflow `.github/workflows/hf-space-rebuild.yml`
+  em push no `homolog-deploy` que altere o backend, se o secret `HF_TOKEN`
+  estiver cadastrado no GitHub. Sem o secret: *Settings → Factory rebuild* no
+  HF (ou um push no repositório do Space).
 - Os endpoints `/merchant/*` e `/a2a/*` são públicos (o demo não tem login).
   Qualquer pessoa com o link pode disparar o "price drop" e consumir o LLM.
   O nginx limita as requisições (resposta 429 em JSON):

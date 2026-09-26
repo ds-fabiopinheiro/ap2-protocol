@@ -31,6 +31,25 @@ fi
 # 1) Restaura chaves e estado salvos no Supabase antes de qualquer serviço subir.
 "$PY" "$DEPLOY_DIR/sync_supabase.py" restore
 
+# 1b) URL pública no agent card. O HF Spaces define SPACE_HOST no container;
+#     sem AP2_PUBLIC_BASE_URL nem SPACE_HOST o agent.json fica como está (localhost).
+if [ -n "${SPACE_HOST:-}" ]; then
+  export AP2_PUBLIC_BASE_URL="${AP2_PUBLIC_BASE_URL:-https://$SPACE_HOST}"
+fi
+if [ -n "${AP2_PUBLIC_BASE_URL:-}" ]; then
+  "$PY" - "$ROLES_DIR/shopping_agent_v2/shopping_agent/agent.json" "${AP2_PUBLIC_BASE_URL%/}/a2a/shopping_agent" <<'EOF'
+import json, sys
+path, url = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as f:
+  card = json.load(f)
+card["url"] = url
+with open(path, "w", encoding="utf-8") as f:
+  json.dump(card, f, indent=2, ensure_ascii=False)
+  f.write("\n")
+EOF
+  echo "[start] agent card url set to ${AP2_PUBLIC_BASE_URL%/}/a2a/shopping_agent"
+fi
+
 pids=()
 shutdown() {
   echo "[start] stopping services..."
