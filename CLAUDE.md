@@ -21,7 +21,7 @@ Todo o trabalho está no branch **`homolog-deploy`**. Não altere o `main`.
 
 | Plataforma | Recurso | Identificadores |
 |---|---|---|
-| GitHub | branch `homolog-deploy` | 7 commits acima do `main` (lista na seção 4) |
+| GitHub | branch `homolog-deploy` | 9 commits acima do `main` (lista na seção 4 e P5) |
 | Vercel | projeto `ap2-homolog-frontend` | team `fabiopinheiro-projects` (`team_TFJpulVK8Dcufy5SIecwChUh`), projeto `prj_ndPs9jLlb7NFC3agQqe4DoUEiz1H`, URL https://ap2-homolog-frontend.vercel.app |
 | Hugging Face | Space `ds-fabiopinheiro/ap2-homolog-backend` | SDK Docker, hardware CPU Basic (gratuito), público, URL https://ds-fabiopinheiro-ap2-homolog-backend.hf.space |
 | Supabase | projeto `ap2-homolog-db` | org `xrusgxpywgadhhgalcfs` (plano Pro), ref `vpermplrecflxtitndgd`, região `us-east-2` (Ohio), compute Micro, URL https://vpermplrecflxtitndgd.supabase.co |
@@ -134,7 +134,10 @@ Detalhes dos arquivos de deploy:
 - Arquivos no repositório do Space: `Dockerfile` (cópia de
   `deploy/hf-space/Dockerfile`) e `README.md` (cópia de `SPACE_README.md`, com
   `sdk: docker` e `app_port: 7860`).
-- Visibilidade: público (foi criado como privado por engano e alterado).
+- Visibilidade: **Protected** (app público pela URL; arquivos do repositório do
+  Space retornam 401 para quem não é dono). Private não serve: exigiria login
+  no HF para chamar a API, e o frontend no Vercel é acessado por visitantes
+  anônimos.
 - Variáveis públicas cadastradas: `SUPABASE_URL`, `AGENT_MODEL=gemini-3.1-flash-lite-preview`.
 - Estado verificado: build concluído, container rodando, agent card
   respondendo publicamente em `/a2a/shopping_agent/.well-known/agent-card.json`.
@@ -166,6 +169,17 @@ Executados no container da sessão original (sem Docker, sem chave de LLM):
 sincronismo contra o Supabase real (falta `SUPABASE_SECRET_KEY` no Space).
 
 ## 6. Pendências, em ordem
+
+### P1 e P2 — CONCLUÍDAS em 26/09/2026 01:36–01:41 UTC
+
+Secrets cadastrados pelo usuário. Teste feito pelo link do Vercel: preview do
+produto → assinatura dos open mandates na Trusted Surface → monitoramento →
+price drop (`price=199&stock=10`) → compra autônoma concluída (US$ 199,00,
+Card •••4242). Supabase: 4 linhas em `ap2_mandates` (open checkout, open
+payment, closed payment, closed checkout) e 18 arquivos em `ap2_state_files`.
+Após "Restart space": evento `restore` com 18 arquivos e nenhuma chave de
+assinatura regravada (as chaves continuaram as mesmas). O texto abaixo fica
+como referência para testes futuros.
 
 ### P1 — Secrets no HF Space (ação do usuário, não do Claude)
 
@@ -215,12 +229,18 @@ rebuild" manual. Opção: GitHub Action em `homolog-deploy` que chama
 com um secret `HF_TOKEN` (write) no GitHub. Requer autorização do usuário para
 criar o token e o secret.
 
-### P5 — Proteção contra uso indevido
+### P5 — Proteção contra uso indevido (parcialmente feito)
 
-`/a2a/*` e `/merchant/*` são públicos e sem autenticação. Qualquer pessoa com
-o link consome a cota do LLM. Opções: limite de gasto na chave do modelo,
-`limit_req` no nginx, ou restringir CORS/origem ao domínio do Vercel. Decidir
-com o usuário.
+Feito (commits `9876609` e `c1bd661`): limite de requisições no nginx.
+`/a2a/*` 20/min por visitante (rajada 10) e 120/min no total (rajada 30);
+`/merchant/*` 5/s por visitante (rajada 20); `OPTIONS` não conta; resposta
+429 em JSON com CORS. O visitante é o último IP do `X-Forwarded-For`; nos logs
+do Space o HF envia um único IP público do cliente nesse header (verificado).
+Teste em produção: 35 requisições simultâneas a `/merchant/state` → 21×200 e
+14×429.
+
+Falta: limite de gasto na chave do modelo (ação do usuário) e, se necessário,
+restringir CORS/origem ao domínio do Vercel.
 
 ### P6 — Sessões do ADK
 
