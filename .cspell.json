@@ -10,7 +10,8 @@
     ".vscode/**",
     ".cspell.json",
     "**/go.sum",
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "deploy/**"
   ],
   "dictionaryDefinitions": [
     {
