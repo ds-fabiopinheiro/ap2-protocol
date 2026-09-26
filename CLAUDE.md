@@ -118,11 +118,13 @@ Detalhes dos arquivos de deploy:
 
 - Root directory `code/web-client`, framework Vite, Node 24.x.
 - Branch de produção: `homolog-deploy` (Settings → Environments → Production).
-- Variáveis (production, preview, development; tipo plain):
+- Variáveis (production, preview, development; tipo plain, exceto onde indicado):
   - `VITE_AGENT_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent`
   - `VITE_MERCHANT_TRIGGER_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/merchant`
   - `VITE_FLOW=card`
-  - `VITE_AUTO_POLL_MS` (opcional, não cadastrada; padrão `60000`): intervalo
+  - `VITE_AUTO_POLL_MS=60000` (tipo Config, cadastrada em Production, Preview
+    e Development; o bundle de produção contém `60000`; padrão no código
+    também `60000`): intervalo
     em ms do "auto-poll fallback" de `src/hooks/useChat.ts`, que envia
     `check_product_now` ao agente (uma chamada ao LLM por envio) enquanto o
     monitoramento está ativo. `0` desliga. Valor inválido usa `60000`. Lida em
@@ -172,9 +174,6 @@ Executados no container da sessão original (sem Docker, sem chave de LLM):
 | Vercel produção | "Ready", abre sem login |
 | HF Space | build OK, container "Running", agent card público OK |
 
-**Não testado:** conversa real com o agente (falta chave de LLM no Space) e o
-sincronismo contra o Supabase real (falta `SUPABASE_SECRET_KEY` no Space).
-
 ## 6. Pendências, em ordem
 
 ### P1 e P2 — CONCLUÍDAS em 26/09/2026 01:36–01:41 UTC
@@ -219,7 +218,12 @@ Opcional: `VERCEL_AI_GATEWAY_API_KEY`, se `AGENT_MODEL` passar a usar
 6. Se o LLM não seguir o fluxo consent → monitoring → purchase, registrar o
    log do `shopping-agent` antes de mudar prompts.
 
-### P3 — URL do agent card (código concluído; falta validar no Space)
+### P3 — URL do agent card (CONCLUÍDA em 26/09/2026)
+
+Após Factory rebuild do Space, o card público
+`https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent/.well-known/agent-card.json`
+devolve `"url": "https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent"`.
+O texto abaixo fica como referência.
 
 `agent.json` do `shopping_agent_v2` tem
 `"url": "http://localhost:8080/a2a/shopping_agent"`. O `start.sh`, antes de
@@ -234,11 +238,12 @@ Teste local: com `SPACE_HOST=exemplo.hf.space`, o card em `:7860` retornou
 `https://exemplo.hf.space/a2a/shopping_agent`; sem a variável, retornou
 `http://localhost:8080/a2a/shopping_agent` e o arquivo não foi alterado.
 
-Falta: Factory rebuild do Space e conferir
-`https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent/.well-known/agent-card.json`
-(esperado: `"url": "https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent"`).
+### P4 — Rebuild automático do Space (CONCLUÍDA em 26/09/2026)
 
-### P4 — Rebuild automático do Space (workflow criado; depende do usuário)
+Secret `HF_TOKEN` cadastrado no GitHub (token fine-grained do HF com leitura e
+escrita só no Space). O re-run do workflow "HF Space rebuild" terminou em
+Success e o Space entrou em Building. Após o rebuild, o evento `restore`
+trouxe 20 arquivos do Supabase. O texto abaixo fica como referência.
 
 `.github/workflows/hf-space-rebuild.yml`: roda em push no `homolog-deploy`
 que altere `code/samples/python/**`, `code/sdk/**`, `deploy/hf-space/**` ou
@@ -247,10 +252,8 @@ que altere `code/samples/python/**`, `code/sdk/**`, `deploy/hf-space/**` ou
 `HfApi(token=HF_TOKEN).restart_space("ds-fabiopinheiro/ap2-homolog-backend", factory_reboot=True)`.
 Falha com mensagem explícita se o secret não existir.
 
-Falta (ação do usuário): criar token fine-grained do HF com escrita só no
-Space, cadastrar como secret `HF_TOKEN` em GitHub → Settings → Secrets and
-variables → Actions, e confirmar que o GitHub Actions está habilitado no fork
-(aba Actions). Depois, disparar o workflow manualmente uma vez para validar.
+O secret fica em GitHub → Settings → Secrets and variables → Actions. Para
+um rebuild manual: aba Actions → "HF Space rebuild" → Run workflow.
 
 ### P5 — Proteção contra uso indevido (parcialmente feito)
 
@@ -287,6 +290,26 @@ Com "Acesso à rede: Confiável", a sessão original não conseguiu acessar
 peça ao usuário para liberar `*.hf.space`, `*.supabase.co`, `*.vercel.app` e
 `ai-gateway.vercel.sh`.
 
+### P8 — Limitações observadas no teste de 26/09/2026 (não implementado)
+
+Pedido usado no teste: "tênis Nike 42 preto, CEP 79040-040, monitorar 7 dias,
+abaixo de R$ 500". Nada abaixo foi corrigido; são registros para decidir
+depois com o usuário.
+
+1. **Moeda:** o mandate foi assinado em USD (máximo 50000 centavos), embora o
+   texto do agente falasse em R$. O sample fixa `_DEFAULT_CURRENCY = USD`.
+2. **Validade:** os mandates saíram com validade de 1 hora em vez de 7 dias.
+   `ttl_seconds` não é repassado e o padrão é 3600.
+3. **Endereço:** o endereço/CEP informado não entra nos mandates.
+4. **Falha na primeira compra:** a primeira tentativa falhou com
+   "Payment transaction_id mismatch"; a segunda concluiu a compra de US$ 499.
+   Causa provável: duas tentativas simultâneas (auto-poll e nudge do
+   `/merchant/state`). Não confirmado em log.
+5. **Cota do Gemini:** nível gratuito (15 RPM, 500 RPD); pico registrado
+   23/15 RPM, com erros 429 RESOURCE_EXHAUSTED.
+6. **Faturamento Google:** bloqueado por retenção OR_CCR_53 na conta Google,
+   caso 5-7433000041726, retorno previsto até 03/10/2026.
+
 ## 7. Regras para as próximas sessões
 
 - Trabalhe no branch `homolog-deploy`; o Vercel publica a cada push e o
@@ -299,9 +322,11 @@ peça ao usuário para liberar `*.hf.space`, `*.supabase.co`, `*.vercel.app` e
 - Não religar "Automatic branching" do Supabase nem trocar o compute sem
   autorização (custo).
 - Não commitar `uv.lock`.
-- Depois de mudar código do backend, é preciso "Factory rebuild" no Space.
-  Com o secret `HF_TOKEN` cadastrado (P4), o workflow `hf-space-rebuild.yml`
-  faz isso no push; sem o secret, o rebuild continua manual.
+- O rebuild do Space é automático: o workflow `hf-space-rebuild.yml` faz
+  Factory rebuild a cada push no `homolog-deploy` que altere o backend
+  (`code/samples/python/**`, `code/sdk/**`, `deploy/hf-space/**`,
+  `pyproject.toml`). Mudanças só no web client, na documentação ou no
+  Supabase não reconstroem o Space. Confira o resultado na aba Actions.
 
 ## 8. Teste local rápido
 
