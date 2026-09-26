@@ -60,8 +60,13 @@ Limitações conhecidas:
 - O Space não reconstrói sozinho quando o GitHub muda: é preciso
   *Settings → Factory rebuild* no HF (ou um push no repositório do Space).
 - Os endpoints `/merchant/*` e `/a2a/*` são públicos (o demo não tem login).
-  Qualquer pessoa com o link pode disparar o "price drop" e consumir o LLM;
-  use limite de gasto na chave do modelo.
+  Qualquer pessoa com o link pode disparar o "price drop" e consumir o LLM.
+  O nginx limita as requisições (resposta 429 em JSON):
+  - `/a2a/*`: 20/min por visitante (rajada de 10) e 120/min no total (rajada de 30);
+  - `/merchant/*`: 5/s por visitante (rajada de 20);
+  - preflight CORS (`OPTIONS`) não conta.
+  O visitante é identificado pelo último IP do `X-Forwarded-For` (adicionado
+  pelo proxy do HF). Mantenha também um limite de gasto na chave do modelo.
 
 ## Teste local do container sem Docker
 
