@@ -11,3 +11,16 @@ export const MERCHANT_TRIGGER_URL =
 /** Sent when the user presses Enter with an empty input (demo starter). */
 export const DEFAULT_CHAT_STARTER_MESSAGE =
     'When is the SuperShoe limited edition Gold sneaker drop? I need size 9 women\'s.';
+
+/**
+ * Interval (ms) of the auto-poll fallback that asks the agent to re-check the
+ * product while monitoring. 0 disables it; missing or invalid values use 60000.
+ */
+const rawAutoPollMs = (import.meta as { env?: { VITE_AUTO_POLL_MS?: string } })
+  .env?.VITE_AUTO_POLL_MS;
+const parsedAutoPollMs = Number(rawAutoPollMs);
+export const AUTO_POLL_MS =
+  rawAutoPollMs !== undefined && rawAutoPollMs.trim() !== "" &&
+  Number.isFinite(parsedAutoPollMs) && parsedAutoPollMs >= 0
+    ? parsedAutoPollMs
+    : 60000;

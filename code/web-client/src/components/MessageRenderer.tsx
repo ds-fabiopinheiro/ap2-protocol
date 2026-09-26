@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import {MERCHANT_TRIGGER_URL} from '../config';
+import {AUTO_POLL_MS, MERCHANT_TRIGGER_URL} from '../config';
 import type {ChatState} from '../hooks/useChat';
 import {TrustedSurface} from '../trustedSurface';
 import type {
@@ -238,7 +238,10 @@ export const MessageRenderer = ({
             status={monitoring}
             onCheckNow={handleCheckNow}
             triggerCurl={`curl -X POST "${MERCHANT_TRIGGER_URL}/trigger-price-drop?item_id=${encodeURIComponent(monitoring.item_id)}&price=${monitoring.price_cap - 1}&stock=10"`}
-            pollIntervalSeconds={!error && isMonitoring ? 15 : undefined}
+            pollIntervalSeconds={
+                !error && isMonitoring && AUTO_POLL_MS > 0 ?
+                    AUTO_POLL_MS / 1000 :
+                    undefined}
             itemName={lastSelectedItemName}
           />
         )}
