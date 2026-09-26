@@ -21,7 +21,7 @@ Todo o trabalho está no branch **`homolog-deploy`**. Não altere o `main`.
 
 | Plataforma | Recurso | Identificadores |
 |---|---|---|
-| GitHub | branch `homolog-deploy` | 9 commits acima do `main` (lista na seção 4 e P5) |
+| GitHub | branch `homolog-deploy` | commits listados na seção 4 e na P5; histórico completo com `git log --oneline main..homolog-deploy` |
 | Vercel | projeto `ap2-homolog-frontend` | team `fabiopinheiro-projects` (`team_TFJpulVK8Dcufy5SIecwChUh`), projeto `prj_ndPs9jLlb7NFC3agQqe4DoUEiz1H`, URL https://ap2-homolog-frontend.vercel.app |
 | Hugging Face | Space `ds-fabiopinheiro/ap2-homolog-backend` | SDK Docker, hardware CPU Basic (gratuito), público, URL https://ds-fabiopinheiro-ap2-homolog-backend.hf.space |
 | Supabase | projeto `ap2-homolog-db` | org `xrusgxpywgadhhgalcfs` (plano Pro), ref `vpermplrecflxtitndgd`, região `us-east-2` (Ohio), compute Micro, URL https://vpermplrecflxtitndgd.supabase.co |
