@@ -1,0 +1,3 @@
+# Projeto Supabase de homologação do AP2 (ref: vpermplrecflxtitndgd, us-east-2).
+# As migrations em supabase/migrations já foram aplicadas no projeto remoto.
+project_id = "ap2-homolog-db"
