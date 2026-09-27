@@ -1,401 +1,401 @@
 # Agentic Payment Protocol (v0.2)
 
-The Agentic Payment Protocol (AP2) provides a protocol to secure Agent-performed
-payment transactions. It makes use of the
-[Agent Authorization model](agent_authorization.md).
+Tradução para pt-BR. Em caso de divergência, vale o texto original em inglês em <https://github.com/google-agentic-commerce/AP2>.
 
-This specification describes the following:
+O Agentic Payment Protocol (AP2) define um protocolo para proteger transações
+de pagamento realizadas por agentes. Ele usa o
+[modelo de Agent Authorization](agent_authorization.md).
 
--   The different roles of entities within AP2.
--   The verification responsibilities of these roles.
--   A [Checkout Mandate](checkout_mandate.md) and
-    [Receipt](checkout_mandate.md#checkout-receipt) for securing *what* is being
-    purchased.
--   A linked [Payment Mandate](payment_mandate.md) and
-    [Receipt](payment_mandate.md#payment-receipt) for the *payment* of the
-    Checkout.
--   How the Checkout and Payment Mandates can be used as evidence at the time of
-    dispute.
+Esta especificação descreve:
 
-AP2 operates as a security feature within a Commerce Protocol. The exact details
-of the Commerce Protocol (e.g., catalog APIs, checkout updates, and specific
-APIs for communication between the different roles) are outside the scope of
-AP2. AP2 is designed explicitly to be compatible with the Universal Commerce
-Protocol (UCP) and integrates seamlessly.
+-   Os diferentes papéis das entidades no AP2.
+-   As responsabilidades de verificação de cada papel.
+-   Um [Checkout Mandate](checkout_mandate.md) (autorização assinada para um
+    checkout) e um [Receipt](checkout_mandate.md#checkout-receipt) (comprovante
+    assinado do resultado) para proteger *o que* está sendo comprado.
+-   Um [Payment Mandate](payment_mandate.md) (autorização assinada para o
+    pagamento) vinculado e seu [Receipt](payment_mandate.md#payment-receipt)
+    para o *pagamento* do Checkout.
+-   Como os Checkout e Payment Mandates podem ser usados como evidência em caso
+    de disputa.
 
-Illustrative examples are provided for
-[Human Present ('direct')](flows.md#human-present) and
-[Human Not Present ('autonomous')](flows.md#human-not-present) flows.
+O AP2 funciona como um recurso de segurança dentro de um Commerce Protocol. Os
+detalhes do Commerce Protocol (por exemplo, APIs de catálogo, atualizações de
+checkout e APIs específicas para comunicação entre os papéis) estão fora do
+escopo do AP2. O AP2 foi projetado explicitamente para ser compatível com o
+Universal Commerce Protocol (UCP) e se integra diretamente a ele.
 
-## Roles
+Há exemplos ilustrativos dos fluxos
+[Human Present ('direct')](flows.md#human-present) e
+[Human Not Present ('autonomous')](flows.md#human-not-present).
 
-AP2 considers five roles, who have different responsibilities from a processing
-and verification perspective. These are as follows:
+## Papéis
 
--   **Shopping Agent (SA):** The Shopping Agent is the primary agent performing
-    product discovery, building the checkout, and executing the purchase.
--   **Credential Provider (CP):** The Credential Provider is the source of
-    Payment Credentials for the purchase. They are responsible for verifying
-    that this Agent is authorized to access this Payment Credential, and scoping
-    the Payment Credential appropriately.
--   **Merchant (M):** The Merchant role is responsible for providing and
-    completing the Checkout. They verify that the Shopping Agent is approved to
-    purchase these particular items and are responsible for the integrity of the
-    inventory, pricing, and any merchant discounts.
--   **Merchant Payment Processor (MPP):** The Merchant Payment Processor role is
-    responsible for processing payments for purchases. They are responsible for
-    verifying that the Payment Credential shared by the Credential Provider has
-    been authorized to pay for this Checkout instance.
--   **Trusted Surface (TS):** The Trusted Surface role is a UI surface that is
-    trusted to get informed user consent for an Intent before creating a
-    user-signed Mandate.
+O AP2 considera cinco papéis, com responsabilidades diferentes do ponto de vista
+de processamento e verificação:
 
-> Note: While AP2 defines five roles, it is possible for a single entity to play
-> multiple (or even all) of the roles. In that case, they would take on all of
-> the responsibilities of each role they are playing.
+-   **Shopping Agent (SA):** o Shopping Agent é o agente principal, que faz a
+    descoberta de produtos, monta o checkout e executa a compra.
+-   **Credential Provider (CP):** o Credential Provider é a origem das Payment
+    Credentials da compra. Ele verifica se o Agent está autorizado a acessar
+    essa Payment Credential e limita o escopo da Payment Credential de forma
+    adequada.
+-   **Merchant (M):** o papel de Merchant fornece e conclui o Checkout. Ele
+    verifica se o Shopping Agent está aprovado para comprar esses itens e
+    responde pela integridade do estoque, dos preços e de descontos do
+    merchant.
+-   **Merchant Payment Processor (MPP):** o papel de Merchant Payment Processor
+    processa os pagamentos das compras. Ele verifica se a Payment Credential
+    compartilhada pelo Credential Provider foi autorizada a pagar por esta
+    instância de Checkout.
+-   **Trusted Surface (TS):** o papel de Trusted Surface é uma interface
+    considerada confiável para obter o consentimento informado do usuário para
+    uma Intent antes de criar um Mandate assinado pelo usuário.
 
-Roles MAY always delegate their responsibilities to another party.
+> Observação: embora o AP2 defina cinco papéis, uma única entidade pode
+> desempenhar vários papéis (ou até todos). Nesse caso, ela assume todas as
+> responsabilidades de cada papel que desempenha.
 
-## Agentic vs Non-Agentic
+Os papéis MAY (podem, opcional) sempre delegar suas responsabilidades a outra
+parte.
 
-Many of these roles can be considered Agentic or Non-Agentic. A role is Agentic
-when:
+## Agentic e Non-Agentic
 
--   Communication to or from the Role is handled by a non-deterministic LLM.
+Muitos desses papéis podem ser considerados Agentic ou Non-Agentic. Um papel é
+Agentic quando:
 
-A role is considered Non-Agentic if:
+-   A comunicação de ou para o papel é tratada por um LLM não determinístico.
 
--   Communication to and from the Role is handled using deterministic code that
-    verifies the authenticity and correctness.
--   And if no processing done by the role is delegated to an LLM.
+Um papel é considerado Non-Agentic se:
 
-The following roles MAY be agentic or non-agentic:
+-   A comunicação de e para o papel é tratada por código determinístico que
+    verifica a autenticidade e a correção.
+-   E se nenhum processamento feito pelo papel é delegado a um LLM.
+
+Os seguintes papéis MAY ser agentic ou non-agentic:
 
 -   Merchant
 -   Merchant Payment Processor
 -   Credential Provider
 
-The following role MUST be non-agentic:
+O seguinte papel MUST (obrigatório) ser non-agentic:
 
 -   Trusted Surface
 
-The following role is expected to be agentic:
+Espera-se que o seguinte papel seja agentic:
 
 -   Shopping Agent
 
-When communication happens between two non-agentic Roles, standard web security
-is sufficient to ensure integrity. However, when either role is agentic, then
-the Agent itself is a potential attacker. As such, additional tamper-evident
-mechanisms are needed to ensure secure communication.
+Quando a comunicação ocorre entre dois papéis non-agentic, a segurança web
+padrão basta para garantir a integridade. Porém, quando qualquer um dos papéis é
+agentic, o próprio Agent é um potencial atacante. Por isso, são necessários
+mecanismos adicionais que evidenciem adulteração para garantir uma comunicação
+segura.
 
-AP2 assumes that, at a minimum, the Shopping Agent is agentic. In the case where
-the payment journey happens directly between two non-agentic surfaces (such as a
-Trusted Surface communicating directly with a non-agentic Merchant), then
-existing e-commerce security models are sufficient.
+O AP2 assume que, no mínimo, o Shopping Agent é agentic. Quando a jornada de
+pagamento ocorre diretamente entre duas superfícies non-agentic (por exemplo,
+uma Trusted Surface que se comunica diretamente com um Merchant non-agentic),
+os modelos de segurança de e-commerce existentes são suficientes.
 
-When this document refers to validation or processing for a particular role, it
-MUST happen in deterministic code regardless of whether the role is agentic or
-not.
+Quando este documento se refere a validação ou processamento de um papel, isso
+MUST ocorrer em código determinístico, seja o papel agentic ou não.
 
 ## Mandates
 
-Mandates are the core means that AP2 uses to authorize agents. See
-[Agent Authorization Framework][agent_authorization.md] for a description of
-how this works in the general case.
+Mandates são o principal meio que o AP2 usa para autorizar agentes. Veja
+[Agent Authorization Framework][agent_authorization.md] para uma descrição de
+como isso funciona no caso geral.
 
-AP2 defines two
-Mandate types: Checkout Mandate and Payment Mandate.
+O AP2 define dois
+tipos de Mandate: Checkout Mandate e Payment Mandate.
 
-The Checkout and Payment Mandate contents are assembled by the Shopping Agent
-after it has determined what task the user wishes it to perform. The exact
-details of how this is achieved is outside of the scope of this specification.
+O conteúdo dos Checkout e Payment Mandates é montado pelo Shopping Agent depois
+que ele determina qual tarefa o usuário quer que ele execute. Os detalhes de
+como isso é feito estão fora do escopo desta especificação.
 
-The Shopping Agent then uses a Trusted Surface to obtain signed Checkout and
-Payment Mandates, which it will use to authorize payment and complete the
-Checkout.
+Em seguida, o Shopping Agent usa uma Trusted Surface para obter Checkout e
+Payment Mandates assinados, que ele usará para autorizar o pagamento e concluir
+o Checkout.
 
 ### Checkout Mandate
 
-The Checkout Mandate is designed to provide the Merchant cryptographic proof
-that the Shopping Agent is authorized to purchase the Checkout that it has
-assembled.
+O Checkout Mandate foi projetado para dar ao Merchant prova criptográfica de que
+o Shopping Agent está autorizado a comprar o Checkout que montou.
 
-The Checkout Mandate is provided by the Shopping Agent and verified by the
-Merchant.
+O Checkout Mandate é fornecido pelo Shopping Agent e verificado pelo Merchant.
 
-The The Merchant MUST provide a merchant-signed JWT containing the Checkout to
-the Shopping Agent. The closed Checkout Mandate is bound to this Checkout JWT
-using a cryptographic hash.
+O Merchant MUST fornecer ao Shopping Agent um JWT assinado pelo merchant
+contendo o Checkout. O closed Checkout Mandate é vinculado a esse Checkout JWT
+por meio de um hash criptográfico.
 
-Once the Merchant has accepted or rejected the Checkout Mandate, it MUST return
-a Checkout Receipt.
+Depois que o Merchant aceitar ou rejeitar o Checkout Mandate, ele MUST retornar
+um Checkout Receipt.
 
-For the full details of the Checkout Mandate and Receipt structures, see
+Para os detalhes completos das estruturas do Checkout Mandate e do Receipt, veja
 [Checkout Mandate](checkout_mandate.md).
 
-### Mandate Versioning
+<a id="mandate-versioning"></a>
 
-Each AP2 Mandate type identifies its schema using the `vct` claim. The `vct`
-value includes a numeric suffix that acts as a schema version number (e.g.
-`mandate.payment.1`, `mandate.checkout.open.1`). Implementations MUST match the
-exact `vct` string, including the version suffix. A future incompatible schema
-revision would introduce a new suffix (e.g. `.2`), allowing old and new versions
-to be distinguished unambiguously.
+### Versionamento de Mandates
+
+Cada tipo de Mandate do AP2 identifica seu schema com a claim `vct`. O valor de
+`vct` inclui um sufixo numérico que funciona como número de versão do schema
+(por exemplo, `mandate.payment.1`, `mandate.checkout.open.1`). As
+implementações MUST corresponder exatamente à string `vct`, incluindo o sufixo
+de versão. Uma revisão futura incompatível do schema introduziria um novo
+sufixo (por exemplo, `.2`), permitindo distinguir versões antigas e novas sem
+ambiguidade.
 
 ### Payment Mandate
 
-The Payment Mandate is designed to provide the Credential Provider, Network, and
-Merchant Payment Processor cryptographic proof that the Shopping Agent is
-authorized to pay for a particular Checkout.
+O Payment Mandate foi projetado para dar ao Credential Provider, à Network e ao
+Merchant Payment Processor prova criptográfica de que o Shopping Agent está
+autorizado a pagar por um Checkout específico.
 
-The Payment Mandate is provided by the Shopping Agent and verified by the
-Credential Provider, Network, and Merchant Payment Processor.
+O Payment Mandate é fornecido pelo Shopping Agent e verificado pelo Credential
+Provider, pela Network e pelo Merchant Payment Processor.
 
-The Payment Mandate is bound to a particular Checkout using the cryptographic
-hash of the Checkout JWT. To prevent rainbow table attacks, the Checkout JWT
-MUST be signed using a digital signature scheme (e.g., ECDSA) and not a
-deterministic signature (e.g., Ed25519).
+O Payment Mandate é vinculado a um Checkout específico pelo hash criptográfico
+do Checkout JWT. Para evitar ataques de rainbow table, o Checkout JWT MUST ser
+assinado com um esquema de assinatura digital (por exemplo, ECDSA) e não com
+uma assinatura determinística (por exemplo, Ed25519).
 
-Once the Merchant Payment Processor has accepted or rejected the Payment
-Mandate, a signed Payment Receipt MUST be returned to the Shopping Agent,
-Credential Provider, and possibly Networks.
+Depois que o Merchant Payment Processor aceitar ou rejeitar o Payment Mandate,
+um Payment Receipt assinado MUST ser retornado ao Shopping Agent, ao Credential
+Provider e, possivelmente, às Networks.
 
-For the full details of the Payment Mandate and Receipt structures, see
+Para os detalhes completos das estruturas do Payment Mandate e do Receipt, veja
 [Payment Mandate](payment_mandate.md).
 
-## Modes
+## Modos
 
-There are two `modes` that AP2 can consider to operate in.
+Há dois `modes` em que o AP2 pode operar.
 
--   Human Present (Direct): The User directly sees the closed Checkout and
-    approves it and its payment explicitly.
+-   Human Present (Direct): o usuário vê diretamente o closed Checkout e o
+    aprova, junto com o pagamento, de forma explícita.
 
--   Human Not Present (Autonomous): The User sees and approves a set of
-    constraints over what closed Checkout and Payment would meet their intent.
-    The Shopping Agent then assembles and approves a closed Checkout and Payment
-    Mandate on their behalf using these open Mandates.
+-   Human Not Present (Autonomous): o usuário vê e aprova um conjunto de
+    constraints sobre quais closed Checkout e Payment atenderiam à sua
+    intenção. Em seguida, o Shopping Agent monta e aprova um closed Checkout e
+    Payment Mandate em nome do usuário usando esses open Mandates.
 
-Verifiers of Mandates *always* receive a closed Payment and Checkout Mandate,
-regardless of the mode. The difference is only in how the verification of the
-Mandate is performed.
+Os verificadores de Mandates *sempre* recebem um closed Payment Mandate e um
+closed Checkout Mandate, qualquer que seja o modo. A diferença está apenas em
+como a verificação do Mandate é feita.
 
-In the Direct case, the signature on the closed Mandates is validated as coming
-from a User directly, using a User Credential or a trust list of Agent
-Providers.
+No caso Direct, a assinatura dos closed Mandates é validada como vinda
+diretamente de um usuário, usando uma User Credential ou uma lista de confiança
+de Agent Providers.
 
-In the Autonomous case, the closed Mandates are signed by an Agent key. Trust in
-this key is provided by open Mandates that are signed by the User or a trust
-list of Agent Providers. Constraints in these Mandates allow the verifier to
-verify that the Checkout and Payment match the User's intent. Only constraints
-relevant to the closed Mandates are shared with the verifier.
+No caso Autonomous, os closed Mandates são assinados por uma chave do Agent. A
+confiança nessa chave vem de open Mandates assinados pelo usuário ou de uma
+lista de confiança de Agent Providers. As constraints desses Mandates permitem
+ao verificador confirmar que o Checkout e o Payment correspondem à intenção do
+usuário. Apenas as constraints relevantes para os closed Mandates são
+compartilhadas com o verificador.
 
 ### Direct (Human Present)
 
-When a Shopping Agent has a Checkout JWT for the closed Checkout from the
-Merchant, they construct the Checkout and Payment Mandate Content and pass it to
-a Trusted Surface for display to the user and signing.
+Quando o Shopping Agent tem, do Merchant, um Checkout JWT para o closed
+Checkout, ele monta o conteúdo dos Checkout e Payment Mandates e o envia a uma
+Trusted Surface para exibição ao usuário e assinatura.
 
-Upon receiving the Checkout and Payment Mandate, the Shopping Agent forwards the
-Payment Mandate to the Credential Provider (and possibly the Network) for
-Verification. Upon successful verification, the the Shopping Agent receives a
-payment credential.
+Ao receber os Checkout e Payment Mandates, o Shopping Agent encaminha o Payment
+Mandate ao Credential Provider (e, possivelmente, à Network) para verificação.
+Se a verificação for bem-sucedida, o Shopping Agent recebe uma payment
+credential.
 
-The payment credential and a Checkout Mandate are then provided to the Merchant.
-The The Merchant verifies the Checkout with what it created, and initiates
-payment with the Merchant Payment Processor if a Merchant-initiated charge.
+A payment credential e um Checkout Mandate são então fornecidos ao Merchant.
+O Merchant confere o Checkout com o que criou e inicia o pagamento com o
+Merchant Payment Processor, se for uma cobrança iniciada pelo Merchant.
 
-In the case that the payment method pushes funds to the Merchant, the Merchant
-will instead receive confirmation of funds sent, and confirm the receipt of
-those funds.
+Quando o meio de pagamento envia os fundos ao Merchant (push), o Merchant
+recebe a confirmação do envio dos fundos e confirma o recebimento.
 
-Upon completion, a Checkout Receipt is returned to the Shopping Agent, and the
-Payment Receipt is returned to the Shopping Agent, Credential Provider and, if
-applicable, the Network.
+Ao final, um Checkout Receipt é retornado ao Shopping Agent, e o Payment
+Receipt é retornado ao Shopping Agent, ao Credential Provider e, se aplicável, à
+Network.
 
-See [Human Present](flows.md#human-present) for a detailed example.
+Veja [Human Present](flows.md#human-present) para um exemplo detalhado.
 
-> Note: Because the User approves the closed Checkout, this can often be
-> replaced with a traditional e-commerce journey where the Merchant and the
-> Trusted Surface communicate directly.
+> Observação: como o usuário aprova o closed Checkout, isso muitas vezes pode
+> ser substituído por uma jornada de e-commerce tradicional em que o Merchant e
+> a Trusted Surface se comunicam diretamente.
 
 ### Autonomous (Human Not Present)
 
-When a Shopping Agent needs to operate autonomously, it will create open
-Checkout and Payment Mandate Content and have these authorized by the Trusted
-Surface. These MUST include the agent's public key as a `cnf` claim. This is
-required as it is not yet bound to a particular transaction, and so it needs to
-be constrained for use by the Agent. It is RECOMMENDED to set the `exp` claim
-for these Mandates to the smallest value that will allow the Shopping Agent to
-complete the assigned task.
+Quando o Shopping Agent precisa operar de forma autônoma, ele cria o conteúdo
+de open Checkout e Payment Mandates e os submete à autorização na Trusted
+Surface. Esses Mandates MUST incluir a chave pública do agente como claim
+`cnf`. Isso é necessário porque eles ainda não estão vinculados a uma transação
+específica e, por isso, precisam ter o uso restrito ao Agent. É RECOMMENDED
+(recomendado) definir a claim `exp` desses Mandates com o menor valor que
+permita ao Shopping Agent concluir a tarefa atribuída.
 
-After the Shopping Agent has created an appropriate Checkout, to authorize the
-Checkout, the Shopping Agent MAY now sign it using its Agent Key instead of
-getting approval on a Trusted Surface. It then MUST provide both the user-signed
-open Mandate and the agent-signed closed Mandate to the Verifying Parties, as
-described in the Direct case above.
+Depois que o Shopping Agent criar um Checkout adequado, para autorizá-lo o
+Shopping Agent MAY assiná-lo com sua Agent Key, em vez de obter aprovação em
+uma Trusted Surface. Em seguida, ele MUST fornecer às partes verificadoras
+tanto o open Mandate assinado pelo usuário quanto o closed Mandate assinado
+pelo agente, como descrito no caso Direct acima.
 
-Shopping Agents MUST NOT present any subsequent open Payment or Checkout
-Mandates without receiving a rejection receipt from the previous one. This is to
-prevent an Agent approving multiple different Checkouts using the same open
-Mandate.
+Shopping Agents MUST NOT (proibido) apresentar novos open Payment ou Checkout
+Mandates sem receber um receipt de rejeição do anterior. Isso impede que um
+Agent aprove vários Checkouts diferentes usando o mesmo open Mandate.
 
-To ensure user privacy, Shopping Agents MUST present only the disclosures from
-the open Mandates needed in the evaluation of the closed Mandates.
+Para garantir a privacidade do usuário, os Shopping Agents MUST apresentar
+apenas as disclosures dos open Mandates necessárias para avaliar os closed
+Mandates.
 
-Upon completion, a Checkout Receipt is returned to the Shopping Agent, and the
-Payment Receipt is returned to the Shopping Agent, Credential Provider and, if
-applicable, the Network.
+Ao final, um Checkout Receipt é retornado ao Shopping Agent, e o Payment
+Receipt é retornado ao Shopping Agent, ao Credential Provider e, se aplicável, à
+Network.
 
-See [Human Not Present](flows.md#human-not-present) for a detailed example.
+Veja [Human Not Present](flows.md#human-not-present) para um exemplo detalhado.
 
-> Note: In the current specification, the Shopping Agent needs to determine the
-> applicable Mandates and Disclosures ad-hoc based on the Checkout. In the
-> future, utilizing an explicit query language in the commerce protocol can help
-> practical interoperability.
+> Observação: na especificação atual, o Shopping Agent precisa determinar os
+> Mandates e as Disclosures aplicáveis caso a caso, com base no Checkout. No
+> futuro, o uso de uma linguagem de consulta explícita no commerce protocol
+> pode facilitar a interoperabilidade prática.
 
-#### Agent-to-Agent Delegation
+#### Delegação entre agentes
 
-Conceptually, it is possible to use this protocol to support delegation of
-Mandates from one Shopping Agent to another. This is outside the scope of the
-current specification.
+Conceitualmente, é possível usar este protocolo para delegar Mandates de um
+Shopping Agent para outro. Isso está fora do escopo da especificação atual.
 
-## Dispute Evidence
+## Evidência em disputas
 
-In the case of a dispute, the Checkout Mandate and Receipt, and Payment Mandate
-and Receipt can be brought together to provide a non-repudiable picture of the
-transaction. Specific details of how this is used for dispute resolution,
-retention, and retrieval requirements are outside the scope of this
-specification.
+Em caso de disputa, o Checkout Mandate e seu Receipt e o Payment Mandate e seu
+Receipt podem ser reunidos para fornecer um registro irrefutável da transação.
+Os detalhes de como isso é usado na resolução de disputas e os requisitos de
+retenção e recuperação estão fora do escopo desta especificação.
 
-The Checkout Mandate and Receipt MAY be able to be provided by the following
-roles:
+O Checkout Mandate e o Receipt MAY ser fornecidos pelos seguintes papéis:
 
 -   Shopping Agent
 -   Merchant
 
-The Payment Mandate and Receipt MAY be able to be provided by the following
-roles:
+O Payment Mandate e o Receipt MAY ser fornecidos pelos seguintes papéis:
 
 -   Shopping Agent
 -   Credential Provider
 -   Network
 -   Merchant Payment Processor
 
-See [Verification: Dispute](#dispute) for the verification rules.
+Veja [Verificação: disputa](#dispute) para as regras de verificação.
 
-> Note: Providing an automated method to retrieve the Checkout Mandate, from
-> either the Shopping Agent or the Merchant, would provide substantial utility
-> to the ecosystem. The exact details are outside the scope of the current
-> version, but would be done by using the Payment Mandate `transaction_id` as
-> the key to request it.
+> Observação: oferecer um método automatizado para obter o Checkout Mandate,
+> seja do Shopping Agent ou do Merchant, seria muito útil para o ecossistema. Os
+> detalhes estão fora do escopo da versão atual, mas isso seria feito usando o
+> `transaction_id` do Payment Mandate como chave da solicitação.
 
-## Verification
+## Verificação
 
-The following verification rules MUST be followed by these roles upon receipt of
-the Mandate.
+Os papéis a seguir MUST seguir estas regras de verificação ao receber o
+Mandate.
 
-> Note: A particular role can always delegate the responsibilities to a
-> technology provider. For example, a Merchant could have their payment
-> processor perform verifications on their behalf. In such a case, the delegate
-> follows the verification rules for that role instead.
+> Observação: um papel sempre pode delegar suas responsabilidades a um
+> fornecedor de tecnologia. Por exemplo, um Merchant pode pedir que seu
+> processador de pagamentos faça as verificações em seu nome. Nesse caso, o
+> delegado segue as regras de verificação desse papel.
 
 ### Merchant
 
-The Merchant MUST receive an appropriate Checkout Mandate from a Shopping Agent
-before completing the Checkout.
+O Merchant MUST receber um Checkout Mandate adequado de um Shopping Agent antes
+de concluir o Checkout.
 
-They MUST verify the Checkout Mandate as follows:
+Ele MUST verificar o Checkout Mandate da seguinte forma:
 
--   Process and verify the Checkout Mandate according to
-    [Verification and Processing Rules](agent_authorization.md#verification-and-processing-rules).
--   Verify that the hash of the Checkout JWT sent for approval matches the value
-    included for the `checkout_hash` claim.
--   If open Checkout Mandates are included, verify that the closed Checkout
-    conforms to all of the Constraints by evaluating each Constraint.
+-   Processar e verificar o Checkout Mandate conforme as
+    [regras de verificação e processamento](agent_authorization.md#verification-and-processing-rules).
+-   Verificar se o hash do Checkout JWT enviado para aprovação corresponde ao
+    valor incluído na claim `checkout_hash`.
+-   Se open Checkout Mandates estiverem incluídos, verificar se o closed
+    Checkout atende a todas as Constraints, avaliando cada uma delas.
 
-If any step fails, the Merchant MUST return a Checkout Receipt JWT containing
-the appropriate error message.
+Se qualquer etapa falhar, o Merchant MUST retornar um Checkout Receipt JWT com a
+mensagem de erro adequada.
 
-### Credential Provider and Network
+### Credential Provider e Network
 
-The Credential Provider and, if applicable, the Network MUST receive an
-appropriate Payment Mandate from the Shopping Agent before returning a payment
-credential.
+O Credential Provider e, se aplicável, a Network MUST receber um Payment Mandate
+adequado do Shopping Agent antes de retornar uma payment credential.
 
-They MUST verify the Payment Mandate as follows:
+Eles MUST verificar o Payment Mandate da seguinte forma:
 
--   Process and verify the Payment Mandate according to
-    [Verification and Processing Rules](agent_authorization.md#verification-and-processing-rules).
--   If open Payment Mandates are included, verify that the closed Payment
-    Mandate matches all the Constraints.
+-   Processar e verificar o Payment Mandate conforme as
+    [regras de verificação e processamento](agent_authorization.md#verification-and-processing-rules).
+-   Se open Payment Mandates estiverem incluídos, verificar se o closed Payment
+    Mandate atende a todas as Constraints.
 
-If any step fails, they MUST return a Payment Receipt JWT containing the
-appropriate error to the Shopping Agent.
+Se qualquer etapa falhar, eles MUST retornar ao Shopping Agent um Payment
+Receipt JWT com o erro adequado.
 
 ### Merchant Payment Processor
 
-The Merchant Payment Processor MUST receive an appropriate Payment Credential
-from the Merchant before processing the transaction.
+O Merchant Payment Processor MUST receber uma Payment Credential adequada do
+Merchant antes de processar a transação.
 
-Merchant Payment Processor MUST verify the Payment Credential is appropriately
-scoped to the Checkout. One way this can be done is by providing the Closed
-Payment Mandate inside the Payment Credential.
+O Merchant Payment Processor MUST verificar se a Payment Credential tem escopo
+adequado ao Checkout. Uma forma de fazer isso é incluir o closed Payment
+Mandate dentro da Payment Credential.
 
-### Dispute
+<a id="dispute"></a>
 
-When performing verification at the time of dispute, the following steps MUST be
-followed to ensure the integrity of the Payment and Checkout Mandate and
+### Disputa
+
+Ao fazer a verificação no momento de uma disputa, as seguintes etapas MUST ser
+seguidas para garantir a integridade dos Payment e Checkout Mandates e dos
 Receipts.
 
--   The Checkout Mandate MUST be verified according to the Merchant Verification
-    rules.
--   The hash of the `checkout_jwt` MUST be independently computed from the
-    included `checkout_jwt`.
--   The Checkout Receipt `reference` MUST match the hash of the closed Checkout
-    Mandate. This is calculated in the same manner as the `sd_hash` would be.
--   The Payment Mandate MUST be verified according to the
-    [Merchant Payment Processor](#merchant-payment-processor) section using the
-    `checkout_hash` from the Checkout Mandate.
--   The Payment Receipt reference MUST match the hash of the closed Payment
-    Mandate. This is calculated in the same manner as the `sd_hash` would be.
+-   O Checkout Mandate MUST ser verificado conforme as regras de verificação do
+    Merchant.
+-   O hash do `checkout_jwt` MUST ser calculado de forma independente a partir
+    do `checkout_jwt` incluído.
+-   O `reference` do Checkout Receipt MUST corresponder ao hash do closed
+    Checkout Mandate. Ele é calculado da mesma forma que o `sd_hash`.
+-   O Payment Mandate MUST ser verificado conforme a seção
+    [Merchant Payment Processor](#merchant-payment-processor), usando o
+    `checkout_hash` do Checkout Mandate.
+-   O reference do Payment Receipt MUST corresponder ao hash do closed Payment
+    Mandate. Ele é calculado da mesma forma que o `sd_hash`.
 
-After all these steps have been performed successfully, then the information
-contained in the Checkout Mandate and Payment Mandate is able to be used as
-evidence as to what the user, and each role saw.
+Depois que todas essas etapas forem concluídas com sucesso, as informações do
+Checkout Mandate e do Payment Mandate podem ser usadas como evidência do que o
+usuário e cada papel viram.
 
-## Extension Points
+## Pontos de extensão
 
-AP2 provides several extension points to allow it to adapt to meet the needs of
-Agentic Commerce. These are as follows:
+O AP2 oferece vários pontos de extensão para se adaptar às necessidades do
+Agentic Commerce:
 
-### Mandate Constraints
+### Constraints de Mandate
 
-This extension point is designed to support constraining Agent behavior, while
-supporting more complex autonomous use cases. To define a new constraint, the
-following MUST be specified:
+Este ponto de extensão serve para restringir o comportamento do Agent e, ao
+mesmo tempo, permitir casos de uso autônomos mais complexos. Para definir uma
+nova constraint, os seguintes itens MUST ser especificados:
 
--   A uniquely defined `type`.
--   A Schema, including which fields are selectively disclosable.
--   The evaluation algorithm.
+-   Um `type` com definição única.
+-   Um Schema, incluindo quais campos permitem divulgação seletiva.
+-   O algoritmo de avaliação.
 
-### Checkout Object
+### Objeto de Checkout
 
-AP2 is agnostic to the contents of the merchant-signed Checkout JWT. It is
-created to be compatible with logically represented Checkout Objects, but it
-does provide an extension point to be adapted to other Checkout Objects. UCP
-itself also provides such extension points within the protocol, which is the
-RECOMMENDED way to support new commerce journeys.
+O AP2 é agnóstico ao conteúdo do Checkout JWT assinado pelo merchant. Ele foi
+criado para ser compatível com Checkout Objects representados logicamente, mas
+oferece um ponto de extensão para ser adaptado a outros Checkout Objects. O
+próprio UCP também oferece esses pontos de extensão dentro do protocolo, que é
+a forma RECOMMENDED de suportar novas jornadas de comércio.
 
-### Payment Instrument
+### Meio de pagamento
 
-AP2 is agnostic to the particular payment instrument used. New Payment
-Instruments are supported by defining a unique `type` in the Payment Instrument
-JSON object. If necessary, additional properties MAY be defined for that
-specific `type`.
+O AP2 é agnóstico ao meio de pagamento usado. Novos Payment Instruments são
+suportados pela definição de um `type` único no objeto JSON Payment Instrument.
+Se necessário, propriedades adicionais MAY ser definidas para esse `type`
+específico.
 
-### Verifiable Digital Credential Formats (VDCs)
+### Formatos de Verifiable Digital Credential (VDCs)
 
-AP2 specifies the use of `SD-JWT`s for securing the Payment and Checkout
-Mandates. Payment and Checkout Mandates could be cryptographically secured by
-other VDCs as mentioned in
+O AP2 especifica o uso de `SD-JWT`s para proteger os Payment e Checkout
+Mandates. Os Payment e Checkout Mandates poderiam ser protegidos
+criptograficamente por outras VDCs, como mencionado em
 [Agent Authorization](agent_authorization.md).

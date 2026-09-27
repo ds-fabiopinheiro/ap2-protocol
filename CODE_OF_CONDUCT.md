@@ -1,95 +1,100 @@
-# Code of Conduct
+# Código de Conduta
 
-## Our Pledge
+## Nosso compromisso
 
-In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body
-size, disability, ethnicity, gender identity and expression, level of
-experience, education, socio-economic status, nationality, personal appearance,
-race, religion, or sexual identity and orientation.
+Com o objetivo de promover um ambiente aberto e acolhedor, nós, como
+contribuidores e mantenedores, nos comprometemos a fazer da participação no
+nosso projeto e na nossa comunidade uma experiência livre de assédio para todas
+as pessoas, independentemente de idade, tamanho corporal, deficiência, etnia,
+identidade e expressão de gênero, nível de experiência, escolaridade, condição
+socioeconômica, nacionalidade, aparência pessoal, raça, religião ou identidade
+e orientação sexual.
 
-## Our Standards
+## Nossos padrões
 
-Examples of behavior that contributes to creating a positive environment
-include:
+Exemplos de comportamento que contribuem para criar um ambiente positivo
+incluem:
 
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive criticism
-* Focusing on what is best for the community
-* Showing empathy towards other community members
+* Usar linguagem acolhedora e inclusiva
+* Respeitar pontos de vista e experiências diferentes
+* Aceitar críticas construtivas com cordialidade
+* Focar no que é melhor para a comunidade
+* Demonstrar empatia com outros membros da comunidade
 
-Examples of unacceptable behavior by participants include:
+Exemplos de comportamento inaceitável por parte dos participantes incluem:
 
-* The use of sexualized language or imagery and unwelcome sexual attention or
-    advances
-* Trolling, insulting/derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic
-    address, without explicit permission
-* Disrespecting the community's time by sending spam or other unsolicited
-    commercial messages
-* Other conduct which could reasonably be considered inappropriate in a
-    professional setting
+* Uso de linguagem ou imagens sexualizadas e atenção ou investidas sexuais
+    indesejadas
+* Trolling, comentários ofensivos/depreciativos e ataques pessoais ou políticos
+* Assédio público ou privado
+* Publicação de informações privadas de outras pessoas, como endereço físico ou
+    eletrônico, sem permissão explícita
+* Desrespeito ao tempo da comunidade com envio de spam ou outras mensagens
+    comerciais não solicitadas
+* Outras condutas que possam ser razoavelmente consideradas inadequadas em um
+    ambiente profissional
 
-## Our Responsibilities
+## Nossas responsabilidades
 
-Project maintainers are responsible for clarifying the standards of acceptable
-behavior and are expected to take appropriate and fair corrective action in
-response to any instances of unacceptable behavior.
+Os mantenedores do projeto são responsáveis por esclarecer os padrões de
+comportamento aceitável e devem tomar medidas corretivas apropriadas e justas
+em resposta a qualquer caso de comportamento inaceitável.
 
-Project maintainers have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, or to ban temporarily or permanently any
-contributor for other behaviors that they deem inappropriate, threatening,
-offensive, or harmful.
+Os mantenedores do projeto têm o direito e a responsabilidade de remover, editar
+ou rejeitar comentários, commits, código, edições de wiki, issues e outras
+contribuições que não estejam alinhadas a este Código de Conduta, ou de banir
+temporária ou permanentemente qualquer contribuidor por outros comportamentos
+que considerem inadequados, ameaçadores, ofensivos ou prejudiciais.
 
-## Scope
+## Escopo
 
-This Code of Conduct applies both within project spaces and in public spaces
-when an individual is representing the project or its community. Examples of
-representing a project or community include using an official project e-mail
-address, posting via an official social media account, or acting as an appointed
-representative at an online or offline event. Representation of a project may be
-further defined and clarified by project maintainers.
+Este Código de Conduta se aplica tanto nos espaços do projeto quanto em espaços
+públicos quando uma pessoa estiver representando o projeto ou sua comunidade.
+Exemplos de representação de um projeto ou comunidade incluem usar um endereço
+de e-mail oficial do projeto, publicar por meio de uma conta oficial em redes
+sociais ou atuar como representante designado em um evento online ou
+presencial. A representação de um projeto pode ser definida e esclarecida com
+mais detalhes pelos mantenedores do projeto.
 
-This Code of Conduct also applies outside the project spaces when the Project
-Steward has a reasonable belief that an individual's behavior may have a
-negative impact on the project or its community.
+Este Código de Conduta também se aplica fora dos espaços do projeto quando o
+Project Steward tiver motivos razoáveis para acreditar que o comportamento de
+uma pessoa pode ter impacto negativo sobre o projeto ou sua comunidade.
 
-## Conflict Resolution
+## Resolução de conflitos
 
-We do not believe that all conflict is bad; healthy debate and disagreement
-often yield positive results. However, it is never okay to be disrespectful or
-to engage in behavior that violates the project’s code of conduct.
+Não acreditamos que todo conflito seja ruim; debates saudáveis e discordâncias
+costumam gerar resultados positivos. No entanto, nunca é aceitável ser
+desrespeitoso ou adotar comportamentos que violem o código de conduta do
+projeto.
 
-If you see someone violating the code of conduct, you are encouraged to address
-the behavior directly with those involved. Many issues can be resolved quickly
-and easily, and this gives people more control over the outcome of their
-dispute. If you are unable to resolve the matter for any reason, or if the
-behavior is threatening or harassing, report it. We are dedicated to providing
-an environment where participants feel welcome and safe.
+Se você vir alguém violando o código de conduta, recomendamos que trate do
+comportamento diretamente com as pessoas envolvidas. Muitos problemas podem ser
+resolvidos de forma rápida e simples, e isso dá às pessoas mais controle sobre
+o resultado da disputa. Se não for possível resolver a questão por qualquer
+motivo, ou se o comportamento for ameaçador ou de assédio, faça uma denúncia.
+Temos o compromisso de oferecer um ambiente em que os participantes se sintam
+bem-vindos e seguros.
 
-Reports should be directed to *[PROJECT STEWARD NAME(s) AND EMAIL(s)]*, the
-Project Steward(s) for *[PROJECT NAME]*. It is the Project Steward’s duty to
-receive and address reported violations of the code of conduct. They will then
-work with a committee consisting of representatives from the Open Source
-Programs Office and the Google Open Source Strategy team. If for any reason you
-are uncomfortable reaching out to the Project Steward, please email
-<opensource@google.com>.
+As denúncias devem ser encaminhadas a *[PROJECT STEWARD NAME(s) AND EMAIL(s)]*,
+o(s) Project Steward(s) de *[PROJECT NAME]*. É dever do Project Steward receber
+e tratar as violações do código de conduta que forem denunciadas. Em seguida,
+ele trabalhará com um comitê formado por representantes do Open Source Programs
+Office e da equipe Google Open Source Strategy. Se por qualquer motivo você não
+se sentir à vontade para entrar em contato com o Project Steward, envie um
+e-mail para <opensource@google.com>.
 
-We will investigate every complaint, but you may not receive a direct response.
-We will use our discretion in determining when and how to follow up on reported
-incidents, which may range from not taking action to permanent expulsion from
-the project and project-sponsored spaces. We will notify the accused of the
-report and provide them an opportunity to discuss it before any action is taken.
-The identity of the reporter will be omitted from the details of the report
-supplied to the accused. In potentially harmful situations, such as ongoing
-harassment or threats to anyone's safety, we may take action without notice.
+Investigaremos todas as reclamações, mas você pode não receber uma resposta
+direta. Usaremos nosso critério para decidir quando e como dar seguimento aos
+incidentes denunciados, o que pode ir desde não tomar nenhuma medida até a
+expulsão permanente do projeto e dos espaços patrocinados pelo projeto.
+Notificaremos a pessoa acusada sobre a denúncia e daremos a ela a oportunidade
+de discuti-la antes de qualquer medida ser tomada. A identidade de quem fez a
+denúncia será omitida dos detalhes fornecidos à pessoa acusada. Em situações
+potencialmente prejudiciais, como assédio contínuo ou ameaças à segurança de
+qualquer pessoa, poderemos agir sem aviso prévio.
 
-## Attribution
+## Atribuição
 
-This Code of Conduct is adapted from the Contributor Covenant, version 1.4,
-available at
+Este Código de Conduta foi adaptado do Contributor Covenant, versão 1.4,
+disponível em
 <https://www.contributor-covenant.org/version/1/4/code-of-conduct/>

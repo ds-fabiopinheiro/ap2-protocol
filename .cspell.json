@@ -11,7 +11,13 @@
     ".cspell.json",
     "**/go.sum",
     "CLAUDE.md",
-    "deploy/**"
+    "deploy/**",
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "mkdocs.yml",
+    "docs/**/*.md"
   ],
   "dictionaryDefinitions": [
     {

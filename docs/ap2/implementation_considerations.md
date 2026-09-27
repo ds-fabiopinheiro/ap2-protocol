@@ -1,139 +1,145 @@
-# Implementation Considerations
+# Considerações de implementação
 
-## Roles
+## Papéis
 
-Below describes what each role needs to care about and examples of how
-this role might be implemented in the payment ecosystem.
+A seguir, o que cada papel precisa tratar e exemplos de como esse papel pode ser
+implementado no ecossistema de pagamentos.
 
 ### Merchant
 
-The Merchant needs to implement the following:
+O Merchant precisa implementar:
 
-  - Provide a Catalog and Checkout endpoints to the Shopping Agent to allow it
-    to perform a commerce protocol, for example as described by the 
+  - Endpoints de Catalog e Checkout para o Shopping Agent, permitindo que ele
+    execute um commerce protocol, por exemplo como descrito no
     [Universal Commerce Protocol](https://ucp.dev/).
-  - Generate a signed Checkout JWT. 
-  - Verify the [Checkout Mandate](checkout_mandate.md)
-    - Or delegate this to a technology provider (such as the MPP).
-  - Complete the Checkout with the Merchant Payment Processor using the Checkout
-    Mandate hash and `payment_token` (scoped to the Payment Mandate).
-    - Or implement this MPP role themselves.
-  - Generate a signed [Checkout Receipt](checkout_mandate.md#checkout-receipt)
-    with appropriate status and return it to the Shopping Agent.
+  - Geração de um Checkout JWT assinado.
+  - Verificação do [Checkout Mandate](checkout_mandate.md) (autorização
+    assinada para um checkout)
+    - Ou delegação dessa verificação a um fornecedor de tecnologia (como o MPP).
+  - Conclusão do Checkout com o Merchant Payment Processor usando o hash do
+    Checkout Mandate e o `payment_token` (com escopo limitado ao Payment
+    Mandate).
+    - Ou implementação do próprio papel de MPP.
+  - Geração de um [Checkout Receipt](checkout_mandate.md#checkout-receipt)
+    assinado com o status adequado e retorno ao Shopping Agent.
 
-Some examples of how the Merchant role could be structured:
+Alguns exemplos de como o papel de Merchant pode ser estruturado:
 
-  - Merchant with UCP endpoints.
-  - A Merchant Agent that communicates over agent-to-agent (a2a) with the Shopping Agent, and
-    then to the Merchant backend via UCP.
-  - Combined Merchant and Merchant Payment Processor. 
-  - A Merchant with delegated Checkout Mandate verification. 
-    - Here the Merchant would provide the Checkout Mandate to a technology
-      provider for verification, and proceed if verification passes.
+  - Merchant com endpoints UCP.
+  - Um Merchant Agent que se comunica via agent-to-agent (a2a) com o Shopping
+    Agent e, em seguida, com o backend do Merchant via UCP.
+  - Merchant e Merchant Payment Processor combinados.
+  - Um Merchant com verificação do Checkout Mandate delegada.
+    - Nesse caso, o Merchant entrega o Checkout Mandate a um fornecedor de
+      tecnologia para verificação e prossegue se a verificação passar.
 
 ### Merchant Payment Processor
 
-The Merchant Payment Processor needs to implement the following:
+O Merchant Payment Processor precisa implementar:
 
-  - Receive the payment token from the Merchant
-  - Verify the [Payment Mandate](payment_mandate.md) in the payment token.
-  - Generate a signed [Payment Receipt](payment_mandate.md#payment-receipt),
-    which is made available to the Shopping Agent, Credential Provider and Network.
-  - Process or verify payment
+  - Recebimento do payment token enviado pelo Merchant
+  - Verificação do [Payment Mandate](payment_mandate.md) (autorização assinada
+    para o pagamento) contido no payment token.
+  - Geração de um [Payment Receipt](payment_mandate.md#payment-receipt)
+    assinado, disponibilizado ao Shopping Agent, ao Credential Provider e à
+    Network.
+  - Processamento ou verificação do pagamento
 
 ### Shopping Agent
 
-The Shopping Agent needs to implement the following: 
+O Shopping Agent precisa implementar:
 
-  - Agentic Shopping to determine user intent.
-  - Selecting a payment instrument from a Credential Provider.
-  - Creation of Checkout and Payment Mandate Content.
-  - Obtaining signed Checkout and Payment Mandates via a Trusted Surface.
-  - Present the [Payment Mandate](payment_mandate.md) to the Credential
-    Provider to get the payment token. This involves:
-    - Selecting the appropriate Mandate from storage.
-    - Key-binding with an Agent key (as needed).
-    - Data minimization through Selective Disclosure.
-    - Preventing double spend and handling receipt management. 
-  - Presenting the [Checkout Mandate](checkout_mandate.md) to the Merchant as part of
-    completing the Checkout. This involves:
-    - Selecting the appropriate Mandate from storage.
-    - Key-binding with an Agent key (as needed).
-    - Data minimization through Selective Disclosure.
-    - Preventing double spend and handling receipt management.
-  - Receiving Receipts and handling success and error.
+  - Agentic Shopping para determinar a intenção do usuário.
+  - Seleção de um meio de pagamento de um Credential Provider.
+  - Criação do conteúdo dos Checkout e Payment Mandates.
+  - Obtenção dos Checkout e Payment Mandates assinados via uma Trusted Surface.
+  - Apresentação do [Payment Mandate](payment_mandate.md) ao Credential
+    Provider para obter o payment token. Isso envolve:
+    - Selecionar o Mandate adequado no armazenamento.
+    - Fazer Key Binding com uma chave do Agent (quando necessário).
+    - Minimizar dados por meio de Selective Disclosure.
+    - Impedir gasto duplo e gerenciar receipts.
+  - Apresentação do [Checkout Mandate](checkout_mandate.md) ao Merchant como
+    parte da conclusão do Checkout. Isso envolve:
+    - Selecionar o Mandate adequado no armazenamento.
+    - Fazer Key Binding com uma chave do Agent (quando necessário).
+    - Minimizar dados por meio de Selective Disclosure.
+    - Impedir gasto duplo e gerenciar receipts.
+  - Recebimento de Receipts e tratamento de sucesso e erro.
 
 ### Credential Provider
 
-The Credential Provider needs to implement the following:
+O Credential Provider precisa implementar:
 
-  - Providing payment instruments to the Shopping Agent.
-  - Verify the [Payment Mandate](payment_mandate.md).
-  - Obtaining the payment token from the network using the Payment Mandate, or initiate sending of funds to the merchant.
-  - Releasing the payment token or funding reference number.
-  - Receiving and storing the
+  - Fornecimento de meios de pagamento ao Shopping Agent.
+  - Verificação do [Payment Mandate](payment_mandate.md).
+  - Obtenção do payment token junto à network usando o Payment Mandate, ou início do envio de fundos ao merchant.
+  - Liberação do payment token ou do número de referência do envio de fundos.
+  - Recebimento e armazenamento do
     [Payment Receipt](payment_mandate.md#payment-receipt).
 
-Examples of how the Credential Provider role can be implemented: 
+Exemplos de como o papel de Credential Provider pode ser implementado:
 
-  - A user's digital Wallet, or payment network that the Shopping Agent links with.
-  - A store of payment instruments provided by the Shopping Agent directly.
-  - A store of Payment instruments provided by the Merchant.
+  - Uma Wallet digital do usuário, ou uma payment network, à qual o Shopping Agent se conecta.
+  - Um repositório de meios de pagamento fornecido diretamente pelo Shopping Agent.
+  - Um repositório de meios de pagamento fornecido pelo Merchant.
 
 ### Trusted Surface
 
-The Trusted Surface represents UI that is trusted by all parties to obtain
-authorization and consent from the end user. It is responsible for: 
+A Trusted Surface representa uma interface considerada confiável por todas as
+partes para obter autorização e consentimento do usuário final. Ela é
+responsável por:
 
-  - Displaying Checkout and Payment Mandate Content to the User.
-  - Obtaining user authorization and consent. 
-  - Creating signed Checkout and Payment Mandates and delegating them to the
-    Shopping Agent. 
+  - Exibir ao usuário o conteúdo dos Checkout e Payment Mandates.
+  - Obter a autorização e o consentimento do usuário.
+  - Criar Checkout e Payment Mandates assinados e delegá-los ao
+    Shopping Agent.
 
-This role can be played by a lot of different entities. Some examples include:
+Esse papel pode ser desempenhado por várias entidades diferentes. Alguns
+exemplos:
 
-  - A deterministic part of the Shopping Agent application.
-  - A standalone User Wallet, or Issuer application.
-  - Trusted User Agents (such as mobile Platforms or Browsers).
+  - Uma parte determinística da aplicação do Shopping Agent.
+  - Uma User Wallet independente, ou uma aplicação do Issuer.
+  - User Agents confiáveis (como plataformas móveis ou navegadores).
 
-## Agent Identification
+## Identificação de agentes
 
-AP2 is designed to constrain Agent behaviors without them having to be inherently
-trustworthy. As part of implementing a Commerce Protocol, Merchants or Trusted
-Surfaces MAY wish to only work with trusted Agents. These details are left to
-the Commerce Protocol layer.
+O AP2 foi projetado para restringir o comportamento dos Agents sem exigir que
+eles sejam confiáveis por natureza. Ao implementar um Commerce Protocol,
+Merchants ou Trusted Surfaces MAY (opcional) querer trabalhar apenas com Agents
+confiáveis. Esses detalhes ficam a cargo da camada do Commerce Protocol.
 
 ## Hashes
 
-When calculating hashes it is important that the same representation is used.
-This is typically achieved by providing the base64url encoded representation of
-JSON structures. For dispute resolution this will mean storing the SD-JWTs,
-along with their disclosures, for the Mandates in their compact serialization.
-This is to allow easy computation of the `sd_hash`, `checkout_hash`, and Receipt
-`reference`.
+Ao calcular hashes, é importante usar a mesma representação. Isso normalmente é
+feito usando a representação em base64url das estruturas JSON. Para a resolução
+de disputas, isso significa armazenar os SD-JWTs dos Mandates, com suas
+disclosures, na serialização compacta. Isso permite calcular facilmente o
+`sd_hash`, o `checkout_hash` e o `reference` do Receipt.
 
-For consistency, the same hashing algorithm is required for both the SD-JWT
-digests and `checkout_hash`.
+Por consistência, o mesmo algoritmo de hash é exigido para os digests do SD-JWT
+e para o `checkout_hash`.
 
-## Agent Key
+## Chave do agente
 
-One important portion of the Autonomous flows is the Agent's key. This is used
-to transaction-bind the open Mandates and prevent their re-use. It is also used
-to prevent double spend by preventing the release of overlapping closed Mandates.
+Uma parte importante dos fluxos Autonomous é a chave do Agent. Ela é usada para
+vincular os open Mandates a uma transação e impedir sua reutilização. Também é
+usada para impedir gasto duplo, bloqueando a liberação de closed Mandates
+sobrepostos.
 
-One way to implement this is through tool calling, where deterministic code
-verifies the closed Mandate being created before being signed. This
-responsibility could also be delegated by the Shopping Agent to a technology
-provider.
+Uma forma de implementar isso é por tool calling, em que código determinístico
+verifica o closed Mandate criado antes de ele ser assinado. Essa
+responsabilidade também pode ser delegada pelo Shopping Agent a um fornecedor de
+tecnologia.
 
-## Mandate Management
+## Gerenciamento de Mandates
 
-As Mandates are long-lived, the Shopping Agent SHOULD provide a mechanism to
-manage active Mandates (along with the tasks they are being used in).
-Limiting the duration of active Mandates, and providing
-notifications to the User, even when executing autonomously, is important to
-keep the User in control of their Shopping Agent.
+Como os Mandates têm longa duração, o Shopping Agent SHOULD (recomendado)
+oferecer um mecanismo para gerenciar os Mandates ativos (junto com as tarefas
+em que estão sendo usados). Limitar a duração dos Mandates ativos e enviar
+notificações ao usuário, mesmo na execução autônoma, é importante para manter o
+usuário no controle do seu Shopping Agent.
 
-In the case of external Trusted Surfaces it could make sense
-to allow for management of delegated Mandates but that is outside the scope of
-this specification.
+No caso de Trusted Surfaces externas, pode fazer sentido permitir o
+gerenciamento de Mandates delegados, mas isso está fora do escopo desta
+especificação.
