@@ -249,7 +249,7 @@ EPICS.append(dict(
             "Consumo do Gemini maior que na jornada autônoma (Shopping Agent v1 e 3 agentes remotos chamam o modelo)."],
     premissas=["O ADK Web funciona atrás do nginx em um subcaminho ou em porta dedicada exposta pelo nginx; a forma será definida na task de spike.",
                "Os endereços localhost:8001/8002 fixos em remote_agents.py continuam válidos porque todos os agentes rodam no mesmo container.",
-               "O Shopping Agent v1 e seus sub-agentes já usam common/retrying_llm_agent.py (RetryingLlmAgent). Com o padrão max_retries=1, o código faz uma única tentativa e não repete; quando repete, repete qualquer exceção, sem espera. Precisa seguir a regra de retry da v2 (RN04 de F-V3.3.2)."],
+               "O Shopping Agent v1 e seus 3 sub-agentes já usam common/retrying_llm_agent.py (RetryingLlmAgent) com max_retries=5: até 5 tentativas (4 novas), repetindo o turno inteiro do agente em qualquer exceção, sem espera. Precisa seguir a regra de retry da v2 (RN04 de F-V3.3.2), que repete só a chamada ao modelo em 503."],
     features=[
         env_feature("v4", "homolog-v3", "F-V4.1"),
         dict(id="F-V4.2", title="Credentials Provider Agent publicado internamente",

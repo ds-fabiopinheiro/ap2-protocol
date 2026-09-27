@@ -108,7 +108,7 @@ __TREE__
 - Não verificado se os agentes em Go chamam o Gemini.
 - O app Android lê `GEMINI_API_KEY` do `local.properties` e grava a chave no `BuildConfig`; as URLs são `http://localhost:8001/8002` fixas (`SettingsScreen.kt`, `ShoppingTools.kt`).
 - Os agentes A2A do cenário human-present usam o modelo `gemini-3.1-flash-lite-preview` fixo em `common/function_call_resolver.py`.
-- O Shopping Agent v1 usa `common/retrying_llm_agent.py` com `max_retries=1`, o que na prática não repete a chamada; quando repete, repete qualquer exceção, sem espera.
+- O Shopping Agent v1 e seus 3 sub-agentes usam `common/retrying_llm_agent.py` com `max_retries=5`: até 5 tentativas, repetindo o turno inteiro do agente em qualquer exceção, sem espera.
 
 ## 10. Pendências para sincronizar
 
@@ -124,7 +124,7 @@ __TREE__
 Pré-requisito: [GitHub CLI](https://cli.github.com/) instalada e autenticada (`gh auth login`) com permissão de escrita em issues.
 
 ```bash
-cd backlog
+cd docs/backlog    # no repositório (PR #9); no zip, a pasta é backlog/
 python3 create_issues.py                  # simulação: lista o que seria criado
 python3 create_issues.py --apply --only v3  # cria só o épico v3 e seus filhos
 python3 create_issues.py --apply          # cria tudo
@@ -135,7 +135,7 @@ O script:
 1. cria as labels e os milestones que faltam;
 2. cria as issues na ordem pai → filho, com o corpo de `out/issues/*.md`;
 3. vincula cada filho ao pai como sub-issue;
-4. grava o mapa chave → número em `out/created.json`.
+4. grava o mapa chave → número em `out/created.json` (arquivo local, ignorado pelo `.gitignore` da pasta).
 
 Se for executado de novo, reaproveita issues com o mesmo título.
 
