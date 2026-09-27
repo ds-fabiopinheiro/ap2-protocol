@@ -1,4 +1,5 @@
 import type { PurchaseComplete } from '../types';
+import {formatDateTime, formatUsd} from '../utils/format';
 import './ReceiptCard.scss';
 
 function getAmountCharge(
@@ -17,11 +18,16 @@ function getPaymentMethod(
   const instrument = closedMandateContent?.payment_instrument as
     | Record<string, unknown>
     | undefined;
-  if (instrument?.description && typeof instrument.description === 'string')
-    return instrument.description;
+  if (instrument?.description && typeof instrument.description === 'string') {
+    // The description comes from the signed mandate; translate only the
+    // displayed text ("Card •••4242" -> "Cartão •••4242").
+    return instrument.description.startsWith('Card ')
+      ? `Cartão ${instrument.description.slice('Card '.length)}`
+      : instrument.description;
+  }
   if (instrument?.type && typeof instrument.type === 'string')
     return instrument.type;
-  return 'Card';
+  return 'Cartão';
 }
 
 interface Props {
@@ -35,7 +41,7 @@ export function ReceiptCard({ purchase, itemName }: Props) {
     | undefined;
   const amount = getAmountCharge(closedMandateContent);
   const paymentMethod = getPaymentMethod(closedMandateContent);
-  const displayName = itemName ?? 'Order';
+  const displayName = itemName ?? 'Pedido';
 
   return (
     <div className="msg-agent receipt-card-container">
@@ -54,8 +60,8 @@ export function ReceiptCard({ purchase, itemName }: Props) {
             </svg>
           </div>
           <div className="title-container">
-            <div className="title">Purchase Complete</div>
-            <div className="subtitle">Autonomous · mandate-authorized</div>
+            <div className="title">Compra concluída</div>
+            <div className="subtitle">Autônoma · autorizada por mandate</div>
           </div>
         </div>
 
@@ -65,17 +71,17 @@ export function ReceiptCard({ purchase, itemName }: Props) {
 
           <div className="info-grid">
             <div className="grid-item">
-              <div className="item-label">Charged</div>
-              <div className="item-value">${amount.toFixed(2)}</div>
+              <div className="item-label">Valor cobrado</div>
+              <div className="item-value">{formatUsd(amount)}</div>
             </div>
             <div className="grid-item">
-              <div className="item-label">Payment</div>
+              <div className="item-label">Pagamento</div>
               <div className="item-value payment-method">{paymentMethod}</div>
             </div>
           </div>
 
           <div className="chain-box">
-            <div className="chain-label">Transaction chain</div>
+            <div className="chain-label">Cadeia da transação</div>
             {[
               {
                 label: 'Merchant MCP',
@@ -83,7 +89,7 @@ export function ReceiptCard({ purchase, itemName }: Props) {
               },
               {
                 label: 'Credential Provider MCP',
-                steps: 'issue_payment_credential (verify + issue)',
+                steps: 'issue_payment_credential (verifica + emite)',
               },
             ].map((s) => (
               <div key={s.label} className="chain-row">
@@ -94,7 +100,7 @@ export function ReceiptCard({ purchase, itemName }: Props) {
           </div>
 
           <div className="timestamp">
-            {new Date().toLocaleString('en-US', {
+            {formatDateTime(new Date(), {
               month: 'short',
               day: 'numeric',
               year: 'numeric',
