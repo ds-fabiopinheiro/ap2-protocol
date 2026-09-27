@@ -200,9 +200,18 @@ export function useChat() {
                   '[useChat.ts] Received status event:',
                   JSON.stringify(event, null, 2));
               if (event.status.state === 'failed') {
+                // Show the text parts of the error; fall back to the raw JSON
+                // only when there is no text part.
+                const errorText = (event.status.message?.parts ?? [])
+                    .filter(
+                        (p) => p.kind === 'text' && typeof p.text === 'string')
+                    .map((p) => p.text as string)
+                    .join('\n')
+                    .trim();
                 addMessage({
                   role: 'system',
-                  text: 'Erro do agente: ' + JSON.stringify(event.status.message),
+                  text: 'O agente retornou um erro. ' +
+                      (errorText || JSON.stringify(event.status.message)),
                 });
               }
               const statusParts = event.status.message?.parts ?? [];

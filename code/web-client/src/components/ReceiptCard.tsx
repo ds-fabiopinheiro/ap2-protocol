@@ -18,8 +18,13 @@ function getPaymentMethod(
   const instrument = closedMandateContent?.payment_instrument as
     | Record<string, unknown>
     | undefined;
-  if (instrument?.description && typeof instrument.description === 'string')
-    return instrument.description;
+  if (instrument?.description && typeof instrument.description === 'string') {
+    // The description comes from the signed mandate; translate only the
+    // displayed text ("Card •••4242" -> "Cartão •••4242").
+    return instrument.description.startsWith('Card ')
+      ? `Cartão ${instrument.description.slice('Card '.length)}`
+      : instrument.description;
+  }
   if (instrument?.type && typeof instrument.type === 'string')
     return instrument.type;
   return 'Cartão';

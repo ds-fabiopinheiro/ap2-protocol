@@ -241,8 +241,7 @@ export function MandateApproval({
               ? 'o item estiver disponível e dentro do orçamento de'
               : 'o preço for ≤'}{' '}
             <span className="highlight">{formatUsd(priceCap)}</span>. Mantenha
-            esta aba aberta: o monitoramento roda no navegador e para se a aba
-            for fechada.
+            esta aba aberta: o monitoramento e a compra dependem dela.
           </div>
 
           {state === 'idle' && (

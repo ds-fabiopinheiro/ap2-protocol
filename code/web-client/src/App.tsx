@@ -123,6 +123,9 @@ const ChatInput = ({input, setInput, handleSend, loading}: ChatInputProps) => (
       placeholder="Ex.: Quero um tênis Nike preto, tamanho 42. Monitore o preço e compre se ficar abaixo de US$ 500."
       disabled={loading}
       className="chat-input"
+      // Focus on load so Enter with an empty field sends the starter
+      // message without clicking the field first.
+      autoFocus
     />
     <button
       onClick={() =>
