@@ -197,6 +197,8 @@ Testes de 27/09/2026 (feitos pelo usuário):
 | #7 | Tradução da documentação da raiz e de `docs/` | Mesclado (`71b9332`) |
 | #8 | Tradução dos READMEs de `code/` | Mesclado (`0adcc69`) |
 | #9 | Backlog v3–v6 em `docs/backlog/` (fora do site do mkdocs por `exclude_docs`) | Mesclado (`eeb768f`) |
+| #39 | CLAUDE.md: testes de 27/09, correções do PR #6 (P8.8), estado dos PRs e issues da v3 | Mesclado (`3f044b8`) |
+| #40 | CLAUDE.md: limitações mantidas do teste pós-merge de 27/09 (P8.9) | Mesclado (`65f703c`) |
 
 Os PRs #7, #8 e #9 alteraram a lista `ignorePaths` do `.cspell.json`; os
 conflitos entre eles foram resolvidos mantendo as entradas dos dois lados.
