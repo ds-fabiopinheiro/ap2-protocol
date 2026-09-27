@@ -6,6 +6,7 @@ import {
   type DecodedJwt,
   type DecodedSdJwt,
 } from '../utils/sdJwtDecoder';
+import {formatMinorUnits, formatUsd} from '../utils/format';
 import './MandateCard.scss';
 
 interface Props {
@@ -28,7 +29,7 @@ function truncate(s: string, n = 48): string {
 }
 
 function formatTimestamp(ts: number): string {
-  return new Date(ts).toLocaleTimeString([], {
+  return new Date(ts).toLocaleTimeString('pt-BR', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -66,11 +67,11 @@ function summarizeEntry(
       if (typeof p.item_id === 'string')
         out.push({ label: 'Item', value: String(p.item_id) });
       if (typeof p.price_cap === 'number')
-        out.push({ label: 'Price Cap', value: `$${p.price_cap}` });
+        out.push({ label: 'Preço máximo', value: formatUsd(p.price_cap) });
       if (typeof p.qty === 'number')
-        out.push({ label: 'Qty', value: String(p.qty) });
+        out.push({ label: 'Qtd.', value: String(p.qty) });
       if (typeof p.payment_method === 'string')
-        out.push({ label: 'Method', value: String(p.payment_method) });
+        out.push({ label: 'Forma de pagamento', value: String(p.payment_method) });
       break;
     }
     case 'open_checkout_mandate': {
@@ -85,11 +86,11 @@ function summarizeEntry(
       ) as Record<string, unknown> | undefined;
       if (merchants) {
         const arr = (merchants.allowed as unknown[]) ?? [];
-        out.push({ label: 'Allowed Merchants', value: String(arr.length) });
+        out.push({ label: 'Merchants permitidos', value: String(arr.length) });
       }
       if (lineItems) {
         const items = (lineItems.items as unknown[]) ?? [];
-        out.push({ label: 'Line Item Rules', value: String(items.length) });
+        out.push({ label: 'Regras de itens', value: String(items.length) });
       }
       break;
     }
@@ -103,9 +104,12 @@ function summarizeEntry(
         const min = amount.min;
         const max = amount.max;
         const cur = amount.currency ?? '';
+        const code = String(cur || 'USD');
+        const fmt = (v: unknown) =>
+          typeof v === 'number' ? formatMinorUnits(v, code) : String(v);
         out.push({
-          label: 'Amount',
-          value: `${min ?? 0}–${max ?? '∞'} ${String(cur)}`,
+          label: 'Faixa de valor',
+          value: `${fmt(min ?? 0)}–${max == null ? '∞' : fmt(max)}`,
         });
       }
       const payees = constraints.find(
@@ -113,21 +117,24 @@ function summarizeEntry(
       ) as Record<string, unknown> | undefined;
       if (payees) {
         const arr = (payees.allowed as unknown[]) ?? [];
-        out.push({ label: 'Allowed Payees', value: String(arr.length) });
+        out.push({ label: 'Recebedores permitidos', value: String(arr.length) });
       }
       break;
     }
     case 'checkout_jwt': {
       const payload = jwt?.payload ?? entry.rawPayload ?? {};
       if (payload.cart_id)
-        out.push({ label: 'Cart', value: String(payload.cart_id) });
+        out.push({ label: 'Carrinho', value: String(payload.cart_id) });
       if (typeof payload.total === 'number')
         out.push({
           label: 'Total',
-          value: `$${(payload.total / 100).toFixed(2)}`,
+          value: formatMinorUnits(
+            payload.total,
+            typeof payload.currency === 'string' ? payload.currency : 'USD',
+          ),
         });
       if (payload.currency)
-        out.push({ label: 'Currency', value: String(payload.currency) });
+        out.push({ label: 'Moeda', value: String(payload.currency) });
       const merchant = payload.merchant as Record<string, unknown> | undefined;
       if (merchant?.name)
         out.push({ label: 'Merchant', value: String(merchant.name) });
@@ -141,7 +148,7 @@ function summarizeEntry(
       }
       const inner = first.checkout_jwt;
       if (typeof inner === 'string' && inner.split('.').length === 3) {
-        out.push({ label: 'Binds', value: 'Merchant-signed checkout JWT' });
+        out.push({ label: 'Vincula', value: 'checkout JWT assinado pelo Merchant' });
       }
       break;
     }
@@ -150,7 +157,7 @@ function summarizeEntry(
       const src = sd ? first : (entry.rawPayload ?? {});
       const tx = src.transaction_id;
       if (typeof tx === 'string') {
-        out.push({ label: 'Transaction', value: truncate(tx, 32) });
+        out.push({ label: 'Transação', value: truncate(tx, 32) });
       }
       const amount = src.amount as Record<string, unknown> | undefined;
       if (amount) {
@@ -158,13 +165,13 @@ function summarizeEntry(
         const cur = amount.currency ?? '';
         if (typeof amt === 'number') {
           out.push({
-            label: 'Amount',
-            value: `${(amt / 100).toFixed(2)} ${String(cur)}`,
+            label: 'Valor',
+            value: formatMinorUnits(amt, String(cur || 'USD')),
           });
         }
       }
       const payee = src.payee as Record<string, unknown> | undefined;
-      if (payee?.name) out.push({ label: 'Payee', value: String(payee.name) });
+      if (payee?.name) out.push({ label: 'Recebedor', value: String(payee.name) });
       break;
     }
     case 'mandate_chain':
@@ -172,18 +179,18 @@ function summarizeEntry(
       if (sd?.kbJwt?.payload) {
         const aud = sd.kbJwt.payload.aud;
         const nonce = sd.kbJwt.payload.nonce;
-        if (aud) out.push({ label: 'Audience', value: String(aud) });
+        if (aud) out.push({ label: 'Audience (aud)', value: String(aud) });
         if (nonce)
           out.push({ label: 'Nonce', value: truncate(String(nonce), 24) });
       } else if (entry.rawPayload) {
         const aud = entry.rawPayload.aud;
         const nonce = entry.rawPayload.nonce;
         const chainId = entry.rawPayload.mandate_chain_id;
-        if (aud) out.push({ label: 'Audience', value: String(aud) });
+        if (aud) out.push({ label: 'Audience (aud)', value: String(aud) });
         if (nonce)
           out.push({ label: 'Nonce', value: truncate(String(nonce), 24) });
         if (chainId)
-          out.push({ label: 'Chain', value: truncate(String(chainId), 24) });
+          out.push({ label: 'Cadeia', value: truncate(String(chainId), 24) });
       }
       break;
     }
@@ -209,7 +216,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1200);
       }}>
-      {copied ? 'Copied' : 'Copy'}
+      {copied ? 'Copiado' : 'Copiar'}
     </button>
   );
 }
@@ -302,21 +309,23 @@ export function MandateCard({ entry }: Props) {
       {expanded && (
         <div className="detail-section">
           {error && (
-            <div className="decode-error">Could not decode: {error}</div>
+            <div className="decode-error">
+              Não foi possível decodificar: {error}
+            </div>
           )}
           {headerError && (
             <div className="decode-error">
-              Header parse failed: {headerError}
+              Falha ao interpretar o header: {headerError}
             </div>
           )}
           {payloadError && (
             <div className="decode-error">
-              Payload parse failed: {payloadError}
+              Falha ao interpretar o payload: {payloadError}
               {rawPayloadString != null && (
                 <span className="decode-hint">
                   {' '}
-                  · Showing raw decoded string below (token may have been
-                  truncated or corrupted in transit).
+                  · A string decodificada bruta aparece abaixo (o token pode
+                  ter sido truncado ou corrompido no transporte).
                 </span>
               )}
             </div>
@@ -341,7 +350,7 @@ export function MandateCard({ entry }: Props) {
 
               {payloadError && rawPayloadString && (
                 <section>
-                  <h4>Raw Decoded Payload</h4>
+                  <h4>Payload decodificado (bruto)</h4>
                   <pre className="json-block">
                     <code>{rawPayloadString}</code>
                   </pre>
@@ -354,15 +363,15 @@ export function MandateCard({ entry }: Props) {
                   <div className="disclosure-table">
                     <div className="disclosure-row head">
                       <span>Salt</span>
-                      <span>Key</span>
-                      <span>Value</span>
+                      <span>Chave</span>
+                      <span>Valor</span>
                     </div>
                     {sd.disclosures.map((d, i) => (
                       <div key={i} className="disclosure-row">
                         <span className="mono small">
                           {truncate(d.salt, 18)}
                         </span>
-                        <span className="mono">{d.key ?? '(array)'}</span>
+                        <span className="mono">{d.key ?? '(item de array)'}</span>
                         <span
                           className="mono value-cell"
                           style={{ whiteSpace: 'pre-wrap' }}>
@@ -390,7 +399,7 @@ export function MandateCard({ entry }: Props) {
           {entry.rawToken && (
             <section>
               <div className="raw-token-header">
-                <h4>Raw Encoded Token</h4>
+                <h4>Token codificado (bruto)</h4>
                 <CopyButton text={entry.rawToken} />
               </div>
               <pre className="raw-token">

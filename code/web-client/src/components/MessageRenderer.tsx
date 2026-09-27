@@ -93,7 +93,7 @@ export const MessageRenderer = ({
   if (msg.role === 'user_action') {
     return (
       <UserActionCard
-        label={msg.userActionLabel ?? 'Action'}
+        label={msg.userActionLabel ?? 'Ação'}
         sublabel={msg.userActionSublabel}
       />
     );

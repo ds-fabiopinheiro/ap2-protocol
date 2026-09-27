@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import type {InventoryMatch, InventoryOptionsArtifact} from '../types';
+import {formatUsd} from '../utils/format';
 import './InventoryOptionsCard.scss';
 
 interface Props {
@@ -44,9 +45,9 @@ function ItemRow({
         </div>
       </div>
       <div className="price-wrapper">
-        <div className="item-price">${item.price.toFixed(2)}</div>
+        <div className="item-price">{formatUsd(item.price)}</div>
         {item.stock != null && (
-          <div className="item-stock">{item.stock} in stock</div>
+          <div className="item-stock">{item.stock} em estoque</div>
         )}
       </div>
     </div>
@@ -88,27 +89,28 @@ export function InventoryOptionsCard({inventory, onSelect}: Props) {
         ))}
       </div>
       <p className="info-text">
-        I&apos;ve queried the merchant inventory via Merchant MCP and found{' '}
-        {inventory.matches.length} option
-        {inventory.matches.length === 1 ? '' : 's'} above. Please select which
-        item you want, then I&apos;ll create the purchase mandate and start
-        monitoring the price.
+        Consultei o estoque do Merchant via Merchant MCP e encontrei{' '}
+        {inventory.matches.length}{' '}
+        {inventory.matches.length === 1 ? 'opção' : 'opções'}, listadas acima.
+        Escolha o item. Em seguida, crio o mandate de compra e começo a
+        monitorar o preço.
       </p>
       <div className="status-text">
         {onSelect ? (
           selected ? (
             <>
-              Selected <span className="selected-item-id">{selected}</span>
+              Selecionado: <span className="selected-item-id">{selected}</span>
               {hasConfirmed
-                ? '. Creating mandate…'
-                : '. Click &quot;Confirm selection&quot; to create the mandate.'}
+                ? '. Criando o mandate…'
+                : '. Clique em "Confirmar seleção" para criar o mandate.'}
             </>
           ) : (
-            'Choose an option above.'
+            'Escolha uma das opções acima.'
           )
         ) : (
           <>
-            Selected <span className="selected-item-id">{selected || '—'}</span>
+            Selecionado:{' '}
+            <span className="selected-item-id">{selected || '—'}</span>
           </>
         )}
       </div>
@@ -119,7 +121,7 @@ export function InventoryOptionsCard({inventory, onSelect}: Props) {
             onSelect?.(selected);
           }}
           className="confirm-button">
-          Confirm selection
+          Confirmar seleção
         </button>
       )}
     </div>
