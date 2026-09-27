@@ -205,9 +205,9 @@ entradas dos dois lados.
 Issues da v3 criadas a partir de `docs/backlog/out/issues/` (PR #9): #10–#38,
 milestone #1 "v3 — Merchant Agent (homolog-v3)", hierarquia de sub-issues
 Épico → Feature → PBI → Task. EP-V3 = #10; features #11–#13; PBIs #14–#18;
-tasks #19–#38. Labels aplicadas: `versão:v3` em todas e `tipo:épico` na #10.
-Faltam `tipo:feature`, `tipo:pbi`, `tipo:task` e `área:*`, que precisam ser
-criadas no GitHub antes (o conector do GitHub não cria labels). v4, v5 e v6
+tasks #19–#38. Labels conforme `out/issues.json` (tipo, área e versão),
+conferidas em 27/09 às 07:15 UTC. As labels foram criadas pelo usuário no
+GitHub; o conector do GitHub desta sessão não cria labels. v4, v5 e v6
 não foram criadas; aguardam confirmação do usuário.
 
 Tradução pt-BR: o que ficou em inglês e o motivo estão nas descrições dos PRs
