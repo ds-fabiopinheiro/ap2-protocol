@@ -1,58 +1,58 @@
-# AP2 Sample: User Authorization using Digital Payment Credentials
+# Sample AP2: autorização do usuário com Digital Payment Credentials
 
-This sample demonstrates user authentication of a purchase using digital payment
-credentials (DPC).
+Este sample mostra a autenticação do usuário em uma compra usando digital
+payment credentials (DPC, credenciais digitais de pagamento).
 
-## Scenario
+## Cenário
 
-This repository demonstrates a conversational Android shopping assistant. It
-features a full user experience, from natural language product discovery
-(powered by Gemini) to secure payment using Digital Payment Credentials (DPC).
-All backend communication is handled via the A2A protocol.
+Este repositório mostra um assistente de compras conversacional para Android.
+Ele cobre a experiência completa do usuário, da busca de produtos em linguagem
+natural (com Gemini) ao pagamento seguro com Digital Payment Credentials (DPC).
+Toda a comunicação com o backend usa o protocolo A2A.
 
-## Key Actors
+## Atores principais
 
-This sample consists of:
+Este sample é composto por:
 
-*   **Shopping Agent:** An Android app that handles the user's requests to shop.
-*   **Merchant Agent:** An agent that handles product queries from the shopping
-    agent and verifies the DPC signature. Runs locally on port `8001`.
-*   **Credentials Provider Agent:** An agent that extracts the Agent Provider's
-    public key from the DPC certificate and signs / hands out payment
-    credentials. Runs locally on port `8002` (started automatically by
+*   **Shopping Agent:** um app Android que trata os pedidos de compra do usuário.
+*   **Merchant Agent:** um agente que atende as consultas de produtos do shopping
+    agent e verifica a assinatura da DPC. Roda localmente na porta `8001`.
+*   **Credentials Provider Agent:** um agente que extrai a chave pública do
+    Agent Provider do certificado da DPC e assina / fornece credenciais de
+    pagamento. Roda localmente na porta `8002` (iniciado automaticamente pelo
     `run.sh`).
 
-## Key Features
+## Principais recursos
 
-*   Purchase with a **Digital Payment Credential (DPC):** A modern, secure
-    payment flow using the Android Credential Manager that allows signing over
-    the user's intent displayed on a trusted surface.
+*   Compra com uma **Digital Payment Credential (DPC):** fluxo de pagamento
+    moderno e seguro que usa o Android Credential Manager e permite assinar a
+    intenção do usuário exibida em uma trusted surface.
 
-## Executing the Example
+## Como executar o exemplo
 
-### Setup
+### Configuração
 
-1.  **Install Android Studio.**
+1.  **Instale o Android Studio.**
 
-    Download Android Studio from the
-    [official website](https://developer.android.com/studio) and install it.
-    This will install the Android SDK, JDK, and all other necessary tools
-    needed to build and run the Android app.
+    Baixe o Android Studio no
+    [site oficial](https://developer.android.com/studio) e instale-o.
+    Isso instala o Android SDK, o JDK e as demais ferramentas necessárias
+    para compilar e executar o app Android.
 
-2.  **Obtain a Google API key from
-    [Google AI Studio](https://aistudio.google.com/apikey)** and export it
-    as an environment variable (needed by the merchant / credentials provider
-    servers):
+2.  **Obtenha uma chave de API do Google no
+    [Google AI Studio](https://aistudio.google.com/apikey)** e exporte-a
+    como variável de ambiente (necessária para os servidores do merchant /
+    credentials provider):
 
     ```sh
     export GOOGLE_API_KEY=your_key
     ```
 
-3.  **Create `local.properties` for the Android app.**
+3.  **Crie o `local.properties` do app Android.**
 
-    This file is gitignored because it contains machine-specific paths and
-    your API key. Create it with your key and Android SDK path — you can
-    find the SDK path in Android Studio under `Settings > Languages &
+    Este arquivo está no gitignore porque contém caminhos específicos da
+    máquina e sua chave de API. Crie-o com sua chave e o caminho do Android
+    SDK — o caminho do SDK aparece no Android Studio em `Settings > Languages &
     Frameworks > Android SDK`:
 
     ```sh
@@ -62,26 +62,26 @@ This sample consists of:
     EOF
     ```
 
-4.  **Set `JAVA_HOME`.**
+4.  **Defina `JAVA_HOME`.**
 
-    The JDK ships with Android Studio but does not set `JAVA_HOME` by
-    default. You can find the path in Android Studio under `Settings >
+    O JDK vem com o Android Studio, mas `JAVA_HOME` não é definido por
+    padrão. O caminho aparece no Android Studio em `Settings >
     Build, Execution, Deployment > Build Tools > Gradle`:
 
     ```sh
     export JAVA_HOME=</absolute/path/to/jdk>
     ```
 
-5.  **Generate the Gradle wrapper.**
+5.  **Gere o Gradle wrapper.**
 
-    The Gradle wrapper (`gradlew`, `gradlew.bat`, `gradle/wrapper/*`) is
-    gitignored, so a fresh clone doesn't include it. Generate it once via
-    either:
+    O Gradle wrapper (`gradlew`, `gradlew.bat`, `gradle/wrapper/*`) está no
+    gitignore, então um clone novo não o inclui. Gere-o uma vez de uma
+    destas formas:
 
-    *   Open `code/samples/android/shopping_assistant/` in Android Studio
-        and let it sync — Android Studio will generate the wrapper
-        automatically, **or**
-    *   Run the Gradle wrapper task with a system-installed Gradle:
+    *   Abra `code/samples/android/shopping_assistant/` no Android Studio
+        e aguarde a sincronização — o Android Studio gera o wrapper
+        automaticamente, **ou**
+    *   Execute a tarefa `wrapper` com um Gradle instalado no sistema:
 
         ```sh
         cd code/samples/android/shopping_assistant
@@ -89,58 +89,58 @@ This sample consists of:
         cd -
         ```
 
-6.  **Ensure your environment meets
-    the [Python sample prerequisites](../../../python).**
+6.  **Confirme que o ambiente atende aos
+    [pré-requisitos do sample em Python](../../../python).**
 
-7.  **Enable the Enhanced Payment Confirmation UI.**
+7.  **Ative a Enhanced Payment Confirmation UI.**
 
-    To experience the most modern and secure payment flow, you must enable a
-    required feature flag:
+    Para usar o fluxo de pagamento mais moderno e seguro, é preciso ativar
+    uma feature flag obrigatória:
 
-    **Enroll in the
+    **Inscreva-se no
     [Google Play Services Beta Program](https://developers.google.com/android/guides/beta-program):**
-    Ensure the Google Account on your test device is enrolled.
+    confirme que a Conta Google do dispositivo de teste está inscrita.
 
-8.  **Install the Digital Wallet App (sideloaded).**
+8.  **Instale o app de carteira digital (sideload).**
 
-    This demo requires a separate digital wallet app ('CM Wallet') to be
-    installed on the same device that holds the Digital Payment Credentials.
+    Esta demo exige um app de carteira digital separado ('CM Wallet'),
+    instalado no mesmo dispositivo, que guarda as Digital Payment Credentials.
 
-    1.  Download the
-        [latest CM Wallet APK](https://github.com/digitalcredentialsdev/CMWallet/actions?query=branch%3Amain).
+    1.  Baixe o
+        [APK mais recente do CM Wallet](https://github.com/digitalcredentialsdev/CMWallet/actions?query=branch%3Amain).
 
-    1.  Install the APK and start the app:
+    1.  Instale o APK e inicie o app:
 
         ```sh
         adb install app-debug.apk
         adb shell am start -n "com.credman.cmwallet/.MainActivity"
         ```
 
-### Execution
+### Execução
 
-A convenience script is included to automatically build, install, and launch
-the Android app, and start the local merchant and credentials provider
-servers. Run it from the repository root:
+Há um script que compila, instala e abre o app Android e inicia os
+servidores locais do merchant e do credentials provider. Execute-o a partir
+da raiz do repositório:
 
 ```sh
 ./code/samples/android/scenarios/digital-payment-credentials/run.sh
 ```
 
-## How to Use the App
+## Como usar o app
 
-1.  Ensure the local Merchant Agent server is running:
+1.  Confirme que o servidor local do Merchant Agent está em execução:
 
     ```
     curl http://localhost:8001/a2a/merchant_agent/.well-known/agent-card.json
     ```
 
-2.  Launch the Shopping Assistant app on your device.
+2.  Abra o app Shopping Assistant no dispositivo.
 
-3.  In the app's settings screen, enter the URL for your local merchant server.
-    The default URL will be `http://10.0.2.2:8001`.
+3.  Na tela de configurações do app, informe a URL do servidor local do
+    merchant. A URL padrão é `http://10.0.2.2:8001`.
 
-4.  Click the **Connect** button. The app will fetch the A2A Agent Card from
-    the server and initialize the chat session.
+4.  Clique no botão **Connect**. O app busca o A2A Agent Card no servidor e
+    inicia a sessão de chat.
 
-5.  You can now start a conversation with the shopping assistant. For example,
-    try saying: "I'm looking for a new car."
+5.  Agora você pode conversar com o assistente de compras. Por exemplo,
+    diga: "I'm looking for a new car."

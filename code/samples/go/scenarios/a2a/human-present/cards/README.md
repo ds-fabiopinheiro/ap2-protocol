@@ -1,128 +1,129 @@
-# Go Sample: Human-Present Card Payment (A2A)
+# Sample em Go: pagamento com cartão human-present (A2A)
 
-This scenario demonstrates a human-present card payment flow using Go agents.
+Este cenário mostra um fluxo de pagamento com cartão human-present (usuário
+presente durante a compra) usando agentes em Go.
 
-**What's included:**
+**O que está incluído:**
 
-- Merchant Agent - product catalog and cart management
-- Credentials Provider - payment credentials and wallet
-- Payment Processor - payment processing and OTP challenges
+- Merchant Agent - catálogo de produtos e gestão do carrinho
+- Credentials Provider - credenciais de pagamento e carteira
+- Payment Processor - processamento de pagamentos e desafios OTP
 
-**Note:** This sample focuses on agents in Go. Use the Python
-Shopping Agent to interact with these agents.
+**Observação:** este sample trata dos agentes em Go. Use o Shopping Agent
+em Python para interagir com esses agentes.
 
-## Agents Implemented
+## Agentes implementados
 
 - **Merchant Agent** (`http://localhost:8001/a2a/merchant_agent`)
-    - Handles product catalog queries
-    - Creates and manages cart mandates
-    - Exposes `search_catalog` skill for shopping intents
-    - Supports AP2 and Sample Card Network extensions
+    - Atende consultas ao catálogo de produtos
+    - Cria e gerencia cart mandates
+    - Expõe a skill `search_catalog` para intenções de compra
+    - Suporta as extensões AP2 e Sample Card Network
 
 - **Credentials Provider Agent**
   (`http://localhost:8002/a2a/credentials_provider`)
-    - Manages user payment credentials and wallet
-    - Provides payment method details
-    - Supplies tokenized (DPAN) card information
-    - Handles payment authorization
+    - Gerencia as credenciais de pagamento e a carteira do usuário
+    - Fornece detalhes dos meios de pagamento
+    - Fornece dados do cartão tokenizado (DPAN)
+    - Trata a autorização do pagamento
 
 - **Merchant Payment Processor Agent**
   (`http://localhost:8003/a2a/merchant_payment_processor_agent`)
-    - Processes payments on behalf of merchants
-    - Implements OTP challenge mechanism
-    - Handles payment authorization and settlement
+    - Processa pagamentos em nome dos merchants
+    - Implementa o mecanismo de desafio OTP
+    - Trata a autorização e a liquidação do pagamento
 
-## What This Sample Demonstrates
+## O que este sample mostra
 
-1. **AP2 Protocol Features**
-    - Complete mandate lifecycle (Intent → Cart → Payment)
-    - Card payment support with DPAN tokens
-    - OTP challenge flows
-    - Extension mechanism (AP2 + payment method extensions)
+1. **Recursos do protocolo AP2**
+    - Ciclo de vida completo do mandate (Intent → Cart → Payment)
+    - Suporte a pagamento com cartão usando tokens DPAN
+    - Fluxos de desafio OTP
+    - Mecanismo de extensões (AP2 + extensões de meio de pagamento)
 
-2. **Backend Service Patterns**
-    - Modular, independently deployable services
-    - Clean separation of concerns
-    - Go's strengths for backend services (concurrency, type safety,
-      performance)
+2. **Padrões de serviços de backend**
+    - Serviços modulares, implantáveis de forma independente
+    - Separação clara de responsabilidades
+    - Pontos fortes do Go para serviços de backend (concorrência, segurança
+      de tipos, desempenho)
 
-3. **Language-Agnostic Protocol**
-    - Go backend agents work seamlessly with Python Shopping Agent
-    - Demonstrates true interoperability across languages
-    - Shows protocol is implementation-independent
+3. **Protocolo independente de linguagem**
+    - Agentes de backend em Go funcionam com o Shopping Agent em Python
+    - Mostra interoperabilidade real entre linguagens
+    - Mostra que o protocolo independe da implementação
 
-## Running the Sample
+## Como executar o sample
 
-### Prerequisites
+### Pré-requisitos
 
-- Go 1.21 or higher
+- Go 1.21 ou superior
 - Make
-- Google API key from [Google AI Studio](https://aistudio.google.com/apikey)
+- Chave de API do Google obtida no [Google AI Studio](https://aistudio.google.com/apikey)
 
-### Quick Start
+### Início rápido
 
-1. **Set up your API key:**
+1. **Configure sua chave de API:**
 
    ```sh
    export GOOGLE_API_KEY=your_key
    ```
 
-   Or create a `.env` file in `code/samples/go/`:
+   Ou crie um arquivo `.env` em `code/samples/go/`:
 
    ```sh
    echo "GOOGLE_API_KEY=your_key" > code/samples/go/.env
    ```
 
-2. **Run all `go` agents:**
+2. **Execute todos os agentes `go`:**
 
    ```sh
-   # From repository root
+   # A partir da raiz do repositório
    bash code/samples/go/scenarios/a2a/human-present/cards/run.sh
    ```
 
-   This starts all three backend agents:
+   Isso inicia os três agentes de backend:
 
-   - Merchant Agent on port 8001
-   - Credentials Provider on port 8002
-   - Payment Processor on port 8003
+   - Merchant Agent na porta 8001
+   - Credentials Provider na porta 8002
+   - Payment Processor na porta 8003
 
-### Manual Build and Run
+### Compilação e execução manual
 
 ```sh
 cd code/samples/go
 
-# Install dependencies
+# Instala as dependências
 go mod download
 
-# Build all agents
+# Compila todos os agentes
 make build
 
-# Run individual agents (in separate terminals)
+# Executa cada agente (em terminais separados)
 ./bin/merchant_agent
 ./bin/credentials_provider_agent
 ./bin/merchant_payment_processor_agent
 ```
 
-## Complete Shopping Flow
+## Fluxo de compra completo
 
-To demonstrate the full end-to-end shopping workflow using the Go agents, we
-can leverage the Python Shopping Agent.
+Para mostrar o fluxo de compra de ponta a ponta com os agentes em Go, é
+possível usar o Shopping Agent em Python.
 
-### Python Shopping Agent + `go` Agents
+### Shopping Agent em Python + agentes `go`
 
-This demonstrates **cross-language interoperability**.
+Isso mostra **interoperabilidade entre linguagens**.
 
-1. **Start the Go backend agents** (see [Quick Start](#quick-start))
+1. **Inicie os agentes de backend em Go** (veja [Início rápido](#início-rápido))
 
-2. **Start the Python Shopping Agent in a separate terminal:**
+2. **Inicie o Shopping Agent em Python em outro terminal:**
 
    ```sh
-   # From repository root
+   # A partir da raiz do repositório
    uv run --package ap2-samples adk web code/samples/python/src/roles
    ```
 
-   The Python Shopping Agent is pre-configured to connect with the Go backends
-   in `code/samples/python/src/roles/shopping_agent/remote_agents.py`:
+   O Shopping Agent em Python já vem configurado para se conectar aos backends
+   em Go em `code/samples/python/src/roles/shopping_agent/remote_agents.py`:
 
    ```python
    merchant_agent_client = PaymentRemoteA2aClient(
@@ -138,23 +139,23 @@ This demonstrates **cross-language interoperability**.
    )
    ```
 
-3. **Open browser** to `http://localhost:8000` and shop!
+3. **Abra o navegador** em `http://localhost:8000` e faça compras.
 
-   You'll now have:
+   Você terá:
 
-   - **Shopping Agent**: Python (with ADK web UI)
-   - **Backend Agents**: Go (merchant, credentials, payment processor)
+   - **Shopping Agent**: Python (com a interface web do ADK)
+   - **Agentes de backend**: Go (merchant, credentials, payment processor)
 
-   To try it out:
-   - Select "Shopping Agent" from the top-left dropdown
-   - Ask: "Hello, I'd like to buy a pair of red running shoes."
-   - Follow the conversation to complete the purchase flow
+   Para testar:
+   - Selecione "Shopping Agent" no menu suspenso no canto superior esquerdo
+   - Pergunte: "Hello, I'd like to buy a pair of red running shoes."
+   - Siga a conversa para concluir o fluxo de compra
 
-### Direct API Testing
+### Teste direto da API
 
-You can test the Go agents directly with HTTP requests:
+Você pode testar os agentes em Go diretamente com requisições HTTP:
 
-**Get merchant agent info:**
+**Obter informações do merchant agent:**
 
 ```sh
 curl -X POST http://localhost:8001/a2a/merchant_agent \
@@ -167,7 +168,7 @@ curl -X POST http://localhost:8001/a2a/merchant_agent \
   }'
 ```
 
-**Search for products:**
+**Buscar produtos:**
 
 ```sh
 curl -X POST http://localhost:8001/a2a/merchant_agent \
@@ -185,7 +186,7 @@ curl -X POST http://localhost:8001/a2a/merchant_agent \
   }'
 ```
 
-**Get payment methods:**
+**Obter meios de pagamento:**
 
 ```sh
 curl -X POST http://localhost:8002/a2a/credentials_provider \
@@ -200,7 +201,7 @@ curl -X POST http://localhost:8002/a2a/credentials_provider \
   }'
 ```
 
-## Project Structure
+## Estrutura do projeto
 
 ```text
 code/samples/go/
@@ -235,47 +236,48 @@ code/samples/go/
     └── run.sh                           # Start all agents
 ```
 
-## Development
+## Desenvolvimento
 
-### Running Tests
+### Execução dos testes
 
 ```sh
 cd code/samples/go
 make test
 ```
 
-### Code Formatting
+### Formatação do código
 
 ```sh
 make fmt
 ```
 
-### Adding a New Backend Agent
+### Como adicionar um novo agente de backend
 
-1. Create entry point in `cmd/your_agent/main.go`
-2. Implement executor in `pkg/roles/your_agent/executor.go`
-3. Define `agent.json` with capabilities and skills
-4. Add build target to `Makefile`
-5. Update `run.sh` to start the new agent
+1. Crie o ponto de entrada em `cmd/your_agent/main.go`
+2. Implemente o executor em `pkg/roles/your_agent/executor.go`
+3. Defina o `agent.json` com capabilities e skills
+4. Adicione o alvo de build ao `Makefile`
+5. Atualize o `run.sh` para iniciar o novo agente
 
-## Stopping the Agents
+## Como parar os agentes
 
-If you used `run.sh`, press `Ctrl+C` to stop all agents.
+Se você usou o `run.sh`, pressione `Ctrl+C` para parar todos os agentes.
 
-If running manually, stop each process individually.
+Se executou manualmente, pare cada processo individualmente.
 
-## Next Steps
+## Próximos passos
 
-- **Experience the full flow**: Use Python Shopping Agent with these Go backends
-- **Explore the code**: See how AP2 protocol is implemented in Go
-- **Build your own**: Use these as reference for your own AP2 agents
+- **Executar o fluxo completo**: use o Shopping Agent em Python com estes
+  backends em Go
+- **Explorar o código**: veja como o protocolo AP2 é implementado em Go
+- **Construir o seu**: use estes agentes como referência para os seus agentes AP2
 
-## Resources
+## Recursos
 
-- [AP2 Protocol Documentation](../../../../README.md)
-- [Python Sample (with Shopping Agent)](../../../../python/scenarios/a2a/human-present/cards/README.md)
-- [Go Implementation Guide](../../README.md)
+- [Documentação do protocolo AP2](../../../../README.md)
+- [Sample em Python (com Shopping Agent)](../../../../python/scenarios/a2a/human-present/cards/README.md)
+- [Guia da implementação em Go](../../README.md)
 
-## License
+## Licença
 
-Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
+Copyright 2025 Google LLC. Licenciado sob a Apache License, Version 2.0.
