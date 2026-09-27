@@ -202,7 +202,7 @@ export function useChat() {
               if (event.status.state === 'failed') {
                 addMessage({
                   role: 'system',
-                  text: 'Agent error: ' + JSON.stringify(event.status.message),
+                  text: 'Erro do agente: ' + JSON.stringify(event.status.message),
                 });
               }
               const statusParts = event.status.message?.parts ?? [];
@@ -401,7 +401,7 @@ export function useChat() {
             }
           }
         } catch (e) {
-          addMessage({role: 'system', text: 'Connection error: ' + String(e)});
+          addMessage({role: 'system', text: 'Erro de conexão: ' + String(e)});
         } finally {
           setLoading(false);
         }
@@ -513,8 +513,8 @@ export function useChat() {
   async function handleMandateApprove(mandateRequest: MandateApprovalData) {
     addMessage({
       role: 'user_action',
-      userActionLabel: 'Approved mandate',
-      userActionSublabel: 'User signed over the TS surface with agent provider key',
+      userActionLabel: 'Mandate aprovado',
+      userActionSublabel: 'Usuário assinou na Trusted Surface com a chave do agent provider',
     });
     await sendToAgent(
         {type: 'mandate_approved', mandate_request: mandateRequest},
@@ -523,7 +523,7 @@ export function useChat() {
   }
 
   function handleMandateReject() {
-    addMessage({role: 'system', text: 'Mandate rejected. Purchase cancelled.'});
+    addMessage({role: 'system', text: 'Mandate recusado. Compra cancelada.'});
   }
 
   return {

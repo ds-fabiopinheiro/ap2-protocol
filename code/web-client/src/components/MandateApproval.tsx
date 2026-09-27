@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import type {TrustedSurface} from '../trustedSurface';
 import type {MandateApprovalData, MandateRequest} from '../types';
+import {formatUsd} from '../utils/format';
 import './MandateApproval.scss';
 
 interface Props {
@@ -75,7 +76,7 @@ export function MandateApproval({
             </svg>
           </div>
           <div className="title-container">
-            <div className="title">Trusted Surface For Mandates</div>
+            <div className="title">Trusted Surface para mandates</div>
             <div className="subtitle">AP2 · Open Mandates</div>
           </div>
         </div>
@@ -95,18 +96,18 @@ export function MandateApproval({
               <div className="details-grid details-grid-availability">
                 {[
                   {
-                    label: 'Budget (max)',
-                    value: `$${priceCap}`,
+                    label: 'Orçamento (máx.)',
+                    value: formatUsd(priceCap),
                     accent: '#60a5fa',
                   },
                   {
-                    label: 'Availability',
+                    label: 'Disponibilidade',
                     value: mandate.available
-                      ? 'In stock'
-                      : 'Not yet — awaiting drop',
+                      ? 'Em estoque'
+                      : 'Ainda não — aguardando lançamento',
                     accent: mandate.available ? '#34d399' : '#fbbf24',
                   },
-                  {label: 'Qty', value: String(qty), accent: '#94a3b8'},
+                  {label: 'Qtd.', value: String(qty), accent: '#94a3b8'},
                 ].map((f) => (
                   <div key={f.label} className="grid-item">
                     <div className="item-label">{f.label}</div>
@@ -119,21 +120,21 @@ export function MandateApproval({
 
               <div className="gap-indicator gap-indicator-availability">
                 <div className="gap-header">
-                  <span className="gap-label">Trigger condition</span>
+                  <span className="gap-label">Condição de disparo</span>
                   <span className="gap-status pending">
-                    Availability + budget
+                    Disponibilidade + orçamento
                   </span>
                 </div>
                 <p className="gap-prose">
-                  Agent will purchase when the item becomes available and price
-                  is within your <span className="highlight">${priceCap}</span>{' '}
-                  budget.
+                  O agente compra quando o item ficar disponível e o preço estiver
+                  dentro do seu orçamento de{' '}
+                  <span className="highlight">{formatUsd(priceCap)}</span>.
                 </p>
               </div>
 
               {hasCurrentPrice && (
                 <div className="reference-price-note">
-                  Reference price: ${current!.toFixed(2)} (list)
+                  Preço de referência: {formatUsd(current!)} (tabela)
                 </div>
               )}
             </>
@@ -142,16 +143,16 @@ export function MandateApproval({
               <div className="details-grid">
                 {[
                   {
-                    label: 'Max Price',
-                    value: `$${priceCap}`,
+                    label: 'Preço máximo',
+                    value: formatUsd(priceCap),
                     accent: '#60a5fa',
                   },
                   {
-                    label: 'Current',
-                    value: hasCurrentPrice ? `$${current!.toFixed(2)}` : '—',
+                    label: 'Atual',
+                    value: hasCurrentPrice ? formatUsd(current!) : '—',
                     accent: '#f87171',
                   },
-                  {label: 'Qty', value: String(qty), accent: '#94a3b8'},
+                  {label: 'Qtd.', value: String(qty), accent: '#94a3b8'},
                 ].map((f) => (
                   <div key={f.label} className="grid-item">
                     <div className="item-label">{f.label}</div>
@@ -165,12 +166,12 @@ export function MandateApproval({
               {hasCurrentPrice && (
                 <div className="gap-indicator">
                   <div className="gap-header">
-                    <span className="gap-label">Price gap to trigger</span>
+                    <span className="gap-label">Diferença até o disparo</span>
                     <span
                       className={`gap-status ${gap <= 0 ? 'met' : 'pending'}`}>
                       {gap <= 0
-                        ? `✓ condition met`
-                        : `-$${gap.toFixed(2)} needed`}
+                        ? `✓ condição atendida`
+                        : `faltam ${formatUsd(gap)}`}
                     </span>
                   </div>
                   <div className="progress-track">
@@ -225,20 +226,22 @@ export function MandateApproval({
                 {mandate.payment_method === 'x402'
                   ? mandate.payment_method_description ||
                     'x402 ••• USDC (Base Sepolia)'
-                  : 'Card •••4242'}
+                  : 'Cartão •••4242'}
               </span>
               <span className="fop-badge">
-                {mandate.payment_method === 'x402' ? 'USDC (Base)' : 'Default'}
+                {mandate.payment_method === 'x402' ? 'USDC (Base)' : 'Padrão'}
               </span>
             </div>
           </div>
 
           <div className="info-banner">
-            Approving creates a cryptographic mandate. The agent will purchase
-            autonomously when{' '}
-            {availabilityMode ? 'the item is available and within' : 'price ≤'}{' '}
-            <span className="highlight">${priceCap}</span>
-            {availabilityMode ? ' budget' : ''}. You can close this window.
+            Aprovar cria um mandate criptográfico. O agente compra sozinho
+            quando{' '}
+            {availabilityMode
+              ? 'o item estiver disponível e dentro do orçamento de'
+              : 'o preço for ≤'}{' '}
+            <span className="highlight">{formatUsd(priceCap)}</span>. Você pode
+            fechar esta janela.
           </div>
 
           {state === 'idle' && (
@@ -253,10 +256,10 @@ export function MandateApproval({
                     strokeLinejoin="round"
                   />
                 </svg>
-                Approve & Sign
+                Aprovar e assinar
               </button>
               <button className="reject-button" onClick={onReject}>
-                Reject
+                Recusar
               </button>
             </div>
           )}
@@ -264,7 +267,7 @@ export function MandateApproval({
           {state === 'signing' && (
             <div className="signing-state">
               <div className="spinner" />
-              Signing with ECDSA P-256…
+              Assinando com ECDSA P-256…
             </div>
           )}
 
@@ -283,7 +286,7 @@ export function MandateApproval({
                   />
                 </svg>
               </div>
-              <span className="status-text">Mandate signed</span>
+              <span className="status-text">Mandate assinado</span>
             </div>
           )}
         </div>

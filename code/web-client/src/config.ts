@@ -10,7 +10,7 @@ export const MERCHANT_TRIGGER_URL =
 
 /** Sent when the user presses Enter with an empty input (demo starter). */
 export const DEFAULT_CHAT_STARTER_MESSAGE =
-    'When is the SuperShoe limited edition Gold sneaker drop? I need size 9 women\'s.';
+    'Quero comprar um tênis Nike preto com logo branca, tamanho 42. Monitore o preço e compre se ficar abaixo de US$ 500.';
 
 /**
  * Interval (ms) of the auto-poll fallback that asks the agent to re-check the

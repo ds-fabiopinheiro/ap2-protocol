@@ -334,6 +334,10 @@ depois com o usuário.
 - Não religar "Automatic branching" do Supabase nem trocar o compute sem
   autorização (custo).
 - Não commitar `uv.lock`.
+- Idioma: mensagens de commit, títulos e descrições de PR em pt-BR, com o
+  prefixo Conventional Commits em inglês (exigido pelo workflow
+  `conventional-commits.yml`). Ex.: `docs: traduz README para pt-BR`,
+  `feat(web-client): interface em pt-BR`.
 - O rebuild do Space é automático: o workflow `hf-space-rebuild.yml` faz
   Factory rebuild a cada push no `homolog-deploy` que altere o backend
   (`code/samples/python/**`, `code/sdk/**`, `deploy/hf-space/**`,

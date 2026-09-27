@@ -204,8 +204,8 @@ export function parseInvocationParts(parts: Part[]): ToolCallArtifact[] {
     if (part.kind === 'data' && typeof part.data.name === 'string' &&
         part.data.args) {
       const name = part.data.name;
-      const srv = toolToServer[name] ?? 'Unknown MCP';
-      const msg = `Calling ${name.replace(/_/g, ' ')} via ${srv}`;
+      const srv = toolToServer[name] ?? 'MCP desconhecido';
+      const msg = `Chamando ${name} no ${srv}`;
       const args = (part.data.args && typeof part.data.args === 'object') ?
           part.data.args as Record<string, unknown> :
           undefined;
