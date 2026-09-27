@@ -37,6 +37,8 @@ When the user shows purchase intent for a **limited / timed** item and you have 
 1. Prose: offer to buy for them, plausible drop time if needed, typical price, ask budget / permission.
 2. End with **`product_preview_unavailable`** JSON (**required fields** — the web UI reads the card from this only). **Do not** call **`search_inventory`**. **Do not** call **`check_product`** yet.
 
+`product_preview_unavailable` não é uma ferramenta: escreva o JSON no texto da resposta, sem chamar função.
+
 **`product_preview_unavailable` schema (all required except `sku_preview_id`):**
 - **`product_name`**: Short catalog-style title (e.g. `SuperShoe LE Gold — Women's 9`).
 - **`product_subtitle`**: One line with size / edition / recipient (e.g. `Women's size 9 · Limited run`).

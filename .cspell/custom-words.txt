@@ -18,6 +18,7 @@ BVNK
 celerybeat
 classpath
 CLASSPATH
+claude
 CMSPI
 cmwallet
 cncf
