@@ -19,11 +19,14 @@ from pathlib import Path
 from typing import Any
 
 from google.adk.agents import Agent
+from google.adk.models.google_llm import Gemini
 from google.adk.tools.base_tool import BaseTool
 from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from google.adk.tools.tool_context import ToolContext
 from mcp import StdioServerParameters
+
+from common.model_retry import gemini_retry_options
 
 from shopping_agent.mandate_tools import (
   assemble_and_sign_mandates_tool,
@@ -173,15 +176,16 @@ _PURCHASE_INSTRUCTION = (_PROMPTS_DIR / "purchase_agent.md").read_text()
 def _resolve_model(model_name: str):
   """Returns the model for the ADK agents.
 
-  Plain Gemini names (no "/") are passed as strings and use the native
-  Gemini client (GOOGLE_API_KEY). Names with a provider prefix, e.g.
+  Plain Gemini names (no "/") use the native Gemini client (GOOGLE_API_KEY),
+  with up to 2 retries on 503 UNAVAILABLE (see common/model_retry.py).
+  Names with a provider prefix, e.g.
   "vercel_ai_gateway/google/gemini-3.1-flash-lite-preview" or
   "anthropic/claude-...", are routed through LiteLLM, which reads the
   provider key from its own environment variable
   (VERCEL_AI_GATEWAY_API_KEY, ANTHROPIC_API_KEY, ...).
   """
   if "/" not in model_name:
-    return model_name
+    return Gemini(model=model_name, retry_options=gemini_retry_options())
   from google.adk.models.lite_llm import LiteLlm  # pylint: disable=g-import-not-at-top
 
   return LiteLlm(model=model_name)
