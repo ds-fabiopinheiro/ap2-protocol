@@ -194,7 +194,7 @@ Testes de 27/09/2026 (feitos pelo usuário):
 |---|---|---|
 | #5 | Web client em pt-BR e ajustes do teste de aceitação | Mesclado (`53b7c9f`) |
 | #6 | Prompts em pt-BR, nova tentativa em 503 e instrução sobre `product_preview_unavailable` | Mesclado (`2121005`); rebuild do Space OK |
-| #7 | Tradução da documentação da raiz e de `docs/` | Aberto, pronto para revisão, CI verde; merge pelo usuário |
+| #7 | Tradução da documentação da raiz e de `docs/` | Mesclado (`71b9332`) |
 | #8 | Tradução dos READMEs de `code/` | Aberto, CI verde; merge pelo usuário |
 | #9 | Backlog v3–v6 em `docs/backlog/` | Aberto, CI verde; merge pelo usuário |
 
