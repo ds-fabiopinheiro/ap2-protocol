@@ -24,7 +24,7 @@ from google.genai import types
 # the client waits a fixed backoff and ignores Retry-After / RetryInfo, so a
 # retry would spend more of the free-tier quota (15 RPM) and fail again.
 # 400 and other client errors are never retried.
-RETRYABLE_STATUS_CODES = (503,)
+RETRY_STATUS_CODES = (503,)
 
 # Original request + 2 retries.
 MAX_ATTEMPTS = 3
@@ -44,5 +44,5 @@ def gemini_retry_options() -> types.HttpRetryOptions:
       max_delay=MAX_DELAY_SECONDS,
       exp_base=EXP_BASE,
       jitter=JITTER_SECONDS,
-      http_status_codes=list(RETRYABLE_STATUS_CODES),
+      http_status_codes=list(RETRY_STATUS_CODES),
   )
