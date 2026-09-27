@@ -12,7 +12,7 @@ export function ErrorCard({error}: Props) {
         <div className="error-icon-wrapper">
           <span className="error-icon">!</span>
         </div>
-        <span className="error-label">Error</span>
+        <span className="error-label">Erro</span>
         <div className="error-type">{error.error}</div>
       </div>
       <p className="error-message">{error.message}</p>
