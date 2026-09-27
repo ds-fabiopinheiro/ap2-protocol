@@ -18,33 +18,33 @@ const PHASE_ORDER: Array<{
 }> = [
   {
     title: 'Mandate Request',
-    blurb: 'User-facing proposal built by the shopping agent.',
+    blurb: 'Proposta exibida ao usuário, montada pelo Shopping Agent.',
     kinds: ['mandate_request'],
   },
   {
     title: 'Open Mandates',
     blurb:
-      'SD-JWTs issued by the credential provider authorizing future actions.',
+      'SD-JWTs emitidos pelo Credential Provider que autorizam ações futuras.',
     kinds: ['open_checkout_mandate', 'open_payment_mandate'],
   },
   {
     title: 'Checkout JWT',
-    blurb: 'Merchant-signed checkout payload bound to the cart.',
+    blurb: 'Payload de checkout assinado pelo Merchant e vinculado ao carrinho.',
     kinds: ['checkout_jwt'],
   },
   {
     title: 'Closed Mandates',
-    blurb: 'Agent-signed delegate credentials completing the chain.',
+    blurb: 'Credenciais delegadas assinadas pelo agente que completam a cadeia.',
     kinds: ['closed_checkout_mandate', 'closed_payment_mandate'],
   },
   {
     title: 'Mandate Chains',
-    blurb: 'Full SD-JWT chains containing open and closed mandates.',
+    blurb: 'Cadeias SD-JWT completas com os open e closed mandates.',
     kinds: ['mandate_chain'],
   },
   {
     title: 'Presentations',
-    blurb: 'Key-binding presentations to merchant / credential provider.',
+    blurb: 'Presentations com Key Binding para o Merchant / Credential Provider.',
     kinds: ['presentation'],
   },
 ];
@@ -54,10 +54,10 @@ export function MandateViewer({mandates}: Props) {
     return (
       <div className="mandate-viewer-empty">
         <div className="icon">📝</div>
-        <div className="title">No mandates yet</div>
+        <div className="title">Nenhum mandate ainda</div>
         <div className="subtitle">
-          Mandates created during this shopping session will appear here as
-          structured cards with full SD-JWT detail.
+          Os mandates criados nesta sessão de compra aparecem aqui como cartões
+          estruturados, com o detalhe completo do SD-JWT.
         </div>
       </div>
     );
@@ -68,8 +68,8 @@ export function MandateViewer({mandates}: Props) {
       <div className="viewer-header">
         <div className="viewer-title">Mandates</div>
         <div className="viewer-subtitle">
-          {mandates.length} mandate{mandates.length === 1 ? '' : 's'} in this
-          session · click a card to expand decoded detail
+          {mandates.length} mandate{mandates.length === 1 ? '' : 's'} nesta
+          sessão · clique em um cartão para ver o conteúdo decodificado
         </div>
       </div>
 

@@ -36,10 +36,10 @@ const AppHeader = ({usedServers}: {usedServers: Set<string>}) => {
         <div className="title">
           Delegated Shopper
           {flow === 'x402' && <span className="flow-badge x402">x402</span>}
-          {flow === 'card' && <span className="flow-badge card">Card</span>}
+          {flow === 'card' && <span className="flow-badge card">Cartão</span>}
         </div>
         <div className="subtitle">
-          A2A · Human-not-present · Merchant MCP · Credential Provider MCP
+          A2A · human-not-present · Merchant MCP · Credential Provider MCP
         </div>
       </div>
       <div className="server-badges">
@@ -71,7 +71,7 @@ const TabBar = ({
     <button
       className={`tab ${activeTab === 'chat' ? 'active' : ''}`}
       onClick={() => onChange('chat')}>
-      Chat
+      Conversa
     </button>
     <button
       className={`tab ${activeTab === 'mandates' ? 'active' : ''}`}
@@ -87,20 +87,20 @@ const EmptyChatState = () => (
     <div className="icon">🛒</div>
     <div className="title">Delegated Shopper</div>
     <div className="subtitle">
-      Full flow: product preview → mandate signing → availability monitoring →
-      autonomous purchase
+      Fluxo completo: prévia do produto → assinatura dos mandates →
+      monitoramento de disponibilidade → compra autônoma
       <br />
       via Merchant MCP + Credential Provider MCP
     </div>
     <p className="suggestion">
-      Try:{' '}
+      Exemplo:{' '}
       <em>
-        &quot;When is the SuperShoe limited edition Gold sneaker drop? I need size 9
-        women&apos;s.&quot;
+        &quot;Quero comprar um tênis Nike preto com logo branca, tamanho 42.
+        Monitore o preço e compre se ficar abaixo de US$ 500.&quot;
       </em>
     </p>
     <p className="suggestion-enter-hint">
-      or just press <kbd>Enter</kbd> to start
+      ou pressione <kbd>Enter</kbd> para começar
     </p>
   </div>
 );
@@ -120,9 +120,12 @@ const ChatInput = ({input, setInput, handleSend, loading}: ChatInputProps) => (
         !loading &&
         handleSend({fallbackIfEmpty: DEFAULT_CHAT_STARTER_MESSAGE})
       }
-      placeholder="e.g. When is the SuperShoe limited edition Gold sneaker drop? I need size 9 women's."
+      placeholder="Ex.: Quero um tênis Nike preto, tamanho 42. Monitore o preço e compre se ficar abaixo de US$ 500."
       disabled={loading}
       className="chat-input"
+      // Focus on load so Enter with an empty field sends the starter
+      // message without clicking the field first.
+      autoFocus
     />
     <button
       onClick={() =>
@@ -130,7 +133,7 @@ const ChatInput = ({input, setInput, handleSend, loading}: ChatInputProps) => (
       }
       disabled={loading}
       className="send-button">
-      Send
+      Enviar
     </button>
   </div>
 );

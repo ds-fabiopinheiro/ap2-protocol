@@ -1,4 +1,5 @@
 import type {MonitoringStatus} from '../types';
+import {formatUsd} from '../utils/format';
 import './MonitoringCard.scss';
 
 interface Props {
@@ -28,7 +29,7 @@ export function MonitoringCard({
       <div className="monitoring-card">
         <div className="monitoring-header">
           <div className="status-dot" />
-          <span className="title">Monitoring Board</span>
+          <span className="title">Painel de monitoramento</span>
         </div>
         <div className="item-name">
           {itemName ?? status.item_id}
@@ -37,23 +38,25 @@ export function MonitoringCard({
 
         <div className="status-grid">
           <div className="status-cell">
-            <span className="cell-label">Price</span>
+            <span className="cell-label">Preço</span>
             <span
               className={`cell-value ${status.current_price != null ? 'has-price' : 'no-price'}`}>
               {status.current_price != null
-                ? `$${current.toFixed(2)}`
-                : '— checking'}
+                ? formatUsd(current)
+                : '— verificando'}
             </span>
           </div>
           <div className="status-cell">
-            <span className="cell-label">Target</span>
-            <span className="cell-value target">${status.price_cap}</span>
+            <span className="cell-label">Limite</span>
+            <span className="cell-value target">
+              {formatUsd(status.price_cap)}
+            </span>
           </div>
           <div className="status-cell">
-            <span className="cell-label">Available</span>
+            <span className="cell-label">Disponível</span>
             <span
               className={`cell-value ${available ? 'available-yes' : 'available-no'}`}>
-              {available ? '✓ In stock' : '✗ Not yet'}
+              {available ? '✓ Em estoque' : '✗ Ainda não'}
             </span>
           </div>
         </div>
@@ -62,23 +65,24 @@ export function MonitoringCard({
           <div className="progress-bar" style={{width: `${pct}%`}} />
         </div>
         <div className="info-text">
-          You can close this window. Purchase will execute automatically when
-          the item is available and within budget.
+          Mantenha esta aba aberta: o monitoramento e a compra dependem dela.
+          A compra será feita automaticamente quando o item estiver disponível
+          e dentro do orçamento.
         </div>
         {triggerCurl && (
           <div className="curl-box">
-            <div className="curl-label">Simulate drop (price + stock):</div>
+            <div className="curl-label">Simular lançamento (preço + estoque):</div>
             <code className="curl-code">{triggerCurl}</code>
           </div>
         )}
         {pollIntervalSeconds && (
           <p className="poll-text">
-            Auto-checking every {pollIntervalSeconds}s
+            Verificação automática a cada {pollIntervalSeconds} s
           </p>
         )}
         {onCheckNow && (
           <button onClick={onCheckNow} className="check-button">
-            Check now
+            Verificar agora
           </button>
         )}
       </div>
