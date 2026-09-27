@@ -240,8 +240,9 @@ export function MandateApproval({
             {availabilityMode
               ? 'o item estiver disponível e dentro do orçamento de'
               : 'o preço for ≤'}{' '}
-            <span className="highlight">{formatUsd(priceCap)}</span>. Você pode
-            fechar esta janela.
+            <span className="highlight">{formatUsd(priceCap)}</span>. Mantenha
+            esta aba aberta: o monitoramento roda no navegador e para se a aba
+            for fechada.
           </div>
 
           {state === 'idle' && (

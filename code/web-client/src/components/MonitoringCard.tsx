@@ -65,8 +65,9 @@ export function MonitoringCard({
           <div className="progress-bar" style={{width: `${pct}%`}} />
         </div>
         <div className="info-text">
-          Você pode fechar esta janela. A compra será feita automaticamente
-          quando o item estiver disponível e dentro do orçamento.
+          Mantenha esta aba aberta: o monitoramento roda no navegador e para
+          se a aba for fechada. A compra será feita automaticamente quando o
+          item estiver disponível e dentro do orçamento.
         </div>
         {triggerCurl && (
           <div className="curl-box">
