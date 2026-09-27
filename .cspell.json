@@ -11,7 +11,8 @@
     ".cspell.json",
     "**/go.sum",
     "CLAUDE.md",
-    "deploy/**"
+    "deploy/**",
+    "docs/backlog/**"
   ],
   "dictionaryDefinitions": [
     {

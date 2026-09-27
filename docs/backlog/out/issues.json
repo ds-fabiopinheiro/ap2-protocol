@@ -1,0 +1,1409 @@
+[
+  {
+    "key": "EP-V3",
+    "title": "v3 · Merchant Agent e Merchant Payment Processor Agent publicados via A2A",
+    "kind": "Épico",
+    "labels": [
+      "tipo:épico",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": null,
+    "file": "001_EP-V3.md"
+  },
+  {
+    "key": "F-V3.1",
+    "title": "F-V3.1 · Ambiente e branch da v3",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "EP-V3",
+    "file": "002_F-V3.1.md"
+  },
+  {
+    "key": "F-V3.1.1",
+    "title": "F-V3.1.1 · Ambiente de homologação v3 publicado a partir do branch homolog-v3",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1",
+    "file": "003_F-V3.1.1.md"
+  },
+  {
+    "key": "F-V3.1.1.T1",
+    "title": "F-V3.1.1.T1 · [Infra] Criar o branch homolog-v3 a partir de homolog-deploy",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "004_F-V3.1.1.T1.md"
+  },
+  {
+    "key": "F-V3.1.1.T2",
+    "title": "F-V3.1.1.T2 · [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v3 (Docker, CPU Basic, Protected)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "005_F-V3.1.1.T2.md"
+  },
+  {
+    "key": "F-V3.1.1.T3",
+    "title": "F-V3.1.1.T3 · [Back] Isolar o estado de cada versão no Supabase (AP2_ENV)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "006_F-V3.1.1.T3.md"
+  },
+  {
+    "key": "F-V3.1.1.T4",
+    "title": "F-V3.1.1.T4 · [Infra] Aplicar a migration de isolamento no projeto ap2-homolog-db",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "007_F-V3.1.1.T4.md"
+  },
+  {
+    "key": "F-V3.1.1.T5",
+    "title": "F-V3.1.1.T5 · [Infra] Incluir o mapeamento homolog-v3 → ds-fabiopinheiro/ap2-homolog-v3 no workflow de rebuild",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "008_F-V3.1.1.T5.md"
+  },
+  {
+    "key": "F-V3.1.1.T6",
+    "title": "F-V3.1.1.T6 · [QA] Verificar que as versões anteriores continuam funcionando após a criação da v3",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "009_F-V3.1.1.T6.md"
+  },
+  {
+    "key": "F-V3.1.1.T7",
+    "title": "F-V3.1.1.T7 · [Docs] Registrar a v3 no CLAUDE.md e no deploy/README.md",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.1.1",
+    "file": "010_F-V3.1.1.T7.md"
+  },
+  {
+    "key": "F-V3.2",
+    "title": "F-V3.2 · Merchant Agent publicado como serviço A2A",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "EP-V3",
+    "file": "011_F-V3.2.md"
+  },
+  {
+    "key": "F-V3.2.1",
+    "title": "F-V3.2.1 · Merchant Agent acessível por A2A com agent card público",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2",
+    "file": "012_F-V3.2.1.md"
+  },
+  {
+    "key": "F-V3.2.1.T1",
+    "title": "F-V3.2.1.T1 · [Back] Iniciar o Merchant Agent no start.sh da v3",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.1",
+    "file": "013_F-V3.2.1.T1.md"
+  },
+  {
+    "key": "F-V3.2.1.T2",
+    "title": "F-V3.2.1.T2 · [Back] Reescrever a URL do agent card do Merchant Agent",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.1",
+    "file": "014_F-V3.2.1.T2.md"
+  },
+  {
+    "key": "F-V3.2.1.T3",
+    "title": "F-V3.2.1.T3 · [Infra] Adicionar a rota /a2a/merchant_agent no nginx com limite de requisições",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.1",
+    "file": "015_F-V3.2.1.T3.md"
+  },
+  {
+    "key": "F-V3.2.1.T4",
+    "title": "F-V3.2.1.T4 · [QA] Testar agent card, limite e reinício do Merchant Agent",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.1",
+    "file": "016_F-V3.2.1.T4.md"
+  },
+  {
+    "key": "F-V3.2.2",
+    "title": "F-V3.2.2 · Busca de produto no Merchant Agent com resposta assinada",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2",
+    "file": "017_F-V3.2.2.md"
+  },
+  {
+    "key": "F-V3.2.2.T1",
+    "title": "F-V3.2.2.T1 · [QA] Escrever script de teste A2A para o Merchant Agent",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.2",
+    "file": "018_F-V3.2.2.T1.md"
+  },
+  {
+    "key": "F-V3.2.2.T2",
+    "title": "F-V3.2.2.T2 · [Back] Levar o watch.log dos agentes para LOGS_DIR",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.2",
+    "file": "019_F-V3.2.2.T2.md"
+  },
+  {
+    "key": "F-V3.2.2.T3",
+    "title": "F-V3.2.2.T3 · [Back] Registrar no Supabase os mandates emitidos pelo Merchant Agent",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.2",
+    "file": "020_F-V3.2.2.T3.md"
+  },
+  {
+    "key": "F-V3.2.2.T4",
+    "title": "F-V3.2.2.T4 · [QA] Executar o teste 3 vezes e medir o consumo do Gemini",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.2.2",
+    "file": "021_F-V3.2.2.T4.md"
+  },
+  {
+    "key": "F-V3.3",
+    "title": "F-V3.3 · Merchant Payment Processor Agent e modelo configurável nos agentes A2A",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "EP-V3",
+    "file": "022_F-V3.3.md"
+  },
+  {
+    "key": "F-V3.3.1",
+    "title": "F-V3.3.1 · Merchant Payment Processor Agent em execução interna com desafio OTP",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3",
+    "file": "023_F-V3.3.1.md"
+  },
+  {
+    "key": "F-V3.3.1.T1",
+    "title": "F-V3.3.1.T1 · [Back] Iniciar o Processor Agent no start.sh da v3",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3.1",
+    "file": "024_F-V3.3.1.T1.md"
+  },
+  {
+    "key": "F-V3.3.1.T2",
+    "title": "F-V3.3.1.T2 · [QA] Verificar isolamento e reinício do Processor Agent",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3.1",
+    "file": "025_F-V3.3.1.T2.md"
+  },
+  {
+    "key": "F-V3.3.2",
+    "title": "F-V3.3.2 · Modelo dos agentes A2A definido por AGENT_MODEL",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3",
+    "file": "026_F-V3.3.2.md"
+  },
+  {
+    "key": "F-V3.3.2.T1",
+    "title": "F-V3.3.2.T1 · [Back] Ler AGENT_MODEL em function_call_resolver.py e base_server_executor.py",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3.2",
+    "file": "027_F-V3.3.2.T1.md"
+  },
+  {
+    "key": "F-V3.3.2.T2",
+    "title": "F-V3.3.2.T2 · [Back] Aplicar a regra de nova tentativa em erro 503 nos agentes A2A",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3.2",
+    "file": "028_F-V3.3.2.T2.md"
+  },
+  {
+    "key": "F-V3.3.2.T3",
+    "title": "F-V3.3.2.T3 · [QA] Testar a troca de modelo e a nova tentativa nos agentes A2A",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v3"
+    ],
+    "milestone": "v3 — Merchant Agent (homolog-v3)",
+    "parent": "F-V3.3.2",
+    "file": "029_F-V3.3.2.T3.md"
+  },
+  {
+    "key": "EP-V4",
+    "title": "v4 · Shopping Agent v1 e Credentials Provider Agent com jornada assistida no ADK Web",
+    "kind": "Épico",
+    "labels": [
+      "tipo:épico",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": null,
+    "file": "030_EP-V4.md"
+  },
+  {
+    "key": "F-V4.1",
+    "title": "F-V4.1 · Ambiente e branch da v4",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "EP-V4",
+    "file": "031_F-V4.1.md"
+  },
+  {
+    "key": "F-V4.1.1",
+    "title": "F-V4.1.1 · Ambiente de homologação v4 publicado a partir do branch homolog-v4",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1",
+    "file": "032_F-V4.1.1.md"
+  },
+  {
+    "key": "F-V4.1.1.T1",
+    "title": "F-V4.1.1.T1 · [Infra] Criar o branch homolog-v4 a partir de homolog-v3",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1.1",
+    "file": "033_F-V4.1.1.T1.md"
+  },
+  {
+    "key": "F-V4.1.1.T2",
+    "title": "F-V4.1.1.T2 · [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v4 (Docker, CPU Basic, Protected)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1.1",
+    "file": "034_F-V4.1.1.T2.md"
+  },
+  {
+    "key": "F-V4.1.1.T3",
+    "title": "F-V4.1.1.T3 · [Infra] Incluir o mapeamento homolog-v4 → ds-fabiopinheiro/ap2-homolog-v4 no workflow de rebuild",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1.1",
+    "file": "035_F-V4.1.1.T3.md"
+  },
+  {
+    "key": "F-V4.1.1.T4",
+    "title": "F-V4.1.1.T4 · [QA] Verificar que as versões anteriores continuam funcionando após a criação da v4",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1.1",
+    "file": "036_F-V4.1.1.T4.md"
+  },
+  {
+    "key": "F-V4.1.1.T5",
+    "title": "F-V4.1.1.T5 · [Docs] Registrar a v4 no CLAUDE.md e no deploy/README.md",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.1.1",
+    "file": "037_F-V4.1.1.T5.md"
+  },
+  {
+    "key": "F-V4.2",
+    "title": "F-V4.2 · Credentials Provider Agent publicado internamente",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "EP-V4",
+    "file": "038_F-V4.2.md"
+  },
+  {
+    "key": "F-V4.2.1",
+    "title": "F-V4.2.1 · Credentials Provider Agent lista as formas de pagamento da conta de demonstração",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.2",
+    "file": "039_F-V4.2.1.md"
+  },
+  {
+    "key": "F-V4.2.1.T1",
+    "title": "F-V4.2.1.T1 · [Back] Iniciar o Credentials Provider Agent no start.sh da v4",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.2.1",
+    "file": "040_F-V4.2.1.T1.md"
+  },
+  {
+    "key": "F-V4.2.1.T2",
+    "title": "F-V4.2.1.T2 · [Back] Incluir os arquivos do Credentials Provider no espelhamento do Supabase",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.2.1",
+    "file": "041_F-V4.2.1.T2.md"
+  },
+  {
+    "key": "F-V4.2.1.T3",
+    "title": "F-V4.2.1.T3 · [QA] Testar a listagem e a falha do Credentials Provider",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.2.1",
+    "file": "042_F-V4.2.1.T3.md"
+  },
+  {
+    "key": "F-V4.3",
+    "title": "F-V4.3 · Compra assistida com o Shopping Agent v1 no ADK Web",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "EP-V4",
+    "file": "043_F-V4.3.md"
+  },
+  {
+    "key": "F-V4.3.1",
+    "title": "F-V4.3.1 · Spike: forma de publicar o ADK Web atrás do nginx",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3",
+    "file": "044_F-V4.3.1.md"
+  },
+  {
+    "key": "F-V4.3.1.T1",
+    "title": "F-V4.3.1.T1 · [Back] Testar ADK Web em subcaminho e em diretório de agentes dedicado",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.1",
+    "file": "045_F-V4.3.1.T1.md"
+  },
+  {
+    "key": "F-V4.3.1.T2",
+    "title": "F-V4.3.1.T2 · [Docs] Registrar a decisão sobre o ADK Web",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.1",
+    "file": "046_F-V4.3.1.T2.md"
+  },
+  {
+    "key": "F-V4.3.2",
+    "title": "F-V4.3.2 · Compra assistida ponta a ponta pelo ADK Web",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3",
+    "file": "047_F-V4.3.2.md"
+  },
+  {
+    "key": "F-V4.3.2.T1",
+    "title": "F-V4.3.2.T1 · [Back] Iniciar o ADK Web restrito ao Shopping Agent v1",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.2",
+    "file": "048_F-V4.3.2.T1.md"
+  },
+  {
+    "key": "F-V4.3.2.T2",
+    "title": "F-V4.3.2.T2 · [Infra] Rota e limite de requisições do ADK Web no nginx",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.2",
+    "file": "049_F-V4.3.2.T2.md"
+  },
+  {
+    "key": "F-V4.3.2.T3",
+    "title": "F-V4.3.2.T3 · [Back] Persistir os mandates da jornada assistida no Supabase",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.2",
+    "file": "050_F-V4.3.2.T3.md"
+  },
+  {
+    "key": "F-V4.3.2.T4",
+    "title": "F-V4.3.2.T4 · [Back] Alinhar o RetryingLlmAgent do Shopping Agent v1 à regra de retry da v2",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.2",
+    "file": "051_F-V4.3.2.T4.md"
+  },
+  {
+    "key": "F-V4.3.2.T5",
+    "title": "F-V4.3.2.T5 · [QA] Executar os cenários de compra assistida",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v4"
+    ],
+    "milestone": "v4 — Shopping Agent v1 (homolog-v4)",
+    "parent": "F-V4.3.2",
+    "file": "052_F-V4.3.2.T5.md"
+  },
+  {
+    "key": "EP-V5",
+    "title": "v5 · Jornada assistida (human-present) no web client React",
+    "kind": "Épico",
+    "labels": [
+      "tipo:épico",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": null,
+    "file": "053_EP-V5.md"
+  },
+  {
+    "key": "F-V5.1",
+    "title": "F-V5.1 · Ambiente e branch da v5",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "EP-V5",
+    "file": "054_F-V5.1.md"
+  },
+  {
+    "key": "F-V5.1.1",
+    "title": "F-V5.1.1 · Ambiente de homologação v5 publicado a partir do branch homolog-v5",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1",
+    "file": "055_F-V5.1.1.md"
+  },
+  {
+    "key": "F-V5.1.1.T1",
+    "title": "F-V5.1.1.T1 · [Infra] Criar o branch homolog-v5 a partir de homolog-v4",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "056_F-V5.1.1.T1.md"
+  },
+  {
+    "key": "F-V5.1.1.T2",
+    "title": "F-V5.1.1.T2 · [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v5 (Docker, CPU Basic, Protected)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "057_F-V5.1.1.T2.md"
+  },
+  {
+    "key": "F-V5.1.1.T3",
+    "title": "F-V5.1.1.T3 · [Infra] Criar o projeto Vercel ap2-homolog-v5-frontend",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "058_F-V5.1.1.T3.md"
+  },
+  {
+    "key": "F-V5.1.1.T4",
+    "title": "F-V5.1.1.T4 · [Infra] Incluir o mapeamento homolog-v5 → ds-fabiopinheiro/ap2-homolog-v5 no workflow de rebuild",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "059_F-V5.1.1.T4.md"
+  },
+  {
+    "key": "F-V5.1.1.T5",
+    "title": "F-V5.1.1.T5 · [QA] Verificar que as versões anteriores continuam funcionando após a criação da v5",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "060_F-V5.1.1.T5.md"
+  },
+  {
+    "key": "F-V5.1.1.T6",
+    "title": "F-V5.1.1.T6 · [Docs] Registrar a v5 no CLAUDE.md e no deploy/README.md",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.1.1",
+    "file": "061_F-V5.1.1.T6.md"
+  },
+  {
+    "key": "F-V5.2",
+    "title": "F-V5.2 · Integração do web client com o Shopping Agent v1",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "EP-V5",
+    "file": "062_F-V5.2.md"
+  },
+  {
+    "key": "F-V5.2.1",
+    "title": "F-V5.2.1 · Spike: protocolo entre web client e Shopping Agent v1",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2",
+    "file": "063_F-V5.2.1.md"
+  },
+  {
+    "key": "F-V5.2.1.T1",
+    "title": "F-V5.2.1.T1 · [Back] Avaliar expor o Shopping Agent v1 por A2A com run_server próprio",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.1",
+    "file": "064_F-V5.2.1.T1.md"
+  },
+  {
+    "key": "F-V5.2.1.T2",
+    "title": "F-V5.2.1.T2 · [Front] Avaliar o reaproveitamento de a2aClient.ts para o v1",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.1",
+    "file": "065_F-V5.2.1.T2.md"
+  },
+  {
+    "key": "F-V5.2.1.T3",
+    "title": "F-V5.2.1.T3 · [Docs] Registrar o contrato de artifacts da jornada assistida",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.1",
+    "file": "066_F-V5.2.1.T3.md"
+  },
+  {
+    "key": "F-V5.2.2",
+    "title": "F-V5.2.2 · Escolha entre jornada autônoma e assistida na tela inicial",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2",
+    "file": "067_F-V5.2.2.md"
+  },
+  {
+    "key": "F-V5.2.2.T1",
+    "title": "F-V5.2.2.T1 · [Front] Criar seletor de jornada e roteamento de agente",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.2",
+    "file": "068_F-V5.2.2.T1.md"
+  },
+  {
+    "key": "F-V5.2.2.T2",
+    "title": "F-V5.2.2.T2 · [Infra] Cadastrar VITE_ASSISTED_AGENT_URL no projeto Vercel da v5",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.2",
+    "file": "069_F-V5.2.2.T2.md"
+  },
+  {
+    "key": "F-V5.2.2.T3",
+    "title": "F-V5.2.2.T3 · [QA] Testar troca de jornada e regressão da autônoma",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.2.2",
+    "file": "070_F-V5.2.2.T3.md"
+  },
+  {
+    "key": "F-V5.3",
+    "title": "F-V5.3 · Telas da jornada assistida no web client",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "EP-V5",
+    "file": "071_F-V5.3.md"
+  },
+  {
+    "key": "F-V5.3.1",
+    "title": "F-V5.3.1 · Seleção das opções de compra do Merchant",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3",
+    "file": "072_F-V5.3.1.md"
+  },
+  {
+    "key": "F-V5.3.1.T1",
+    "title": "F-V5.3.1.T1 · [Front] Criar o cartão de opções de compra",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.1",
+    "file": "073_F-V5.3.1.T1.md"
+  },
+  {
+    "key": "F-V5.3.1.T2",
+    "title": "F-V5.3.1.T2 · [Back] Emitir o artifact de opções no Shopping Agent v1",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.1",
+    "file": "074_F-V5.3.1.T2.md"
+  },
+  {
+    "key": "F-V5.3.1.T3",
+    "title": "F-V5.3.1.T3 · [QA] Testar seleção e lista vazia",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.1",
+    "file": "075_F-V5.3.1.T3.md"
+  },
+  {
+    "key": "F-V5.3.2",
+    "title": "F-V5.3.2 · Escolha da forma de pagamento e assinatura do Payment Mandate na Trusted Surface",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3",
+    "file": "076_F-V5.3.2.md"
+  },
+  {
+    "key": "F-V5.3.2.T1",
+    "title": "F-V5.3.2.T1 · [Front] Criar o cartão de formas de pagamento",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.2",
+    "file": "077_F-V5.3.2.T1.md"
+  },
+  {
+    "key": "F-V5.3.2.T2",
+    "title": "F-V5.3.2.T2 · [Front] Adaptar a Trusted Surface para o Payment Mandate da jornada assistida",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.2",
+    "file": "078_F-V5.3.2.T2.md"
+  },
+  {
+    "key": "F-V5.3.2.T3",
+    "title": "F-V5.3.2.T3 · [Back] Emitir os artifacts de formas de pagamento e de pedido de assinatura",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.2",
+    "file": "079_F-V5.3.2.T3.md"
+  },
+  {
+    "key": "F-V5.3.2.T4",
+    "title": "F-V5.3.2.T4 · [QA] Testar assinatura e recusa",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.2",
+    "file": "080_F-V5.3.2.T4.md"
+  },
+  {
+    "key": "F-V5.3.3",
+    "title": "F-V5.3.3 · Desafio OTP e recibo da compra assistida",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3",
+    "file": "081_F-V5.3.3.md"
+  },
+  {
+    "key": "F-V5.3.3.T1",
+    "title": "F-V5.3.3.T1 · [Front] Criar o cartão de OTP e reaproveitar o ReceiptCard",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:front",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.3",
+    "file": "082_F-V5.3.3.T1.md"
+  },
+  {
+    "key": "F-V5.3.3.T2",
+    "title": "F-V5.3.3.T2 · [Back] Aplicar o limite de tentativas de OTP (se RN02 for confirmada)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.3",
+    "file": "083_F-V5.3.3.T2.md"
+  },
+  {
+    "key": "F-V5.3.3.T3",
+    "title": "F-V5.3.3.T3 · [QA] Testar OTP correto, errado e limite",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v5"
+    ],
+    "milestone": "v5 — Jornada assistida no web client (homolog-v5)",
+    "parent": "F-V5.3.3",
+    "file": "084_F-V5.3.3.T3.md"
+  },
+  {
+    "key": "EP-V6",
+    "title": "v6 · Agentes em Go e app Android de demonstração",
+    "kind": "Épico",
+    "labels": [
+      "tipo:épico",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": null,
+    "file": "085_EP-V6.md"
+  },
+  {
+    "key": "F-V6.1",
+    "title": "F-V6.1 · Ambiente e branch da v6",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "EP-V6",
+    "file": "086_F-V6.1.md"
+  },
+  {
+    "key": "F-V6.1.1",
+    "title": "F-V6.1.1 · Ambiente de homologação v6 publicado a partir do branch homolog-v6",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1",
+    "file": "087_F-V6.1.1.md"
+  },
+  {
+    "key": "F-V6.1.1.T1",
+    "title": "F-V6.1.1.T1 · [Infra] Criar o branch homolog-v6 a partir de homolog-v5",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1.1",
+    "file": "088_F-V6.1.1.T1.md"
+  },
+  {
+    "key": "F-V6.1.1.T2",
+    "title": "F-V6.1.1.T2 · [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v6 (Docker, CPU Basic, Protected)",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1.1",
+    "file": "089_F-V6.1.1.T2.md"
+  },
+  {
+    "key": "F-V6.1.1.T3",
+    "title": "F-V6.1.1.T3 · [Infra] Incluir o mapeamento homolog-v6 → ds-fabiopinheiro/ap2-homolog-v6 no workflow de rebuild",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1.1",
+    "file": "090_F-V6.1.1.T3.md"
+  },
+  {
+    "key": "F-V6.1.1.T4",
+    "title": "F-V6.1.1.T4 · [QA] Verificar que as versões anteriores continuam funcionando após a criação da v6",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1.1",
+    "file": "091_F-V6.1.1.T4.md"
+  },
+  {
+    "key": "F-V6.1.1.T5",
+    "title": "F-V6.1.1.T5 · [Docs] Registrar a v6 no CLAUDE.md e no deploy/README.md",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.1.1",
+    "file": "092_F-V6.1.1.T5.md"
+  },
+  {
+    "key": "F-V6.2",
+    "title": "F-V6.2 · Agentes Go como backend alternativo do cenário assistido",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "EP-V6",
+    "file": "093_F-V6.2.md"
+  },
+  {
+    "key": "F-V6.2.1",
+    "title": "F-V6.2.1 · Binários Go no container com seleção de backend",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2",
+    "file": "094_F-V6.2.1.md"
+  },
+  {
+    "key": "F-V6.2.1.T1",
+    "title": "F-V6.2.1.T1 · [Infra] Adicionar estágio de build Go ao Dockerfile",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2.1",
+    "file": "095_F-V6.2.1.T1.md"
+  },
+  {
+    "key": "F-V6.2.1.T2",
+    "title": "F-V6.2.1.T2 · [Back] Selecionar Python ou Go no start.sh por AP2_BACKEND_LANG",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2.1",
+    "file": "096_F-V6.2.1.T2.md"
+  },
+  {
+    "key": "F-V6.2.1.T3",
+    "title": "F-V6.2.1.T3 · [QA] Testar os três valores de AP2_BACKEND_LANG",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2.1",
+    "file": "097_F-V6.2.1.T3.md"
+  },
+  {
+    "key": "F-V6.2.2",
+    "title": "F-V6.2.2 · Compra assistida com backend Go",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2",
+    "file": "098_F-V6.2.2.md"
+  },
+  {
+    "key": "F-V6.2.2.T1",
+    "title": "F-V6.2.2.T1 · [QA] Executar o roteiro de compra assistida com backend Go",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2.2",
+    "file": "099_F-V6.2.2.T1.md"
+  },
+  {
+    "key": "F-V6.2.2.T2",
+    "title": "F-V6.2.2.T2 · [Docs] Registrar diferenças observadas entre Python e Go",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.2.2",
+    "file": "100_F-V6.2.2.T2.md"
+  },
+  {
+    "key": "F-V6.3",
+    "title": "F-V6.3 · App Android de homologação usando o backend público",
+    "kind": "Feature",
+    "labels": [
+      "tipo:feature",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "EP-V6",
+    "file": "101_F-V6.3.md"
+  },
+  {
+    "key": "F-V6.3.1",
+    "title": "F-V6.3.1 · App Android configurado para o backend público sem chave no APK",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3",
+    "file": "102_F-V6.3.1.md"
+  },
+  {
+    "key": "F-V6.3.1.T1",
+    "title": "F-V6.3.1.T1 · [Mobile] Parametrizar as URLs do backend no build do app",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:mobile",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.1",
+    "file": "103_F-V6.3.1.T1.md"
+  },
+  {
+    "key": "F-V6.3.1.T2",
+    "title": "F-V6.3.1.T2 · [Back] Criar endpoint de proxy do Gemini para o app, com limite de requisições",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:back",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.1",
+    "file": "104_F-V6.3.1.T2.md"
+  },
+  {
+    "key": "F-V6.3.1.T3",
+    "title": "F-V6.3.1.T3 · [Mobile] Trocar a chamada direta ao Gemini pelo proxy",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:mobile",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.1",
+    "file": "105_F-V6.3.1.T3.md"
+  },
+  {
+    "key": "F-V6.3.1.T4",
+    "title": "F-V6.3.1.T4 · [Segurança] Verificar o APK contra segredos embutidos",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:segurança",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.1",
+    "file": "106_F-V6.3.1.T4.md"
+  },
+  {
+    "key": "F-V6.3.1.T5",
+    "title": "F-V6.3.1.T5 · [Infra] Expor as rotas do Merchant e do Credentials Provider do cenário Android no nginx",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.1",
+    "file": "107_F-V6.3.1.T5.md"
+  },
+  {
+    "key": "F-V6.3.2",
+    "title": "F-V6.3.2 · APK de homologação publicado no GitHub Releases",
+    "kind": "PBI",
+    "labels": [
+      "tipo:pbi",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3",
+    "file": "108_F-V6.3.2.md"
+  },
+  {
+    "key": "F-V6.3.2.T1",
+    "title": "F-V6.3.2.T1 · [Infra] Criar workflow de build do APK (Gradle) e publicação no Releases",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:infra",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.2",
+    "file": "109_F-V6.3.2.T1.md"
+  },
+  {
+    "key": "F-V6.3.2.T2",
+    "title": "F-V6.3.2.T2 · [QA] Testar instalação e compra com DPC em aparelho físico",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:qa",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.2",
+    "file": "110_F-V6.3.2.T2.md"
+  },
+  {
+    "key": "F-V6.3.2.T3",
+    "title": "F-V6.3.2.T3 · [Docs] Escrever instruções de instalação do APK de homologação",
+    "kind": "Task",
+    "labels": [
+      "tipo:task",
+      "área:docs",
+      "versão:v6"
+    ],
+    "milestone": "v6 — Go e Android (homolog-v6)",
+    "parent": "F-V6.3.2",
+    "file": "111_F-V6.3.2.T3.md"
+  }
+]
