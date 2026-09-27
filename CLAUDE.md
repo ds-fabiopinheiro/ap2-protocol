@@ -67,6 +67,8 @@ Só o `shopping_agent_v2` chama LLM. O modelo vem de `AGENT_MODEL`:
 | `7db0f41` | `supabase/migrations/`: as 2 migrations já aplicadas no projeto |
 | `e5ed159` | `supabase/config.toml` |
 | `8475da2` | `code/web-client/src/utils/mandateEntries.ts`: remove import e variáveis não usadas que faziam `tsc` falhar no `npm run build` (erro do repositório original; o `run.sh` original usa `npm run dev` e não passava por `tsc`) |
+| `53b7c9f` (merge do PR #5) | Web client em pt-BR: textos da interface, `lang="pt-BR"`, valores com `Intl.NumberFormat('pt-BR', USD)` (`src/utils/format.ts`); aviso "Mantenha esta aba aberta: o monitoramento e a compra dependem dela."; erro do agente exibido como "O agente retornou um erro." + texto das parts; "Card •••4242" exibido como "Cartão •••4242" (o mandate assinado não muda); `autoFocus` no campo de mensagem |
+| `2121005` (merge do PR #6) | Prompts do Shopping Agent com a regra de responder em pt-BR; `common/model_retry.py` (nova tentativa só em 503) usado por `_resolve_model()`; instrução sobre `product_preview_unavailable` em `consent_agent.md` (ver P8.8) |
 
 Os commits foram feitos pela interface web do GitHub, com o usuário
 `ds-fabiopinheiro` como autor, porque a sessão original não tinha permissão de
@@ -134,7 +136,7 @@ Detalhes dos arquivos de deploy:
   - Variáveis `VITE_*` são lidas no build: alterar no Vercel exige novo deploy.
 - Deployment Protection: "Standard Protection" (padrão). Verificado que a URL
   de produção abre sem login (título da página: "Shopping Agent — AP2
-  Human-Not-Present"). As URLs de preview exigem login do Vercel.
+  human-not-present", desde o PR #5). As URLs de preview exigem login do Vercel.
 - Observação: pelo conector MCP do Vercel, `get_project` e `list_deployments`
   retornaram 404/vazio para este projeto; o painel web mostra o projeto
   normalmente. Use o painel ou a CLI se o conector falhar.
@@ -175,7 +177,45 @@ Executados no container da sessão original (sem Docker, sem chave de LLM):
 | Vercel produção | "Ready", abre sem login |
 | HF Space | build OK, container "Running", agent card público OK |
 
+Testes de 27/09/2026 (feitos pelo usuário):
+
+| Teste | Resultado |
+|---|---|
+| Aceitação do PR #5 no preview do Vercel (1ª rodada) | Interface em pt-BR aprovada com ajustes pedidos: aviso de manter a aba aberta, texto do erro do agente, "Cartão" no recibo e Enter com o campo vazio após recarregar. Nessa rodada apareceram os dois erros de P8.8 |
+| Reteste do PR #5 (commit `730cc7f`), preview do Vercel, ~04:30 UTC | Aviso da aba OK; após recarregar, o campo recebe foco e o Enter com campo vazio envia a mensagem inicial; bundle com "Cartão " e "O agente retornou um erro."; `Check product now` (3×) e `Check price now` (1×) inalterados. Aprovado para merge |
+| Produção após o merge dos PRs #5 e #6, https://ap2-homolog-frontend.vercel.app, 04:39–04:41 UTC | Workflow "HF Space rebuild" com sucesso (04:36:52); Space em RUNNING com restore de 45 arquivos (04:37:56). Enter com campo vazio enviou a mensagem inicial sem clicar no campo; respostas do agente em pt-BR com valores em US$; Trusted Surface e painel com "Mantenha esta aba aberta..."; queda simulada para US$ 450; "Compra concluída", pedido `f3d6fc00-0ab4-43d3-ae77-9ac030e7b914`, US$ 450,00, "Cartão •••4242"; 4 mandates novos em `ap2_mandates` (open checkout, open payment, closed payment, closed checkout); 9 requisições ao agente, todas HTTP 200; nenhum erro 503 ou de ferramenta |
+| Testes unitários do PR #6 (`common/model_retry_tests.py`, Gemini simulado) | 7 casos: 503→503→200 conclui na 3ª chamada com esperas de 2–3,5 s e 4–5,5 s; 503 persistente para em 3 chamadas; 429 (com e sem `Retry-After`), 400 e 500 com 1 chamada; retry pela classe `Gemini` do ADK |
+
 ## 6. Pendências, em ordem
+
+### Estado dos PRs e issues em 27/09/2026
+
+| PR | Conteúdo | Estado |
+|---|---|---|
+| #5 | Web client em pt-BR e ajustes do teste de aceitação | Mesclado (`53b7c9f`) |
+| #6 | Prompts em pt-BR, nova tentativa em 503 e instrução sobre `product_preview_unavailable` | Mesclado (`2121005`); rebuild do Space OK |
+| #7 | Tradução da documentação da raiz e de `docs/` | Aberto, pronto para revisão, CI verde; merge pelo usuário |
+| #8 | Tradução dos READMEs de `code/` | Aberto, CI verde; merge pelo usuário |
+| #9 | Backlog v3–v6 em `docs/backlog/` | Aberto, CI verde; merge pelo usuário |
+
+Os PRs #7, #8 e #9 alteram a lista `ignorePaths` do `.cspell.json`; a cada
+merge, os outros ficam em conflito nesse arquivo. A resolução é manter as
+entradas dos dois lados.
+
+Issues da v3 criadas a partir de `docs/backlog/out/issues/` (PR #9): #10–#38,
+milestone #1 "v3 — Merchant Agent (homolog-v3)", hierarquia de sub-issues
+Épico → Feature → PBI → Task. EP-V3 = #10; features #11–#13; PBIs #14–#18;
+tasks #19–#38. Labels aplicadas: `versão:v3` em todas e `tipo:épico` na #10.
+Faltam `tipo:feature`, `tipo:pbi`, `tipo:task` e `área:*`, que precisam ser
+criadas no GitHub antes (o conector do GitHub não cria labels). v4, v5 e v6
+não foram criadas; aguardam confirmação do usuário.
+
+Tradução pt-BR: o que ficou em inglês e o motivo estão nas descrições dos PRs
+#5–#8. Valores trocados com o agente (`Check product now`, `Check price now`,
+tipos e campos JSON), nomes de ferramentas, rotas, variáveis `VITE_*` e
+conteúdo assinado não são traduzidos. Os arquivos traduzidos ficam em
+`ignorePaths` do `.cspell.json`, porque o spellcheck do CI só tem o
+dicionário em inglês.
 
 ### P1 e P2 — CONCLUÍDAS em 26/09/2026 01:36–01:41 UTC
 
@@ -291,11 +331,11 @@ Com "Acesso à rede: Confiável", a sessão original não conseguiu acessar
 peça ao usuário para liberar `*.hf.space`, `*.supabase.co`, `*.vercel.app` e
 `ai-gateway.vercel.sh`.
 
-### P8 — Limitações observadas no teste de 26/09/2026 (não implementado)
+### P8 — Limitações observadas nos testes de 26 e 27/09/2026
 
-Pedido usado no teste: "tênis Nike 42 preto, CEP 79040-040, monitorar 7 dias,
-abaixo de R$ 500". Nada abaixo foi corrigido; são registros para decidir
-depois com o usuário.
+Pedido usado no teste de 26/09: "tênis Nike 42 preto, CEP 79040-040, monitorar
+7 dias, abaixo de R$ 500". Os itens 1–7 não foram corrigidos; são registros
+para decidir depois com o usuário. O item 8 foi corrigido no PR #6.
 
 1. **Moeda:** o mandate foi assinado em USD (máximo 50000 centavos), embora o
    texto do agente falasse em R$. O sample fixa `_DEFAULT_CURRENCY = USD`.
@@ -321,6 +361,25 @@ depois com o usuário.
    causa não confirmada. Depois do teste o usuário informou que só ele testa
    e que não passa de 500 RPD; por isso o intervalo foi reduzido para
    `30000` (pico estimado cerca de 11 RPM, ainda não medido).
+8. **Erros do teste de aceitação do PR #5 (27/09/2026), corrigidos no PR #6:**
+   - `503 UNAVAILABLE` do Gemini (modelo sobrecarregado). Correção: `common/model_retry.py` configura `HttpRetryOptions` do
+     cliente `google-genai`, passado por `_resolve_model()` como
+     `Gemini(model=…, retry_options=…)` aos três agentes. Repete só HTTP 503,
+     no máximo 2 novas tentativas (3 chamadas), esperas de cerca de 2 s e 4 s
+     mais até 1 s de variação. Repete só a requisição ao modelo, não o turno
+     do agente nem as ferramentas. 429, 400 e 500 não são repetidos: o cliente
+     ignora `Retry-After`, e repetir 429 gastaria mais da cota gratuita.
+     `RetryingLlmAgent` foi descartado porque repete o turno inteiro (inclusive
+     ferramentas de checkout e pagamento) em qualquer exceção e sem espera. O
+     caminho LiteLLM (`AGENT_MODEL` com `/`) continua sem nova tentativa.
+   - `Tool 'product_preview_unavailable' not found`: o modelo chamou como
+     função o nome do JSON que deveria escrever no texto. Correção: nova linha
+     na seção A de `consent_agent.md`: "`product_preview_unavailable` não é uma
+     ferramenta: escreva o JSON no texto da resposta, sem chamar função."
+     Schema e exemplos não mudaram.
+   - No teste em produção de 27/09 (04:39–04:41 UTC) nenhum dos dois erros
+     apareceu. Uma execução não prova que não voltam; se voltarem, registrar o
+     log do `shopping-agent`.
 
 ## 7. Regras para as próximas sessões
 
