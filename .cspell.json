@@ -47,7 +47,8 @@
     "code/samples/python/scenarios/a2a/human-present/x402/README.md",
     "code/sdk/python/ap2/sdk/README.md",
     "code/sdk/python/ap2/tests/README.md",
-    "code/sdk/schemas/README.md"
+    "code/sdk/schemas/README.md",
+    "docs/backlog/**"
   ],
   "dictionaryDefinitions": [
     {
