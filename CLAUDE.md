@@ -196,11 +196,10 @@ Testes de 27/09/2026 (feitos pelo usuário):
 | #6 | Prompts em pt-BR, nova tentativa em 503 e instrução sobre `product_preview_unavailable` | Mesclado (`2121005`); rebuild do Space OK |
 | #7 | Tradução da documentação da raiz e de `docs/` | Mesclado (`71b9332`) |
 | #8 | Tradução dos READMEs de `code/` | Mesclado (`0adcc69`) |
-| #9 | Backlog v3–v6 em `docs/backlog/` | Aberto, CI verde; merge pelo usuário |
+| #9 | Backlog v3–v6 em `docs/backlog/` (fora do site do mkdocs por `exclude_docs`) | Mesclado (`eeb768f`) |
 
-Os PRs #7, #8 e #9 alteram a lista `ignorePaths` do `.cspell.json`. Depois
-dos merges de #7 e #8, o #9 foi atualizado com `homolog-deploy`; o conflito
-nesse arquivo se resolve mantendo as entradas dos dois lados.
+Os PRs #7, #8 e #9 alteraram a lista `ignorePaths` do `.cspell.json`; os
+conflitos entre eles foram resolvidos mantendo as entradas dos dois lados.
 
 Issues da v3 criadas a partir de `docs/backlog/out/issues/` (PR #9): #10–#38,
 milestone #1 "v3 — Merchant Agent (homolog-v3)", hierarquia de sub-issues
