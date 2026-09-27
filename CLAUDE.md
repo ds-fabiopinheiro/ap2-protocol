@@ -379,6 +379,37 @@ para decidir depois com o usuário. O item 8 foi corrigido no PR #6.
    - No teste em produção de 27/09 (04:39–04:41 UTC) nenhum dos dois erros
      apareceu. Uma execução não prova que não voltam; se voltarem, registrar o
      log do `shopping-agent`.
+9. **Limitações do teste pós-merge de 27/09/2026 (11:06–11:15 UTC), mantidas
+   por decisão do usuário (não corrigir; o risco da mudança não compensa):**
+   - **429 no meio da compra.** Com o item já disponível no momento da
+     aprovação, aprovação e compra caem no mesmo minuto (cerca de 17
+     chamadas) e passam de 15 RPM. No teste, o 429 veio logo depois de
+     `complete_checkout`: a tela mostrou erro sem recibo, mas os closed
+     mandates foram criados e `ap2_token_store.json` foi atualizado às
+     11:07:49. O resultado dessa compra fictícia ficou indeterminado.
+     Como evitar: esperar cerca de 1 minuto entre aprovar o mandate e
+     disparar a queda de preço. Se o 429 aparecer depois de
+     `complete_checkout`, tratar a compra como incerta e não repetir o pedido.
+     Não mudar a regra de retry (só 503) sem autorização do usuário.
+   - **Preço e estoque simulados persistem.** O estado do
+     `/merchant/trigger-price-drop` fica em `merchant_trigger_state.json`,
+     espelhado no Supabase e restaurado no restart. O mesmo `item_id` volta
+     disponível no teste seguinte e a compra acontece na aprovação, sem
+     monitoramento. `nike_preto_logo_branca_tamanho_42_0` e
+     `adidas_tenis_branco_tamanho_41_0` já estão disponíveis (US$ 450 e
+     US$ 250). Como evitar: usar produto diferente em cada teste. Não apagar
+     `ap2_state_files` para "limpar": isso gera chaves de assinatura novas.
+   - **Rebuild do Space por mudança só de README.** O filtro de
+     `hf-space-rebuild.yml` inclui `code/samples/python/**` e `code/sdk/**`,
+     sem excluir `.md`. O merge do PR #8 (só READMEs) reconstruiu o Space
+     (restore de 52 arquivos às 07:17 UTC). Efeito: 2 a 3 minutos fora do ar e
+     perda das sessões em memória. Como evitar: não alterar READMEs nesses
+     caminhos com monitoramento em andamento. Não mexer no filtro sem teste:
+     um filtro errado deixa o Space com código antigo sem aviso.
+   - **Links quebrados herdados do repositório do Google.** `README.md`
+     aponta para `code/sdk/python/ap2/schemas/` (o correto seria
+     `code/sdk/schemas/`); `code/samples/go/scenarios/a2a/human-present/cards/README.md`
+     tem dois links relativos com níveis errados. Só afetam a leitura.
 
 ## 7. Regras para as próximas sessões
 
