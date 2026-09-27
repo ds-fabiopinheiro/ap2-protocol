@@ -1,262 +1,278 @@
-# Executive Summary
+# Resumo executivo
 
-AI agents will redefine the landscape of digital commerce, promising
-unprecedented convenience, personalization, and efficiency. However, this shift
-exposes a fundamental challenge: the world's existing payments infrastructure
-was not designed for a future where autonomous, non-human agents act on a user's
-behalf, or transact with each other. Current payment protocols, built on the
-assumption of direct human-initiated interaction with trusted interfaces, lack
-the mechanisms to securely validate an agent's authenticity and authority to
-transact. This creates ambiguity around transaction liability, and threatens
-adoption of agentic commerce.
+Agentes de IA vão redefinir o cenário do comércio digital, com a promessa de
+conveniência, personalização e eficiência sem precedentes. Essa mudança, porém,
+expõe um desafio fundamental: a infraestrutura de pagamentos existente não foi
+projetada para um futuro em que agentes autônomos, não humanos, atuam em nome de
+um usuário ou fazem transações entre si. Os protocolos de pagamento atuais,
+construídos sobre a premissa de interação direta iniciada por um humano em
+interfaces confiáveis, não têm mecanismos para validar com segurança a
+autenticidade de um agente e sua autoridade para transacionar. Isso gera
+ambiguidade sobre a responsabilidade pelas transações e ameaça a adoção do
+comércio agêntico.
 
-Without a common, trusted protocol, the industry faces the prospect of a
-fragmented and insecure ecosystem, characterized by proprietary, siloed
-solutions that increase complexity for merchants, create friction for users, and
-prevent financial institutions from uniformly assessing risk. To address this
-gap, this protocol proposes an open, interoperable protocol for agent payments.
-This protocol, designed as an extension for emerging agent-to-agent (A2A),
-model-context protocols (MCP), and Universal Commerce Protocol (UCP),
-establishes a secure and reliable framework for
-AI-driven commerce.
+Sem um protocolo comum e confiável, o setor corre o risco de um ecossistema
+fragmentado e inseguro, formado por soluções proprietárias e isoladas que
+aumentam a complexidade para os lojistas, criam atrito para os usuários e
+impedem que as instituições financeiras avaliem o risco de forma uniforme. Para
+cobrir essa lacuna, este documento propõe um protocolo aberto e interoperável
+para pagamentos feitos por agentes. O protocolo, projetado como extensão dos
+protocolos emergentes agent-to-agent (A2A), model-context protocols (MCP) e
+Universal Commerce Protocol (UCP), estabelece uma estrutura segura e confiável
+para o comércio conduzido por IA.
 
-## The New Frontier of Commerce: Why Agent Payments Require a Foundational
-Protocol
+## A nova fronteira do comércio: por que pagamentos por agentes exigem um
+protocolo fundamental
 
-### 1.1 The Rise of Agent Commerce
+### 1.1 O crescimento do comércio por agentes
 
-The evolution of digital interaction is entering a new phase, moving beyond
-direct manipulation of UIs to conversational and delegated task execution. AI
-agents are rapidly becoming primary actors, capable of understanding complex
-user requests and executing multi-step tasks autonomously. In commerce, this
-translates into a paradigm shift where agents will manage everything from
-routine purchases and subscription management to complex product research, price
-negotiation, and dynamic order bundling across multiple vendors. This new era of
-agent commerce promises to unlock immense value, offering users a hyper-
-personalized and frictionless shopping experience while providing merchants with
-new, intelligent channels to reach and serve customers.
+A evolução da interação digital está entrando em uma nova fase, que vai além da
+manipulação direta de interfaces e passa para a execução de tarefas por conversa
+e por delegação. Agentes de IA estão se tornando rapidamente atores principais,
+capazes de entender pedidos complexos dos usuários e executar tarefas de várias
+etapas de forma autônoma. No comércio, isso se traduz em uma mudança de
+paradigma em que agentes vão cuidar de tudo, desde compras rotineiras e gestão
+de assinaturas até pesquisa complexa de produtos, negociação de preços e
+montagem dinâmica de pedidos com vários fornecedores. Essa nova era do comércio
+por agentes promete gerar grande valor, oferecendo aos usuários uma experiência
+de compra hiperpersonalizada
+e sem atrito e dando aos lojistas novos canais inteligentes para
+alcançar e atender clientes.
 
-### 1.2 The Foundational Gap: A Crisis of Trust and Liability
+### 1.2 A lacuna fundamental: crise de confiança e de responsabilidade
 
-Despite its promise, the rise of agent commerce exposes a critical vulnerability
-in the existing digital payments infrastructure. Today's payment protocols are
-designed around the principle of a human user directly interacting with a
-trusted interface, such as a merchant's website or a payment provider's app.
-Authentication, authorization, and liability are all predicated on this direct
-human involvement.
+Apesar do potencial, o crescimento do comércio por agentes expõe uma
+vulnerabilidade crítica na infraestrutura atual de pagamentos digitais. Os
+protocolos de pagamento de hoje são projetados em torno do princípio de um
+usuário humano interagindo diretamente com uma interface confiável, como o site
+de um lojista ou o aplicativo de um provedor de pagamentos. Autenticação,
+autorização e responsabilidade dependem dessa participação humana direta.
 
-Autonomous agents shatter this assumption. When an agent initiates a payment,
-fundamental questions arise that current systems are ill-equipped to answer:
+Agentes autônomos quebram essa premissa. Quando um agente inicia um pagamento,
+surgem questões fundamentais que os sistemas atuais não estão preparados para
+responder:
 
-* Authorization & Auditability: What verifiable proof demonstrates that the user
-granted the agent the specific authority to make this particular purchase?
-* Authenticity of Intent: How can a merchant or payment processor be certain
-that the agent's request accurately reflects the human user's true intent?
-* Agent Error and "Hallucination": How does the system protect against agent
-errors, such as misinterpreting a user's request or "hallucinating" product
-details, which could lead to incorrect purchases?
-* Accountability: In the event of a fraudulent or erroneous transaction, who is
-accountable? The user who delegated the task? The developer of the shopping
-agent? The merchant who accepted the order? The payment network that
-processed it? Or the PSP/orchestration layer?
+* Autorização e auditabilidade: que prova verificável demonstra que o usuário
+concedeu ao agente a autoridade específica para fazer esta compra em particular?
+* Autenticidade da intenção: como um lojista ou processador de pagamentos pode
+ter certeza de que o pedido do agente reflete com precisão a intenção real do
+usuário humano?
+* Erro do agente e "alucinação": como o sistema se protege contra erros do
+agente, como interpretar mal o pedido do usuário ou "alucinar" detalhes de
+produtos, o que poderia levar a compras incorretas?
+* Responsabilização: no caso de uma transação fraudulenta ou incorreta, quem é
+responsável? O usuário que delegou a tarefa? O desenvolvedor do shopping
+agent? O lojista que aceitou o pedido? A rede de pagamento que a
+processou? Ou a camada de PSP/orquestração?
 
-This ambiguity creates a crisis of trust. Without a robust framework to validate
-agent authority and assign liability clearly, financial institutions may be
-hesitant to approve agent-initiated transactions, merchants will be exposed to
-unacceptable levels of fraud risk, and users will be reluctant to delegate
-financial authority to agents.
+Essa ambiguidade cria uma crise de confiança. Sem uma estrutura robusta para
+validar a autoridade do agente e atribuir responsabilidade com clareza, as
+instituições financeiras podem hesitar em aprovar transações iniciadas por
+agentes, os lojistas ficarão expostos a níveis inaceitáveis de risco de fraude e
+os usuários relutarão em delegar autoridade financeira a agentes.
 
-### 1.3 The Risk of a Fragmented Ecosystem
+### 1.3 O risco de um ecossistema fragmentado
 
-In the absence of a universally adopted protocol, the industry will inevitably
-move toward a patchwork of proprietary, closed-loop solutions. Large retailers
-might develop bespoke integrations for their specific agents, and payment
-providers might create siloed ecosystems that do not interoperate. This
-fragmentation would have severe negative consequences:
+Na ausência de um protocolo adotado universalmente, o setor inevitavelmente
+caminhará para uma colcha de retalhos de soluções proprietárias e fechadas.
+Grandes varejistas poderiam desenvolver integrações sob medida para seus agentes
+específicos, e provedores de pagamento poderiam criar ecossistemas isolados que
+não interoperam. Essa fragmentação teria consequências negativas graves:
 
-* For Users: A confusing and inconsistent experience, where their preferred
-agent may only work with a limited set of merchants or payment methods.
-* For Merchants: High development and maintenance costs to support multiple,
-non-standard agent payment integrations, creating a significant barrier to entry
-for small and medium-sized businesses.
-* For the Payments Ecosystem: An inability to collect common signals across all
-agent transactions in order to consistently mitigate fraud, leading to higher
-costs and suppressed transaction approval rates.
+* Para os usuários: uma experiência confusa e inconsistente, em que o agente
+preferido pode funcionar apenas com um conjunto limitado de lojistas ou meios de
+pagamento.
+* Para os lojistas: altos custos de desenvolvimento e manutenção para suportar
+várias integrações de pagamento por agentes fora de padrão, o que cria uma
+barreira de entrada significativa para pequenas e médias empresas.
+* Para o ecossistema de pagamentos: incapacidade de coletar sinais comuns em
+todas as transações de agentes para mitigar fraudes de forma consistente, o que
+leva a custos maiores e a taxas de aprovação de transações mais baixas.
 
-An open, interoperable protocol is the most viable path forward. It creates a
-common language for all participants. It allows for additional data points to be
-shared about the transaction in a way that wasn’t possible before and ensures
-that any compliant agent can securely transact with any compliant merchant,
-fostering a competitive and innovative marketplace.
+Um protocolo aberto e interoperável é o caminho mais viável. Ele cria uma
+linguagem comum para todos os participantes. Ele permite compartilhar dados
+adicionais sobre a transação de uma forma que antes não era possível e garante
+que qualquer agente compatível possa transacionar com segurança com qualquer
+lojista compatível, favorecendo um mercado competitivo e inovador.
 
-## Section 2: Guiding Principles for a Trusted Agent Economy
+## Seção 2: Princípios orientadores para uma economia de agentes confiável
 
-The design of this proposed protocol is rooted in a set of core principles
-intended to build a sustainable, secure, and equitable ecosystem for all
-participants. These principles serve as the philosophical foundation for the
-technical architecture that follows.
+O desenho deste protocolo proposto se baseia em um conjunto de princípios
+centrais, que têm o objetivo de construir um ecossistema sustentável, seguro e
+equitativo para todos os participantes. Esses princípios são a base conceitual
+da arquitetura técnica descrita a seguir.
 
-### 2.1 Openness and Interoperability
+### 2.1 Abertura e interoperabilidade
 
-This protocol is proposed as a non-proprietary, open extension for existing and
-future agent-to-agent (A2A), model-context protocol (MCP), and Universal
-Commerce Protocol (UCP). The goal is to
-provide a common, interoperable payments layer that can be adopted by any
-ecosystem player. This approach fosters a healthy, competitive environment where
-developers can innovate on agent capabilities, merchants can reach the broadest
-possible audience, and users can choose the combination of agents and services
-that best suits their needs.
+Este protocolo é proposto como uma extensão aberta e não proprietária dos
+protocolos agent-to-agent (A2A), model-context protocol (MCP) e Universal
+Commerce Protocol (UCP), atuais e futuros. O objetivo é
+oferecer uma camada de pagamentos comum e interoperável que possa ser adotada
+por qualquer participante do ecossistema. Essa abordagem favorece um ambiente
+competitivo em que desenvolvedores podem inovar nas capacidades dos agentes,
+lojistas podem alcançar o maior público possível e usuários podem escolher a
+combinação de agentes e serviços que melhor atende às suas necessidades.
 
-### 2.2 User Control and Privacy by Design
+### 2.2 Controle do usuário e privacidade desde a concepção
 
-The user must always be the ultimate authority. The protocol is designed to
-ensure users have granular control and transparent visibility over their agents'
-activities.
+O usuário deve ser sempre a autoridade final. O protocolo foi projetado para
+garantir que os usuários tenham controle granular e visibilidade transparente
+sobre as atividades de seus agentes.
 
-Privacy is a core design tenet. The protocol is designed to protect sensitive
-user information, including the content of their conversational prompts, the
-items they are buying and payment details. Through Selective Disclosure, agents
-involved in the shopping process are prevented from accessing sensitive payment
-card industry (PCI) data which is handled exclusively by the specialized
-entities and the secure elements of the payment infrastructure. This focus on
-privacy and data minimization also ensures that entities only see the data that
-is absolutely necessary for them to perform their roles.
+A privacidade é um princípio central do desenho. O protocolo foi projetado para
+proteger informações sensíveis do usuário, incluindo o conteúdo dos prompts de
+conversa, os itens que ele compra e os dados de pagamento. Por meio de Selective
+Disclosure (divulgação seletiva), os agentes envolvidos no processo de compra
+ficam impedidos de acessar dados sensíveis da indústria de cartões de pagamento
+(PCI), que são tratados exclusivamente pelas entidades especializadas e pelos
+elementos seguros da infraestrutura de pagamento. Esse foco em privacidade e
+minimização de dados também garante que cada entidade veja apenas os dados
+estritamente necessários para exercer seu papel.
 
-### 2.3 Verifiable Intent, Not Inferred Action
+### 2.3 Intenção verificável, não ação inferida
 
-Trust in an AI Agent system cannot be based only on interpreting the ambiguous,
-probabilistic outputs of a large language model. Transactions must be anchored
-to deterministic, non-repudiable proof of intent from all parties. This
-principle directly addresses the risk of agent "hallucination" and
-misinterpretation.
+A confiança em um sistema de agentes de IA não pode se basear apenas na
+interpretação das saídas ambíguas e probabilísticas de um modelo de linguagem.
+As transações precisam estar ancoradas em uma prova de intenção determinística e
+irrefutável de todas as partes. Esse princípio trata diretamente do risco de
+"alucinação" e de interpretação incorreta pelo agente.
 
-### 2.4 Clear Transaction Accountability
+### 2.4 Responsabilização clara pelas transações
 
-For the payments ecosystem to embrace agent commerce, there can be no ambiguity
-regarding transaction accountability. A primary objective of this protocol is to
-provide supporting evidence that helps payment networks establish accountability
-and liability principles. This clarity is table stakes for gaining the
-confidence and participation of merchants, issuers, and payment networks.
+Para que o ecossistema de pagamentos adote o comércio por agentes, não pode
+haver ambiguidade quanto à responsabilização pelas transações. Um objetivo
+principal deste protocolo é fornecer evidências que ajudem as redes de pagamento
+a estabelecer princípios de responsabilização e de responsabilidade. Essa
+clareza é requisito mínimo para obter a confiança e a participação de lojistas,
+emissores e redes de pagamento.
 
-## Section 3: Architectural Overview: A Role-Based Ecosystem for Secure
-Transactions
+## Seção 3: Visão geral da arquitetura: um ecossistema baseado em papéis para
+transações seguras
 
-To achieve its goals of security, interoperability, and clear accountability,
-the proposed protocol defines a role-based architecture. Each actor in the
-ecosystem has a distinct and well-defined set of responsibilities, ensuring a
-separation of concerns that enhances security and simplifies integration.
+Para atingir seus objetivos de segurança, interoperabilidade e responsabilização
+clara, o protocolo proposto define uma arquitetura baseada em papéis. Cada ator
+do ecossistema tem um conjunto distinto e bem definido de responsabilidades, o
+que garante uma separação de atribuições que aumenta a segurança e simplifica a
+integração.
 
-The agent payments ecosystem consists of the following key roles:
+O ecossistema de pagamentos por agentes é formado pelos seguintes papéis
+principais:
 
-* **Shopping Agent (SA):** The Shopping Agent is the primary agent performing
-product discovery, building the checkout and executing the purchase.
-* **Credential Provider (CP):** The Credential Provider is the source of Payment
-Credentials for the purchase. They are responsible for verifying that this Agent
-is authorized to access this Payment Credential, and scoping the Payment
-Credential appropriately.
-* **Merchant (M)**: The Merchant is the source of the Checkout. They are
-responsible for owning the catalog and fulfilling orders.
-* **Merchant Payment Processor (MPP)**: The Merchant Payment Processor role is
-responsible for processing payments for purchases. They are responsible for
-verifying that the Payment Credential has been authorized to pay for this
-Checkout.
-* **Trusted Surface (TS):** The Trusted Surface role is a UI surface that is
-trusted to get informed user consent for an Intent before creating a user-signed
-Mandate.
-* **Network and Issuer**: The provider of the payment network and issuer of
-payment credentials to the human user. The Credentials Provider may need to
-interact with the network for issuance of specific tokens for AI agent
-transactions and the Merchant/PSP may submit these transactions for
-authorization to issuers via the networks.
+* **Shopping Agent (SA):** o Shopping Agent (agente de compras) é o agente
+principal, que faz a descoberta de produtos, monta o checkout e executa a
+compra.
+* **Credential Provider (CP):** o Credential Provider (provedor de credenciais)
+é a origem das credenciais de pagamento da compra. Ele é responsável por
+verificar se este agente está autorizado a acessar esta credencial de pagamento
+e por limitar o escopo da credencial de pagamento de forma adequada.
+* **Merchant (M)**: o Merchant (lojista) é a origem do checkout. Ele é
+responsável pelo catálogo e pelo atendimento dos pedidos.
+* **Merchant Payment Processor (MPP)**: o papel Merchant Payment Processor
+(processador de pagamentos do lojista) é responsável por processar os pagamentos
+das compras. Ele é responsável por verificar se a credencial de pagamento foi
+autorizada a pagar este checkout.
+* **Trusted Surface (TS):** o papel Trusted Surface (interface confiável) é uma
+interface de usuário considerada confiável para obter o consentimento informado
+do usuário para uma intenção antes de criar um Mandate (autorização assinada)
+pelo usuário.
+* **Network e Issuer**: o provedor da rede de pagamento e o emissor das
+credenciais de pagamento para o usuário humano. O Credential Provider pode
+precisar interagir com a rede para emitir tokens específicos para transações de
+agentes de IA, e o Merchant/PSP pode enviar essas transações para autorização
+dos emissores por meio das redes.
 
-Some non-normative examples of how the roles could be combined: 
+Alguns exemplos não normativos de como os papéis podem ser combinados: 
 
-* The provider of the Shopping Agent could also provide a non-agentic Trusted
-Surface within their application.
-* The Shopping Agent could also provide their own Credential Provider.  
-* The Merchant could provide their own Merchant Payment Processor  
-* The Merchant could be a Credential Provider. 
+* O provedor do Shopping Agent pode também oferecer uma Trusted Surface não
+agêntica dentro do seu aplicativo.
+* O Shopping Agent pode também oferecer seu próprio Credential Provider.  
+* O Merchant pode oferecer seu próprio Merchant Payment Processor  
+* O Merchant pode ser um Credential Provider. 
 
-## Section 4: Core User Journeys
+## Seção 4: Principais jornadas do usuário
 
-### 4.1 Human Present Transaction
+### 4.1 Transação human-present
 
-Human delegates a task to an AI Agent which requires a payment to be made (e.g.,
-for shopping) and human is available when the payment has to be authorized. A
-typical (but not only) way this may happen is as below:
+O humano delega a um agente de IA uma tarefa que exige um pagamento (por
+exemplo, uma compra) e está disponível quando o pagamento precisa ser
+autorizado. Uma forma típica (mas não a única) de isso acontecer é a seguinte:
 
-* Setup: The User may set up a connection between their preferred Shopping Agent
-& any of the supported Credential Providers. This may require the User to
-authenticate themselves on a surface owned by the Credential Provider.
-* Discovery & Negotiation: The User provides a shopping task to their chosen AI
-Agent (*which may activate a specialized Shopping Agent to complete the task*).
-The Shopping Agent interacts with one or more Merchants to assemble a cart that
-satisfies the User's request. This may include the ability for the merchant to
-provide loyalty, offers, cross-sell and up-sell information (*via the
-integration between the Shopping Agent & Merchant*) which the Shopping Agent
-should represent to the user .
-* Merchant Validates Cart: A SKU or set of SKUs are authorized by the User for
-purchase. This is communicated by the Shopping Agent to the Merchant to initiate
-order creation. The Merchant must sign the Cart that they create for a user,
-signaling that they will fulfill this cart.
-* Provide Payment Methods: The Shopping Agent may provide the payment context to
-the Credentials Provider and request an applicable payment method (shared as a
-reference or in encrypted form), along with any loyalty/discount information
-which may be relevant for the payment method selection (*say, card points which
-can be redeemed towards the txn*).
-* Show Cart: The Shopping Agent presents the final cart and applicable payment
-method to the user in a trusted surface and the user can approve it via an
-authentication process.
-* Sign & Pay: The user’s signed approval must create a cryptographically signed
-“Checkout Mandate”. This mandate contains the explicit goods being purchased &
-their confirmation of purchase. It is shared with the Merchant so they can use
-this as evidence in case of disputes. Separately, the Payment Mandate may be
-shared with the network & issuer for transaction authorization.
-* Payment Execution: The Payment Mandate must be conveyed to the Credential
-provider and Merchant to complete the transaction. There may be multiple ways
-this might happen. For example,
-  * The Shopping Agent (SA) may request Credentials Provider to complete a
-  payment with the Merchant OR,
-  * the SA may submit an order with the merchant, triggering a payment
-  authorization flow where the merchant/PSP requests payment method from the
-  Credentials Provider.
-* Send Transaction to Issuer: The Merchant or PSP routes the transaction to the
-issuer or the network within which the payment method operates. The transaction
-packet may be appended with AI agent presence signals ensuring network/issuer
-get visibility into agentic transactions.
-* Challenge: Any party (issuer, credential provider, merchant etc.) may choose
-to challenge the transaction through existing mechanisms like 3DS2. This
-challenge needs to be presented to the user by the Trusted Surface (*an example
-of this would be a hosted 3DS*) and may require a redirect to a trusted surface
-to complete.
-* Resolve Challenge: The user should have a way to resolve the challenge on a
-trusted surface (say, banking app, website etc.)
-* Authorize Transaction: The issuer approves the payment and confirms success
-back. This is communicated to the User and the Merchant so that the order can be
-fulfilled. A payment receipt is shared with the Credential Provider confirming
-the transaction result. In case of a decline, that can also be appropriately
-communicated.
+* Configuração: o usuário pode configurar uma conexão entre seu Shopping Agent
+preferido e qualquer um dos Credential Providers suportados. Isso pode exigir
+que o usuário se autentique em uma interface do Credential Provider.
+* Descoberta e negociação: o usuário passa uma tarefa de compra para o agente de
+IA escolhido (*que pode acionar um Shopping Agent especializado para concluir a
+tarefa*). O Shopping Agent interage com um ou mais Merchants para montar um
+carrinho que atenda ao pedido do usuário. Isso pode incluir a possibilidade de o
+lojista fornecer informações de fidelidade, ofertas, venda cruzada e venda
+adicional (*por meio da integração entre o Shopping Agent e o Merchant*), que o
+Shopping Agent deve apresentar ao usuário .
+* Merchant valida o carrinho: um SKU ou conjunto de SKUs é autorizado pelo
+usuário para compra. O Shopping Agent comunica isso ao Merchant para iniciar a
+criação do pedido. O Merchant precisa assinar o carrinho que cria para um
+usuário, sinalizando que vai atender esse carrinho.
+* Fornecer meios de pagamento: o Shopping Agent pode fornecer o contexto do
+pagamento ao Credential Provider e solicitar um meio de pagamento aplicável
+(compartilhado como referência ou de forma criptografada), junto com qualquer
+informação de fidelidade/desconto que possa ser relevante para a escolha do meio
+de pagamento (*por exemplo, pontos do cartão que podem ser resgatados na
+transação*).
+* Exibir o carrinho: o Shopping Agent apresenta o carrinho final e o meio de
+pagamento aplicável ao usuário em uma trusted surface, e o usuário pode
+aprová-lo por meio de um processo de autenticação.
+* Assinar e pagar: a aprovação assinada do usuário precisa criar um “Checkout
+Mandate” (autorização do usuário para um checkout) assinado criptograficamente.
+Esse mandate contém os bens exatos que estão sendo comprados e a confirmação de
+compra do usuário. Ele é compartilhado com o Merchant para que este possa
+usá-lo como evidência em caso de disputa. Separadamente, o Payment Mandate
+(autorização do usuário para o pagamento) pode ser compartilhado com a rede e o
+emissor para autorização da transação.
+* Execução do pagamento: o Payment Mandate precisa ser enviado ao Credential
+Provider e ao Merchant para concluir a transação. Isso pode acontecer de várias
+formas. Por exemplo,
+  * o Shopping Agent (SA) pode pedir ao Credential Provider que conclua um
+  pagamento com o Merchant OU
+  * o SA pode enviar um pedido ao lojista, acionando um fluxo de autorização de
+  pagamento em que o lojista/PSP solicita o meio de pagamento ao Credential
+  Provider.
+* Enviar a transação ao emissor: o Merchant ou PSP encaminha a transação ao
+emissor ou à rede em que o meio de pagamento opera. O pacote da transação pode
+receber sinais de presença de agente de IA, garantindo que a rede/emissor tenha
+visibilidade sobre transações agênticas.
+* Desafio: qualquer parte (emissor, Credential Provider, lojista etc.) pode
+decidir desafiar a transação por mecanismos existentes, como o 3DS2. Esse
+desafio precisa ser apresentado ao usuário pela Trusted Surface (*um exemplo
+seria um 3DS hospedado*) e pode exigir um redirecionamento para uma trusted
+surface para ser concluído.
+* Resolver o desafio: o usuário deve ter uma forma de resolver o desafio em uma
+trusted surface (por exemplo, aplicativo do banco, site etc.)
+* Autorizar a transação: o emissor aprova o pagamento e confirma o sucesso. Isso
+é comunicado ao usuário e ao Merchant para que o pedido possa ser atendido. Um
+comprovante de pagamento é compartilhado com o Credential Provider, confirmando
+o resultado da transação. Em caso de recusa, isso também pode ser comunicado de
+forma adequada.
 
-### 4.2 Human Not Present Transaction
+### 4.2 Transação human-not-present
 
-Human delegates a task to an AI Agent which requires a payment to be made (e.g.,
-for shopping) and human wants the AI Agent to proceed with the payment in their
-absence. Some canonical scenarios here could be “*buy these shoes for me when
-the price drops below $100*” or “*buy 2 tickets to this concert as soon as they
-become available, make sure we’re close to the main stage but don’t spend more
-than $1000*”.
+O humano delega a um agente de IA uma tarefa que exige um pagamento (por
+exemplo, uma compra) e quer que o agente de IA faça o pagamento na sua ausência.
+Alguns cenários típicos seriam “*compre estes tênis para mim quando o preço
+cair abaixo de US$ 100*” ou “*compre 2 ingressos para este show assim que
+estiverem disponíveis, garanta que fiquemos perto do palco principal, mas não
+gaste mais de US$ 1000*”.
 
-Key changes from the Human Present modality are noted below:
+As principais diferenças em relação à modalidade human-present estão abaixo:
 
-* The Agent must repeat back to the User what they think they are expected to
-purchase. The User must approve this and confirm that they would like the agent
-to proceed with the purchase in their absence. This is done by the User going
-through in-session authentication (biometric etc.) to confirm their intent.
-* The “Checkout Mandate” signed by the user now contains the list of conditions
-under which the SA can fulfill the user’s order. This mandate is in an “Open”
-state while the Agent tries to meet the user’s requirements. Once the SA
-determines that the requirements can be met, the mandate is “Closed”.
-* Merchant can force user confirmation: If the Merchant is unsure about their
-ability to fulfill the user’s needs (e.g. the request is not for a specific
-SKU), they can force the user to come back into session to confirm the purchase
-conditions or provide additional information.
+* O agente precisa repetir ao usuário o que entende que deve comprar. O usuário
+precisa aprovar isso e confirmar que quer que o agente faça a compra na sua
+ausência. Para isso, o usuário passa por uma autenticação na sessão (biometria
+etc.) para confirmar sua intenção.
+* O “Checkout Mandate” assinado pelo usuário passa a conter a lista de condições
+em que o SA pode atender ao pedido do usuário. Esse mandate fica no estado
+“Open” (aberto) enquanto o agente tenta atender aos requisitos do usuário.
+Quando o SA determina que os requisitos podem ser atendidos, o mandate passa
+para “Closed” (fechado).
+* O Merchant pode exigir confirmação do usuário: se o Merchant não tiver certeza
+de que consegue atender às necessidades do usuário (por exemplo, o pedido não é
+para um SKU específico), ele pode exigir que o usuário volte à sessão para
+confirmar as condições de compra ou fornecer informações adicionais.

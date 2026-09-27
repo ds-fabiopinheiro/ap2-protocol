@@ -1,148 +1,151 @@
-# Security and Privacy Considerations
+# Considerações de segurança e privacidade
 
-## Security Considerations
+## Considerações de segurança
 
-Agentic commerce introduces numerous potential security risks. Given the current
-state of agent security, AP2 assumes that preventing prompt injection attacks
-is infeasible. Therefore, all LLMs and Agents MUST be considered potential
-attackers and are explicitly included in the threat model.
+O comércio agêntico introduz vários riscos de segurança. Dado o estado atual da
+segurança de agentes, o AP2 assume que é inviável impedir ataques de prompt
+injection. Por isso, todos os LLMs e Agents MUST (obrigatório) ser considerados
+potenciais atacantes e estão explicitamente incluídos no modelo de ameaças.
 
-### Manipulated Checkout
+### Checkout manipulado
 
-**Threat:**
+**Ameaça:**
 
-- An attacker steals a signed and authorized Payment Mandate to use it with an
-  unrelated Checkout.
+- Um atacante rouba um Payment Mandate (autorização assinada para o pagamento)
+  assinado e autorizado para usá-lo com um Checkout não relacionado.
 
-**Mitigation**
+**Mitigação**
 
-- The Payment Mandate MUST contain a reference to its associated Checkout.
-- This is via `transaction_id` for closed Payment Mandates and the 
- `mandate.payment.reference` constraint for open ones.
+- O Payment Mandate MUST conter uma referência ao Checkout associado.
+- Isso é feito via `transaction_id` nos closed Payment Mandates e pela
+ constraint `mandate.payment.reference` nos open.
 
-**Threat:**
+**Ameaça:**
 
-- An attacker reuses an open Payment Mandate with a different closed Payment
+- Um atacante reutiliza um open Payment Mandate com outro closed Payment
   Mandate.
-- An attacker reuses an open Payment Mandate to approve a different closed
-  Checkout Mandate.
+- Um atacante reutiliza um open Payment Mandate para aprovar outro closed
+  Checkout Mandate (autorização assinada para um checkout).
 
-**Mitigation**
+**Mitigação**
 
-- Closed Mandates MUST contain the `sd_hash` claim to bind them to the
-  presented open Mandate.
-- Open Mandates MUST contain the Agent's key (via a `cnf` claim) so that
-  only the agent could create a Closed Mandate with a valid signature.
+- Closed Mandates MUST conter a claim `sd_hash` para vinculá-los ao open
+  Mandate apresentado.
+- Open Mandates MUST conter a chave do Agent (via claim `cnf`) para que
+  apenas o agente consiga criar um Closed Mandate com assinatura válida.
 
-**Threat:**
+**Ameaça:**
 
-- An attacker mismatches a closed Mandate with a different open Mandate.
+- Um atacante combina um closed Mandate com outro open Mandate.
 
-**Mitigation**
+**Mitigação**
 
-- Closed Mandates MUST contain the `sd_hash` claim to bind them to the
-  presented open Mandate.
+- Closed Mandates MUST conter a claim `sd_hash` para vinculá-los ao open
+  Mandate apresentado.
 
-**Threat:**
+**Ameaça:**
 
-- An attacker uses a closed Checkout Mandate with a different checkout session.
+- Um atacante usa um closed Checkout Mandate com outra sessão de checkout.
 
-**Mittigation**
+**Mitigação**
 
-- Merchant MUST verify that `checkout_hash` matches the hash of the
-  latest `checkout_jwt`.
+- O Merchant MUST verificar se `checkout_hash` corresponde ao hash do
+  `checkout_jwt` mais recente.
 
-### Manipulated Payment
+### Pagamento manipulado
 
-**Threat:**
+**Ameaça:**
 
-- A Shopping or Credential Provider Agent manipulates the Payment in transit,
-  or requests payment without (or differing from) the User's approved Mandate.
-  This causes the Credential Provider to execute a Payment not approved by the
-  Trusted Surface.
+- Um Shopping Agent ou Agent do Credential Provider manipula o Payment em
+  trânsito, ou solicita um pagamento sem o Mandate aprovado pelo usuário (ou
+  diferente dele). Isso faz o Credential Provider executar um Payment não
+  aprovado pela Trusted Surface.
 
-**Mitigation:**
+**Mitigação:**
 
-- The Merchant Payment Processor and Credential Provider MUST verify the User's
-  signature on the Payment Mandate to ensure its integrity.
-- The `checkout_hash` embedded in the `transaction_id` securely links the
-  payment to the associated Checkout Mandate.
-- Constraint evaluation ensures the payment amounts and payees comply with the
-  authorized limits.
+- O Merchant Payment Processor e o Credential Provider MUST verificar a
+  assinatura do usuário no Payment Mandate para garantir sua integridade.
+- O `checkout_hash` incluído no `transaction_id` vincula de forma segura o
+  pagamento ao Checkout Mandate associado.
+- A avaliação de constraints garante que os valores e os recebedores do
+  pagamento respeitem os limites autorizados.
 
-### Payment Credential Theft
+### Roubo de Payment Credential
 
-**Threat:**
+**Ameaça:**
 
-- An attacker steals the User's Payment Credential or Token after its release
-  to perform a payment in an unauthorized context.
+- Um atacante rouba a Payment Credential ou o Token do usuário depois de sua
+  liberação para fazer um pagamento em um contexto não autorizado.
 
-**Mitigation:**
+**Mitigação:**
 
-- The Payment Credential/Token MUST ONLY be released to the Merchant upon the
-  receipt and verification of a final Payment Mandate. This binds the token to
-  the specific transaction.
+- A Payment Credential/Token MUST ONLY (somente) ser liberada ao Merchant após
+  o recebimento e a verificação de um Payment Mandate final. Isso vincula o
+  token à transação específica.
 
-### Manipulated Discovery
+### Descoberta manipulada
 
-**Threat:**
+**Ameaça:**
 
-- Prompt injection causes the Shopping Agent to select malicious products or
-  make poor purchase decisions.
+- Um prompt injection faz o Shopping Agent selecionar produtos maliciosos ou
+  tomar decisões de compra ruins.
 
-**Mitigation:**
+**Mitigação:**
 
-- The Merchant signature ensures the integrity of the offering.
-- Even if the LLM fails to make the optimal choice, constraint enforcement
-  during closed Mandate verification ensures that the worst-case financial and
-  logical impacts are strictly bounded.
+- A assinatura do Merchant garante a integridade da oferta.
+- Mesmo que o LLM não faça a melhor escolha, a aplicação das constraints na
+  verificação do closed Mandate garante que o pior impacto financeiro e lógico
+  fique estritamente limitado.
 
-### Double Spend
+### Gasto duplo
 
-**Threat:**
+**Ameaça:**
 
-- A prompt injected, or otherwise malicious Shopping Agent attempts to approve
-  multiple valid Checkouts using the same open Mandate.
+- Um Shopping Agent sob prompt injection, ou malicioso por outro motivo, tenta
+  aprovar vários Checkouts válidos usando o mesmo open Mandate.
 
-**Mitigation:**
+**Mitigação:**
 
-- The non-deterministic portion of the Shopping Agent MUST avoid signing
-  multiple, overlapping closed Mandates for the same open Mandate without
-  receiving Receipts rejecting the previously released Mandates.
-  - These Receipts MUST be integrity protected from the Shopping Agent's LLM.
-- Credential Provider, Networks or MPPs MAY reject multiple overlapping
- Mandates, or invalidate previously issued payment tokens.
+- A parte não determinística do Shopping Agent MUST evitar assinar vários
+  closed Mandates sobrepostos para o mesmo open Mandate sem receber Receipts
+  que rejeitem os Mandates liberados antes.
+  - Esses Receipts MUST ter a integridade protegida contra o LLM do Shopping
+    Agent.
+- Credential Provider, Networks ou MPPs MAY (opcional) rejeitar vários
+ Mandates sobrepostos ou invalidar payment tokens emitidos antes.
 
-## Privacy Considerations
+## Considerações de privacidade
 
-### Open Checkout and Payment Mandate Constraints
+### Constraints de open Checkout e Payment Mandates
 
-Open Checkout and Payment Mandate Constraints MAY contain information that is
-not applicable to the particular Checkout that would leak unnecessary user
-intent. Selective Disclosure MUST be used to preserve user privacy.
+As constraints de open Checkout e Payment Mandates MAY conter informações que
+não se aplicam ao Checkout específico e que revelariam intenção do usuário sem
+necessidade. Selective Disclosure MUST ser usada para preservar a privacidade
+do usuário.
 
-To enhance user privacy the Trusted Surface MAY insert decoy digests as
- described in RFC9901 Section 4.2.5.
+Para reforçar a privacidade do usuário, a Trusted Surface MAY inserir digests
+ falsos (decoy digests), como descrito na RFC9901, Seção 4.2.5.
 
-### Checkout and Payment Data Minimization
+### Minimização de dados de Checkout e Payment
 
-To preserve user privacy and the principle of data minimization, Selective
-Disclosure is used to allow the Checkout Mandate and Payment Mandate to be
-shared with the relevant parties for securing the Checkout and Payment
-respectively. The `checkout_hash` links these Mandates allowing them to be
-joined in the case of a Dispute.
+Para preservar a privacidade do usuário e o princípio de minimização de dados,
+a Selective Disclosure permite que o Checkout Mandate e o Payment Mandate sejam
+compartilhados com as partes relevantes para proteger o Checkout e o Payment,
+respectivamente. O `checkout_hash` liga esses Mandates, permitindo reuni-los em
+caso de disputa.
 
-> Note: The information contained within the Mandates, or the Mandates
-> themselves could be shared with other parties if appropriate agreements or
-> channels exist, but that is outside the scope of AP2.
+> Observação: as informações contidas nos Mandates, ou os próprios Mandates,
+> podem ser compartilhadas com outras partes se existirem acordos ou canais
+> adequados, mas isso está fora do escopo do AP2.
 
-### Rainbow Table Attacks
+### Ataques de rainbow table
 
-Digests in SD-JWTs (for Payment and Checkout Mandates as well as Constraints)
-MUST include a salt with sufficient entropy to prevent guessing the plaintext.
-See RFC9901 Section 9.1. For more details.
+Os digests em SD-JWTs (dos Payment e Checkout Mandates e das Constraints) MUST
+incluir um salt com entropia suficiente para impedir que o texto original seja
+adivinhado. Veja a RFC9901, Seção 9.1, para mais detalhes.
 
-The `checkout_hash` makes use of the entropy already included in the JWT
-signature to prevent guessing the Checkout contents. If a signing algorithm
-(e.g. deterministic signature scheme such as `Ed25519`) is used that does not
-include this then a salt of sufficient entropy MUST be present in the Checkout.
+O `checkout_hash` aproveita a entropia já incluída na assinatura do JWT para
+impedir que o conteúdo do Checkout seja adivinhado. Se for usado um algoritmo
+de assinatura que não inclua essa entropia (por exemplo, um esquema de
+assinatura determinística como `Ed25519`), um salt com entropia suficiente MUST
+estar presente no Checkout.
