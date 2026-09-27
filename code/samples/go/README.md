@@ -1,29 +1,29 @@
-# Go Samples for the Agent Payments Protocol AP2
+# Samples em Go do Agent Payments Protocol AP2
 
-This directory contains Go samples demonstrating how to build AP2
-agents.
+Este diretório contém samples em Go que mostram como construir agentes
+AP2.
 
-## Available Scenarios
+## Cenários disponíveis
 
-Currently, one scenario is available:
+No momento, há um cenário disponível:
 
-- **[Human-Present Card Payment](./scenarios/a2a/human-present/cards/README.md)**
-    - Complete card payment flow with Go agents and Python Shopping
-      Agent
+- **[Pagamento com cartão human-present](./scenarios/a2a/human-present/cards/README.md)**
+    - Fluxo completo de pagamento com cartão, com agentes em Go e Shopping
+      Agent em Python
 
-See the [scenario README](./scenarios/a2a/human-present/cards/README.md) for
-detailed setup and usage instructions.
+Consulte o [README do cenário](./scenarios/a2a/human-present/cards/README.md)
+para instruções detalhadas de configuração e uso.
 
-## Why Go for Backend Agents?
+## Por que Go para agentes de backend
 
-Go can be exceptionally well-suited for building AP2 backend services:
+Go pode ser especialmente adequado para construir serviços de backend do AP2:
 
-- **Type Safety**: Compile-time validation of protocol structures
-- **Performance**: Fast response times and low resource usage
-- **Concurrency**: Efficient handling of concurrent requests
-- **Deployment**: Single binary with no runtime dependencies
+- **Segurança de tipos**: validação das estruturas do protocolo em tempo de compilação
+- **Desempenho**: respostas rápidas e baixo uso de recursos
+- **Concorrência**: tratamento eficiente de requisições concorrentes
+- **Implantação**: binário único, sem dependências de runtime
 
-## Project Structure
+## Estrutura do projeto
 
 ```text
 code/samples/go/
@@ -38,19 +38,19 @@ code/samples/go/
             └── cards/                # Card payment scenario
 ```
 
-## Development
+## Desenvolvimento
 
 ```sh
-# Run tests
+# Executa os testes
 make test
 
-# Format code
+# Formata o código
 make fmt
 
-# Build all agents
+# Compila todos os agentes
 make build
 ```
 
-## License
+## Licença
 
-Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
+Copyright 2025 Google LLC. Licenciado sob a Apache License, Version 2.0.

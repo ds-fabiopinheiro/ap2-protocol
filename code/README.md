@@ -1,38 +1,38 @@
-# Code
+# Código
 
-All source code for AP2 lives here, split by artifact.
+Todo o código-fonte do AP2 fica aqui, separado por artefato.
 
-## `sdk/` — the AP2 SDK
+## `sdk/` — o SDK do AP2
 
-The primary artifact of this repository. The Python implementation is at
-[`sdk/python/ap2/`](sdk/python/ap2/) and is the package exposed by the root
-[`pyproject.toml`](../pyproject.toml) (installed as `import ap2`).
+O artefato principal deste repositório. A implementação em Python fica em
+[`sdk/python/ap2/`](sdk/python/ap2/) e é o pacote exposto pelo
+[`pyproject.toml`](../pyproject.toml) da raiz (instalado como `import ap2`).
 
-It contains:
+Conteúdo:
 
-- `sdk/python/ap2/models/` — Pydantic models for carts, mandates, receipts,
-  and payment requests.
-- `sdk/python/ap2/schemas/` — canonical JSON Schemas and the generator used
-  to emit the Python models in `sdk/python/ap2/sdk/generated/`.
-- `sdk/python/ap2/sdk/` — the runtime SDK: mandate wrappers, chain
-  verification, SD-JWT helpers, constraints, disclosure metadata.
-- `sdk/python/ap2/tests/` — unit tests for the SDK.
+- `sdk/python/ap2/models/` — modelos Pydantic para carrinhos, mandates,
+  receipts e solicitações de pagamento.
+- `sdk/python/ap2/schemas/` — JSON Schemas canônicos e o gerador usado para
+  emitir os modelos Python em `sdk/python/ap2/sdk/generated/`.
+- `sdk/python/ap2/sdk/` — o SDK de runtime: wrappers de mandate, verificação
+  de cadeia, utilitários de SD-JWT, constraints, metadados de disclosure.
+- `sdk/python/ap2/tests/` — testes unitários do SDK.
 
-Future language SDKs (Go, JS, …) would live as siblings under `sdk/`.
+SDKs em outras linguagens (Go, JS, …) ficariam ao lado deste, dentro de `sdk/`.
 
-## `samples/` — reference implementations
+## `samples/` — implementações de referência
 
-End-to-end scenarios that demonstrate the protocol:
+Cenários de ponta a ponta que demonstram o protocolo:
 
-- [`samples/python/`](samples/python/) — Python roles (merchant, credentials
-  provider, shopping agent, payment processor) and scenarios.
-- [`samples/go/`](samples/go/) — Go reference servers and scenarios.
-- [`samples/android/`](samples/android/) — Android shopping assistant and the
-  digital payment credentials scenario.
-- [`samples/certs/`](samples/certs/) — test CA and leaf certificates used by
-  the samples for SD-JWT trust verification.
+- [`samples/python/`](samples/python/) — papéis em Python (merchant,
+  credentials provider, shopping agent, payment processor) e cenários.
+- [`samples/go/`](samples/go/) — servidores de referência e cenários em Go.
+- [`samples/android/`](samples/android/) — assistente de compras para Android
+  e o cenário de credenciais de pagamento digitais.
+- [`samples/certs/`](samples/certs/) — CA e certificados folha de teste
+  usados pelos exemplos na verificação de confiança de SD-JWT.
 
-## `web-client/` — demo UI
+## `web-client/` — interface de demonstração
 
-A Vite + React + TypeScript app that exercises the A2A protocol against the
-sample agents.
+Um app Vite + React + TypeScript que exercita o protocolo A2A com os agentes de
+exemplo.
