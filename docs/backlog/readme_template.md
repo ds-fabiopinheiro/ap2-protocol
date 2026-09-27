@@ -1,6 +1,6 @@
 # Backlog das evoluções v3–v6 do ambiente de homologação do AP2
 
-Repositório: `ds-fabiopinheiro/ap2-protocol` · Levantamento: 26/09/2026 · Status: **preview, nada foi criado no GitHub**.
+Repositório: `ds-fabiopinheiro/ap2-protocol` · Levantamento: 26/09/2026 · Status: **issues criadas no GitHub em 27/09/2026 (v3 #10–#38, v4 #42–#64, v5 #65–#96, v6 #97–#123), com milestones e sub-issues**.
 
 Este pacote contém quatro épicos, um por versão. Cada versão tem um branch próprio (`homolog-v3` … `homolog-v6`), criado a partir da versão anterior. Com isso cada versão acumula as anteriores, e as anteriores continuam publicadas para comparação.
 
@@ -69,7 +69,8 @@ Regras:
 | Milestones | Um por versão (ex.: "v3 — Merchant Agent (homolog-v3)") |
 | Hierarquia | Sub-issues do GitHub: Épico → Feature → PBI → Task |
 | Corpo da issue | Seções padronizadas (Campos, Descrição, Regras, Fora de escopo, Critérios de aceite, Definição de pronto) |
-| GitHub Projects (opcional) | Campos Status, Estimativa e Iteração preenchidos no Project; o script não preenche esses campos |
+| GitHub Projects | Project "AP2 homologação — backlog" (https://github.com/users/ds-fabiopinheiro/projects/2, privado). Status: Backlog, Pronto para iniciar, Em andamento, Impedido, Em revisão, Concluído. Campos Ordem, Priority, Nível, Versão, Área, Pontos, Horas, Depende de e Cenários BDD, preenchidos no Project; o script não preenche esses campos |
+| Dependências | 29 relações "blocked by" nativas do GitHub entre épicos, features e PBIs, conforme o campo "Depende de". Tasks do mesmo PBI não têm dependência; a ordem delas é a do campo Ordem |
 
 Os tipos de issue nativos do GitHub (Epic, Feature, Task) só existem em organizações. Como o repositório é de conta pessoal, o tipo fica em label.
 
@@ -92,6 +93,8 @@ __TREE__
 3. **EP-V5.** A tela React só vale a pena depois de a jornada funcionar no ADK Web. O spike F-V5.2.1 define o contrato de dados.
 4. **EP-V6.** Go e Android dependem do cenário assistido estável. O APK exige resolver primeiro a chave do Gemini embutida.
 
+Prioridade confirmada pelo usuário em 27/09/2026: P0 = v3, P1 = v4, P2 = v5, P3 = v6.
+
 ## 8. Verificação da decomposição
 
 - **Cobertura.** Os quatro pedidos do usuário estão cobertos: Merchant Agent (EP-V3), Shopping Agent v1 (EP-V4), jornada assistida (EP-V4 no ADK Web e EP-V5 no web client), Go e Android (EP-V6).
@@ -112,12 +115,12 @@ __TREE__
 
 ## 10. Pendências para sincronizar
 
-- **Responsável, sprint/iteração e prioridade** de cada issue: não definidos.
+- **Responsável e sprint/iteração** de cada issue: não definidos.
 - **Token `HF_TOKEN`** do GitHub: precisa de permissão de escrita em cada novo Space (ação do dono da conta).
 - **Secrets de cada Space** (`GOOGLE_API_KEY`, `SUPABASE_SECRET_KEY`): cadastrados pelo dono da conta.
 - **Faturamento Google** (caso OR_CCR_53, resposta prevista até 03/10/2026): define se a cota continua a do plano gratuito.
-- **Tradução pt-BR** do web client: PR #5 aprovado no teste de aceitação da interface em 27/09/2026, com ajustes pedidos; PRs #6–#8 em andamento. Mesclar antes do EP-V5 para evitar conflito de textos.
-- **Regra de nova tentativa do modelo** (503): definida no PR de backend que corrige os erros do teste de 27/09; a v3 (F-V3.3.2) e a v4 (F-V4.3.2) reutilizam essa regra.
+- **Tradução pt-BR:** PRs #5 a #8 mesclados em 27/09/2026.
+- **Regra de nova tentativa do modelo:** definida no PR #6 (`common/model_retry.py`): só em HTTP 503, no máximo 3 chamadas (2 novas tentativas), com esperas de cerca de 2 s e 4 s mais até 1 s de variação. A v3 (F-V3.3.2) e a v4 (F-V4.3.2) reutilizam essa regra.
 
 ## 11. Como criar as issues no GitHub
 
@@ -137,7 +140,7 @@ O script:
 3. vincula cada filho ao pai como sub-issue;
 4. grava o mapa chave → número em `out/created.json` (arquivo local, ignorado pelo `.gitignore` da pasta).
 
-Se for executado de novo, reaproveita issues com o mesmo título.
+As 111 issues (v3 a v6) já foram criadas em 27/09/2026. Se o script for executado de novo, reaproveita as issues com o mesmo título.
 
 ## 12. Cenários de teste (BDD)
 
