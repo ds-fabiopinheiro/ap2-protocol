@@ -1,167 +1,170 @@
-# Flow Examples
+# Exemplos de fluxos
 
-There are two categories of flows in AP2: Human Present and Human Not Present.
+Há duas categorias de fluxos no AP2: Human Present e Human Not Present.
 
-  - *Human Present*: The User **directly** approves the closed Checkout and
+  - *Human Present*: o usuário aprova **diretamente** os closed Checkout e
     Payment Mandates.
-  - *Human Not Present*: The User approves open Checkout and Payment Mandates
-    while the Agent, acting autonomously, presents them along with Agent-signed
-    closed Checkout and Payment Mandates.
+  - *Human Not Present*: o usuário aprova open Checkout e Payment Mandates,
+    enquanto o agente, atuando de forma autônoma, os apresenta junto com closed
+    Checkout e Payment Mandates assinados pelo agente.
 
-A Human Not Present flow can be turned into a Human Present flow by the Merchant
-(or Credential Provider) returning an `unresolved_constraint` error and
-bringing the User back into the loop to approve the closed Mandates.
+Um fluxo Human Not Present pode ser convertido em um fluxo Human Present pelo
+Merchant (ou pelo Credential Provider) ao retornar um erro
+`unresolved_constraint` e trazer o usuário de volta ao processo para aprovar os
+closed Mandates.
 
-All flows below are non-normative examples. They assume that appropriate
-enrollment and any necessary User Credentials have been set up in advance.
+Todos os fluxos abaixo são exemplos não normativos. Eles pressupõem que o
+cadastro adequado e as User Credentials necessárias foram configurados
+previamente.
 
 ## Human Present
 
-This is the `direct` flow where the User is present to directly approve the
-closed Payment and Checkout Mandates.
+Este é o fluxo `direct`, em que o usuário está presente para aprovar
+diretamente os closed Payment e Checkout Mandates.
 
 <figure>
   <img src="../../assets/ap2_hp_flow.svg" style="width:800px" alt="Diagram showing the overall Human Present flow in AP2">
-  <figcaption align="center">Human Present flow</figcaption>
+  <figcaption align="center">Fluxo Human Present</figcaption>
 </figure>
 
-There are two phases to this flow:
+Este fluxo tem duas fases:
 
-**Phase 1: Shopping**
+**Fase 1: compra**
 
 <figure>
   <img src="../../assets/ap2_hp_shopping.svg" style="width:800px" alt="Human Present Shopping flow">
-  <figcaption align="center">Human Present Shopping flow</figcaption>
+  <figcaption align="center">Fluxo de compra Human Present</figcaption>
 </figure>
 
-  1. User initiates shopping with the Shopping Agent.
-  2. The Shopping Agent communicates with the Merchant and assembles a cart.
-  3. The Shopping Agent goes to Checkout. The Merchant creates a signed Checkout
-     and requires an appropriate mandate to continue.
-  4. The Shopping Agent retrieves existing Instrument Options from the Credential
-     Provider and selects one.
+  1. O usuário inicia a compra com o Shopping Agent.
+  2. O Shopping Agent se comunica com o Merchant e monta um carrinho.
+  3. O Shopping Agent vai para o checkout. O Merchant cria um Checkout assinado
+     e exige um mandate adequado para continuar.
+  4. O Shopping Agent obtém as Instrument Options existentes no Credential
+     Provider e seleciona uma.
 
-**Phase 2: Payment**
+**Fase 2: pagamento**
 
 <figure>
   <img src="../../assets/ap2_hp_payment.svg" style="width:800px" alt="Human Present Payment flow">
-  <figcaption align="center">Human Present Payment flow</figcaption>
+  <figcaption align="center">Fluxo de pagamento Human Present</figcaption>
 </figure>
 
-  1. The Shopping Agent constructs Payment and Checkout Mandate Content and
-     requests user approval via a Trusted Surface.
-     - *This could use an external Trusted Surface with the User Credential
-       model, or an internal one using the Trusted Agent Provider model.*
-  2. The Trusted Surface renders the Mandate Content and obtains user
-     authentication (e.g., biometric) and consent.
-  3. The Trusted Surface uses `user_sk` to sign and create the Payment Mandate
-     and Checkout Mandate.
-     - *The `checkout_jwt` hash is used to permanently link the Mandates.*
-     - *The `user_sk` would be the Agent Provider's key in the Trusted Agent
-       Provider model.*
-  4. The Trusted Surface passes the Mandates back to the Shopping Agent.
-  5. The Shopping Agent passes the Payment Mandate to the Credential Provider,
-     who verifies it and creates a payment token.
-     - *As part of this process, the Credential Provider may share the Payment
-       Mandate with the payment network and receive a scoped purchase credential
-       (also called a token).*
-  6. The Shopping Agent sends this token and the Checkout Mandate to the
-     Merchant.
-  7. The Merchant verifies the integrity and content of the Checkout Mandate
-     against the current cart state, then initiates the payment with the token
-     and `checkout_jwt` hash.
-  8. The Merchant Payment Processor verifies the included Payment Mandate in the
-     token and the binding with the `checkout_jwt` hash.
-  9. The MPP-signed Payment Receipt is returned to the Shopping Agent,
-     Credential Provider, and Network, and the Merchant-signed Checkout Receipt
-     is returned to the Shopping Agent to indicate success.
+  1. O Shopping Agent monta o conteúdo do Payment Mandate e do Checkout Mandate e
+     solicita a aprovação do usuário por meio de uma Trusted Surface.
+     - *Pode ser uma Trusted Surface externa, no modelo de User Credential, ou
+       uma interna, no modelo de Trusted Agent Provider.*
+  2. A Trusted Surface exibe o conteúdo do Mandate e obtém a autenticação do
+     usuário (por exemplo, biometria) e o consentimento.
+  3. A Trusted Surface usa a `user_sk` para assinar e criar o Payment Mandate e
+     o Checkout Mandate.
+     - *O hash do `checkout_jwt` é usado para vincular os Mandates de forma
+       permanente.*
+     - *No modelo de Trusted Agent Provider, a `user_sk` seria a chave do Agent
+       Provider.*
+  4. A Trusted Surface devolve os Mandates ao Shopping Agent.
+  5. O Shopping Agent envia o Payment Mandate ao Credential Provider, que o
+     verifica e cria um token de pagamento.
+     - *Como parte desse processo, o Credential Provider pode compartilhar o
+       Payment Mandate com a rede de pagamento e receber uma credencial de compra
+       com escopo limitado (também chamada de token).*
+  6. O Shopping Agent envia esse token e o Checkout Mandate ao Merchant.
+  7. O Merchant verifica a integridade e o conteúdo do Checkout Mandate em
+     relação ao estado atual do carrinho e, em seguida, inicia o pagamento com o
+     token e o hash do `checkout_jwt`.
+  8. O Merchant Payment Processor verifica o Payment Mandate incluído no token e
+     o vínculo com o hash do `checkout_jwt`.
+  9. O Payment Receipt assinado pelo MPP é devolvido ao Shopping Agent, ao
+     Credential Provider e à rede, e o Checkout Receipt assinado pelo Merchant é
+     devolvido ao Shopping Agent para indicar sucesso.
 
 ## Human Not Present
 
 <figure>
   <img src="../../assets/ap2_hnp_flow.svg" style="width:800px" alt="Human Not Present flow">
-  <figcaption align="center">Human Not Present flow</figcaption>
+  <figcaption align="center">Fluxo Human Not Present</figcaption>
 </figure>
 
-**Phase 1: Shopping**
+**Fase 1: compra**
 
-In the Human Not Present flow, the Shopping phase is split in two. In the first
-phase, the User sets a shopping task for the Agent. In the second phase, the
-Agent acts autonomously to complete the task without further human interaction.
+No fluxo Human Not Present, a fase de compra é dividida em duas. Na primeira, o
+usuário define uma tarefa de compra para o agente. Na segunda, o agente atua de
+forma autônoma para concluir a tarefa sem nova interação humana.
 
 <figure>
   <img src="../../assets/ap2_hnp_shopping.svg" style="width:800px" alt="Human Not Present Shopping flow">
-  <figcaption align="center">Human Not Present Shopping flow</figcaption>
+  <figcaption align="center">Fluxo de compra Human Not Present</figcaption>
 </figure>
 
-**Phase 1a: Shopping (Human Present)**
+**Fase 1a: compra (Human Present)**
 
-In this phase, the User provides the agent authorization for autonomous commerce
-in the form of open Checkout and Payment Mandates.
+Nesta fase, o usuário concede ao agente autorização para comércio autônomo na
+forma de open Checkout e Payment Mandates.
 
-  1. User initiates shopping with the Shopping Agent.
-  2. The Shopping Agent assembles the appropriate `open` Mandate Contents for the
-     shopping session and requests user approval via a Trusted Surface.
-     - *This defines a set of constraints where the Shopping Agent can act
-       without requiring further User authorization.*
-  3. The Trusted Surface renders the Mandate Content and obtains user
-     authentication (e.g., biometric) and consent.
-  4. The Trusted Surface uses the `user_sk` to sign and create the open Checkout
-     and open Payment Mandates.
-     - *The hash of the open Checkout Mandate is included in the open Payment
-       Mandate to permanently link them.*
-     - *The `agent_pk` is included as a confirmation claim to sender-constrain
-       the Mandate usage.*
-     - *The `user_sk` would be the Agent Provider key in the Trusted Agent
-       Provider model.*
+  1. O usuário inicia a compra com o Shopping Agent.
+  2. O Shopping Agent monta o conteúdo adequado dos Mandates `open` para a
+     sessão de compra e solicita a aprovação do usuário por meio de uma Trusted
+     Surface.
+     - *Isso define um conjunto de constraints dentro do qual o Shopping Agent
+       pode atuar sem precisar de nova autorização do usuário.*
+  3. A Trusted Surface exibe o conteúdo do Mandate e obtém a autenticação do
+     usuário (por exemplo, biometria) e o consentimento.
+  4. A Trusted Surface usa a `user_sk` para assinar e criar o open Checkout
+     Mandate e o open Payment Mandate.
+     - *O hash do open Checkout Mandate é incluído no open Payment Mandate para
+       vinculá-los de forma permanente.*
+     - *A `agent_pk` é incluída como claim de confirmação para restringir o uso
+       do Mandate ao remetente.*
+     - *No modelo de Trusted Agent Provider, a `user_sk` seria a chave do Agent
+       Provider.*
 
-The User now leaves the session, having delegated the shopping task to the
-Shopping Agent.
+O usuário então sai da sessão, depois de delegar a tarefa de compra ao Shopping
+Agent.
 
-**Phase 1b: Shopping (Human Not Present)**
+**Fase 1b: compra (Human Not Present)**
 
-In this phase, the Agent autonomously assembles a Checkout it believes fulfills
-the assigned task.
+Nesta fase, o agente monta de forma autônoma um Checkout que, segundo sua
+avaliação, cumpre a tarefa atribuída.
 
-  1. The Shopping Agent communicates with the Merchant and assembles a cart.
-  2. The Shopping Agent goes to Checkout. The Merchant creates a signed Checkout
-     and requires an appropriate mandate to continue.
+  1. O Shopping Agent se comunica com o Merchant e monta um carrinho.
+  2. O Shopping Agent vai para o checkout. O Merchant cria um Checkout assinado
+     e exige um mandate adequado para continuar.
 
-**Phase 2: Payment (Human Not Present)**
+**Fase 2: pagamento (Human Not Present)**
 
-In this phase, the Agent completes the checkout using the provided Mandates.
+Nesta fase, o agente conclui o checkout usando os Mandates recebidos.
 
 <figure>
   <img src="../../assets/ap2_hnp_payment.svg" style="width:800px" alt="Human Not Present Payment flow">
-  <figcaption align="center">Human Not Present Payment flow</figcaption>
+  <figcaption align="center">Fluxo de pagamento Human Not Present</figcaption>
 </figure>
 
-  1. The Shopping Agent selects the appropriate existing open Mandates whose
-     constraints apply to the incoming Checkout.
-     - *The Mandate selection mechanism is outside the scope of this
-       specification.*
-     - *To prevent double-spend, the Shopping Agent MUST NOT create multiple
-       overlapping Mandates until it receives an Action Receipt indicating an
-       error. See the Implementation Considerations section for more details.*
-  2. The Shopping Agent constructs the Payment and Checkout Mandate Contents and
-     signs both closed Mandates using the `agent_sk`.
-     - *The `checkout_jwt` hash is used to permanently link them.*
-     - *The `sd_hash` property of the `kb-sd-jwt` is used to bind the closed
-     mandate to the open one*
-  3. The Shopping Agent passes the Payment Mandates (Open and Closed) to the
-     Credential Provider, who verifies them and creates a payment token.
-     - *As part of this process, the Credential Provider may share the Payment
-       Mandate with the payment network and receive a scoped purchase credential
-       (also called a token).*
-  4. The Shopping Agent sends this token and the Checkout Mandates (Open and
-     Closed) to the Merchant.
-  5. The Merchant verifies the integrity and content of the closed Checkout
-     Mandate against the current cart state, and verifies that the constraints
-     in the open Checkout Mandate have been met. It then initiates the payment
-     with the token, `checkout_jwt` hash, and open Checkout Mandate hash.
-  6. The Merchant Payment Processor verifies the included Payment Mandates in the
-     token, as well as the bindings with the `checkout_jwt` hash and open
-     Checkout Mandate hash.
-  7. The MPP-signed Payment Receipt is returned to the Shopping Agent,
-     Credential Provider, and Network, and the Merchant-signed Checkout Receipt
-     is returned to the Shopping Agent to indicate success.
+  1. O Shopping Agent seleciona os open Mandates existentes cujas constraints se
+     aplicam ao Checkout recebido.
+     - *O mecanismo de seleção de Mandates está fora do escopo desta
+       especificação.*
+     - *Para evitar gasto em duplicidade, o Shopping Agent MUST NOT (não pode)
+       criar vários Mandates sobrepostos até receber um Action Receipt indicando
+       erro. Veja a seção Implementation Considerations para mais detalhes.*
+  2. O Shopping Agent monta o conteúdo do Payment Mandate e do Checkout Mandate e
+     assina os dois closed Mandates usando a `agent_sk`.
+     - *O hash do `checkout_jwt` é usado para vinculá-los de forma permanente.*
+     - *A propriedade `sd_hash` do `kb-sd-jwt` é usada para vincular o closed
+     mandate ao open*
+  3. O Shopping Agent envia os Payment Mandates (open e closed) ao Credential
+     Provider, que os verifica e cria um token de pagamento.
+     - *Como parte desse processo, o Credential Provider pode compartilhar o
+       Payment Mandate com a rede de pagamento e receber uma credencial de compra
+       com escopo limitado (também chamada de token).*
+  4. O Shopping Agent envia esse token e os Checkout Mandates (open e closed) ao
+     Merchant.
+  5. O Merchant verifica a integridade e o conteúdo do closed Checkout Mandate em
+     relação ao estado atual do carrinho e verifica se as constraints do open
+     Checkout Mandate foram atendidas. Em seguida, inicia o pagamento com o token,
+     o hash do `checkout_jwt` e o hash do open Checkout Mandate.
+  6. O Merchant Payment Processor verifica os Payment Mandates incluídos no
+     token, assim como os vínculos com o hash do `checkout_jwt` e com o hash do
+     open Checkout Mandate.
+  7. O Payment Receipt assinado pelo MPP é devolvido ao Shopping Agent, ao
+     Credential Provider e à rede, e o Checkout Receipt assinado pelo Merchant é
+     devolvido ao Shopping Agent para indicar sucesso.

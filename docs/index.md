@@ -11,188 +11,194 @@ hide:
   </div>
 </div>
 
-## What is AP2?
+## O que é o AP2?
 
-**Agent Payments Protocol (AP2) is an open protocol for the emerging Agent
-Economy.** It's designed to enable secure, reliable, and interoperable agent
-commerce for developers, merchants, and the payments industry. The protocol is
-available as an extension for the open-source
-[Agent2Agent (A2A) protocol](https://a2a-protocol.org/) and
-[Universal Commerce Protocol](https://ucp.dev/documentation/ucp-and-ap2/) with more integrations
-in progress.
+**O Agent Payments Protocol (AP2) é um protocolo aberto para a economia de
+agentes que está surgindo.** Ele foi projetado para permitir comércio por agentes
+seguro, confiável e interoperável para desenvolvedores, merchants e o setor de
+pagamentos. O protocolo está disponível como extensão do
+[protocolo Agent2Agent (A2A)](https://a2a-protocol.org/), de código aberto, e do
+[Universal Commerce Protocol](https://ucp.dev/documentation/ucp-and-ap2/), e há
+outras integrações em andamento.
 
 
 <!-- prettier-ignore-start -->
 !!! abstract ""
 
-    Build agents with
+    Construa agentes com
     **[![ADK Logo](https://google.github.io/adk-docs/assets/agent-development-kit.png){class="twemoji lg middle"} ADK](https://google.github.io/adk-docs/)**
-    _(or any framework)_, equip with
+    _(ou qualquer framework)_, equipe-os com
     **[![MCP Logo](https://modelcontextprotocol.io/mcp.png){class="twemoji lg middle"} MCP](https://modelcontextprotocol.io)**
-    _(or any tool)_, collaborate via
-    **[![A2A Logo](https://a2a-protocol.org/latest/assets/a2a-logo-black.svg){class="twemoji sm middle"} A2A](https://a2a-protocol.org)**, and use
-    **![AP2 Logo](./assets/ap2-logo-black.svg){class="twemoji sm middle"} AP2** to secure payments with gen AI agents.
+    _(ou qualquer ferramenta)_, faça-os colaborar via
+    **[![A2A Logo](https://a2a-protocol.org/latest/assets/a2a-logo-black.svg){class="twemoji sm middle"} A2A](https://a2a-protocol.org)** e use o
+    **![AP2 Logo](./assets/ap2-logo-black.svg){class="twemoji sm middle"} AP2** para proteger pagamentos feitos por agentes de IA generativa.
 <!-- prettier-ignore-end -->
 
 <div class="grid cards" markdown>
 
-- :material-play-circle:{ .lg .middle } **Video** Intro in <7 min
+- :material-play-circle:{ .lg .middle } **Vídeo** de introdução em menos de 7 min
 
     ---
 
       <iframe width="560" height="315" src="https://www.youtube.com/embed/jSHj0z9Gi24?si=jDx8luqpw35nbDKy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-- :material-file-document-outline:{ .lg .middle } **Read the docs**
+- :material-file-document-outline:{ .lg .middle } **Leia a documentação**
 
     ---
 
-    [:octicons-arrow-right-24: AP2 v0.2 Release and FIDO Alliance Donation](https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/)
+    [:octicons-arrow-right-24: Lançamento do AP2 v0.2 e doação à FIDO Alliance](https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/)
 
-    [:octicons-arrow-right-24: FIDO Alliance to Develop Standards for Trusted AI Agent Interactions](https://fidoalliance.org/fido-alliance-to-develop-standards-for-trusted-ai-agent-interactions/)
+    [:octicons-arrow-right-24: FIDO Alliance desenvolverá padrões para interações confiáveis com agentes de IA](https://fidoalliance.org/fido-alliance-to-develop-standards-for-trusted-ai-agent-interactions/)
 
-    [:octicons-arrow-right-24: Agent Payments Protocol Announcement (9/16/2025)](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol)
+    [:octicons-arrow-right-24: Anúncio do Agent Payments Protocol (16/09/2025)](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol)
 
     &nbsp;
 
-    **Explore the detailed technical definition of the AP2 protocol**
+    **Veja a definição técnica detalhada do protocolo AP2**
 
-    [:octicons-arrow-right-24: Agent Payments Protocol Specification](ap2/specification.md)
+    [:octicons-arrow-right-24: Especificação do Agent Payments Protocol](ap2/specification.md)
 
-    [:octicons-arrow-right-24: AP2 and UCP integration guide](https://ucp.dev/documentation/ucp-and-ap2/)
+    [:octicons-arrow-right-24: Guia de integração entre AP2 e UCP](https://ucp.dev/documentation/ucp-and-ap2/)
 
 </div>
 
 ---
 
-## Why an Agent Payments Protocol is Needed
+## Por que um protocolo de pagamentos para agentes é necessário
 
-Today’s payment systems assume a human is directly clicking "buy" on a trusted
-website. When an autonomous agent initiates a payment, this core assumption is
-broken, leading to critical questions that current systems cannot answer:
+Os sistemas de pagamento atuais partem do princípio de que uma pessoa clica
+diretamente em "comprar" em um site confiável. Quando um agente autônomo inicia
+um pagamento, essa premissa deixa de valer, e surgem perguntas que os sistemas
+atuais não conseguem responder:
 
-- **Authorization:** How can we verify that a user gave an agent specific
-    authority for a particular purchase?
-- **Authenticity:** How can a merchant be sure an agent's request accurately
-    reflects the user's true intent, without errors or AI "hallucinations"?
-- **Accountability:** If a fraudulent or incorrect transaction occurs, who is
-    accountable—the user, the agent's developer, the merchant, the issuer, the
-    PSP, or the orchestration layer?
+- **Autorização:** como verificar que o usuário deu ao agente autoridade
+    específica para uma determinada compra?
+- **Autenticidade:** como o merchant pode ter certeza de que a solicitação do
+    agente reflete com precisão a real intenção do usuário, sem erros nem
+    "alucinações" da IA?
+- **Responsabilização:** se ocorrer uma transação fraudulenta ou incorreta,
+    quem é responsável — o usuário, o desenvolvedor do agente, o merchant, o
+    issuer, o PSP ou a camada de orquestração?
 
-This ambiguity creates a crisis of trust that could significantly limit
-adoption. Without a common protocol, we risk a fragmented ecosystem of
-proprietary payment solutions, which would be confusing for users, expensive for
-merchants, and difficult for financial institutions to manage. AP2 aims to
-create a common language for any compliant agent to transact securely with any
-compliant merchant globally.
-
----
-
-## Core Principles and Goals
-
-The Agent Payments Protocol is built on fundamental principles designed to
-create a secure and fair ecosystem:
-
-- **Openness and Interoperability:** As a non-proprietary, open extension for
-    A2A and MCP, AP2 fosters a competitive environment for innovation, broad
-    merchant reach, and user choice.
-- **User Control and Privacy:** The user must always be in control. The
-    protocol is designed with privacy at its core, using a role-based
-    architecture to protect sensitive payment details and personal information.
-- **Verifiable Intent, Not Inferred Action:** Trust in payments is anchored to
-    deterministic, non-repudiable proof of intent from the user, directly
-    addressing the risk of agent error or hallucination.
-- **Clear Transaction Accountability:** AP2 provides a non-repudiable,
-    cryptographic audit trail for every transaction, aiding in dispute
-    resolution and building confidence for all participants.
-- **Global and Future-Proof:** Designed as a global foundation, the initial
-    version supports common "pull" payment methods like credit and debit cards.
-    The roadmap includes e-wallets, "push" payments such as real-time bank
-    transfers (e.g., UPI and PIX), and digital currencies, recognizing that
-    many countries do not have real-time banking systems.
+Essa ambiguidade gera um problema de confiança que pode limitar bastante a
+adoção. Sem um protocolo comum, há o risco de um ecossistema fragmentado de
+soluções de pagamento proprietárias, confuso para os usuários, caro para os
+merchants e difícil de administrar para as instituições financeiras. O AP2
+busca criar uma linguagem comum para que qualquer agente compatível faça
+transações com segurança com qualquer merchant compatível, em qualquer país.
 
 ---
 
-## Key Concept: Verifiable Digital Credentials (VDCs)
+## Princípios e objetivos
 
-The Agent Payments Protocol engineers trust into the system using **verifiable
-digital credentials (VDCs)**. VDCs are tamper-evident, cryptographically signed
-digital objects that serve as the building blocks of a transaction. There are
-two primary types of mandates, each existing in two stages:
+O Agent Payments Protocol se baseia em princípios definidos para criar um
+ecossistema seguro e justo:
 
-- **Checkout Mandate**: Captures the reference to the specific items and
-  purchase details negotiated between the agent and the merchant, and is
-  **shared with the merchant**.
-    - **Open**: Captures the user's constraints and goals for the transaction
-      before a specific cart is finalized for autonomous execution.
-    - **Closed**: Captures the user's (or agent's) authorization for a specific,
-      finalized checkout.
-- **Payment Mandate**: Authorizes a payment against a specific payment
-  instrument, and is **shared with the Credential Provider, Networks and the
+- **Abertura e interoperabilidade:** como extensão aberta e não proprietária do
+    A2A e do MCP, o AP2 favorece um ambiente competitivo para inovação, amplo
+    alcance de merchants e liberdade de escolha para o usuário.
+- **Controle e privacidade do usuário:** o usuário deve estar sempre no
+    controle. O protocolo tem a privacidade como base e usa uma arquitetura
+    baseada em papéis para proteger dados de pagamento sensíveis e informações
+    pessoais.
+- **Intenção verificável, e não ação inferida:** a confiança nos pagamentos se
+    apoia em uma prova determinística e irrefutável da intenção do usuário, o
+    que trata diretamente o risco de erro ou alucinação do agente.
+- **Responsabilização clara das transações:** o AP2 fornece uma trilha de
+    auditoria criptográfica e irrefutável para cada transação, o que ajuda na
+    resolução de disputas e dá confiança a todos os participantes.
+- **Global e preparado para o futuro:** projetado como base global, a versão
+    inicial aceita métodos de pagamento "pull" comuns, como cartões de crédito
+    e débito. O roadmap inclui carteiras digitais, pagamentos "push", como
+    transferências bancárias em tempo real (por exemplo, UPI e PIX), e moedas
+    digitais, considerando que muitos países não têm sistemas bancários em
+    tempo real.
+
+---
+
+## Conceito principal: Verifiable Digital Credentials (VDCs)
+
+O Agent Payments Protocol estabelece confiança no sistema por meio de
+**verifiable digital credentials (VDCs)** (credenciais digitais verificáveis).
+VDCs são objetos digitais assinados criptograficamente, nos quais qualquer
+adulteração é detectável, e servem de base para compor uma transação. Há dois
+tipos principais de Mandates (autorizações assinadas), cada um com dois estágios:
+
+- **Checkout Mandate**: registra a referência aos itens específicos e aos
+  detalhes da compra negociados entre o agente e o merchant, e é
+  **compartilhado com o merchant**.
+    - **Open**: registra as constraints (restrições) e os objetivos do usuário
+      para a transação antes que um carrinho específico seja finalizado para
+      execução autônoma.
+    - **Closed**: registra a autorização do usuário (ou do agente) para um
+      checkout específico e finalizado.
+- **Payment Mandate**: autoriza um pagamento com um instrumento de pagamento
+  específico e é **compartilhado com o Credential Provider, as redes e o
   Merchant Payment Processor**.
-    - **Open**: Captures the user's constraints on payment (e.g., budget,
-      allowed instruments) for autonomous execution.
-    - **Closed**: Captures the authorization for a specific transaction amount
-      bound to a finalized checkout.
+    - **Open**: registra as constraints do usuário sobre o pagamento (por
+      exemplo, orçamento, instrumentos permitidos) para execução autônoma.
+    - **Closed**: registra a autorização de um valor de transação específico
+      vinculado a um checkout finalizado.
 
-These VDCs operate within a defined role-based architecture and are chained
-together to provide a complete, verifiable audit trail for both human-present
-and human-not-present transactions.
+Essas VDCs operam dentro de uma arquitetura definida baseada em papéis e são
+encadeadas para fornecer uma trilha de auditoria completa e verificável, tanto
+em transações human-present (com a pessoa presente) quanto human-not-present
+(sem a pessoa presente).
 
-See more in the sample [Flows](ap2/flows.md).
+Veja mais nos [Fluxos](ap2/flows.md) de exemplo.
 
-## See it in action
+## Veja na prática
 
 <div class="grid cards" markdown>
 
-- **Human Not Present Cards**
+- **Cards (human-not-present)**
 
     ---
 
-    A sample demonstrating an autonomous transaction where the agent acts without human presence, using traditional card payments.
+    Exemplo de uma transação autônoma em que o agente age sem a presença da pessoa, com pagamento por cartão tradicional.
 
-    [:octicons-arrow-right-24: Go to sample](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-not-present/cards/)
+    [:octicons-arrow-right-24: Ir para o exemplo](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-not-present/cards/)
 
-- **Human Not Present x402**
-
-    ---
-
-    A sample demonstrating an autonomous transaction where the agent acts without human presence, using the x402 protocol for payments.
-
-    [:octicons-arrow-right-24: Go to sample](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-not-present/x402/)
-
-- **Digital Payment Credentials Android**
+- **x402 (human-not-present)**
 
     ---
 
-    A sample demonstrating the use of digital payment credentials on an Android device.
+    Exemplo de uma transação autônoma em que o agente age sem a presença da pessoa, com pagamento pelo protocolo x402.
 
-    [:octicons-arrow-right-24: Go to sample](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/android/scenarios/digital-payment-credentials/)
+    [:octicons-arrow-right-24: Ir para o exemplo](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-not-present/x402/)
 
-- **Human Present Cards**
+- **Digital Payment Credentials (Android)**
 
     ---
 
-    A sample demonstrating a human-present transaction using traditional card payments.
+    Exemplo do uso de credenciais digitais de pagamento em um dispositivo Android.
 
-    [:octicons-arrow-right-24: Go to sample](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-present/cards/)
+    [:octicons-arrow-right-24: Ir para o exemplo](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/android/scenarios/digital-payment-credentials/)
+
+- **Cards (human-present)**
+
+    ---
+
+    Exemplo de uma transação human-present com pagamento por cartão tradicional.
+
+    [:octicons-arrow-right-24: Ir para o exemplo](https://github.com/google-agentic-commerce/AP2/tree/main/code/samples/python/scenarios/a2a/human-present/cards/)
 
 </div>
 
 ---
 
-## Get Started and Build with Us
+## Como começar e contribuir
 
-The Agent Payments Protocol provides a mechanism for secure payments, and it's
-part of a larger picture to unlock the full potential of agent-enabled commerce.
-We actively seek your feedback and contributions to help build the future of
-commerce.
+O Agent Payments Protocol fornece um mecanismo para pagamentos seguros e faz
+parte de um conjunto maior de iniciativas para viabilizar o comércio feito por
+agentes. Buscamos ativamente seu feedback e suas contribuições.
 
-Our public GitHub repo hosts the lastest version of AP2 specification, documentation and SDK. Standardization of the specification will continue within the Agentic Authentication Technical and Payments Technical Working Groups in FIDO.
+Nosso repositório público no GitHub hospeda a versão mais recente da especificação, da documentação e do SDK do AP2. A padronização da especificação continuará nos grupos de trabalho Agentic Authentication Technical e Payments Technical da FIDO.
 
-You can get started today by:
+Para começar agora, você pode:
 
-- Downloading and running our **code samples**.
-- **Experimenting with the protocol** and its different agent roles.
-- Contributing your feedback and **code** to the public repository.
+- Baixar e executar nossos **exemplos de código**.
+- **Experimentar o protocolo** e os diferentes papéis de agente.
+- Enviar seu feedback e **código** para o repositório público.
 
-[Visit the GitHub Repository](https://github.com/google-agentic-commerce/AP2)
+[Acesse o repositório no GitHub](https://github.com/google-agentic-commerce/AP2)
