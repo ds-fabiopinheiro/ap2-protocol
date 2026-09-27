@@ -1,0 +1,30 @@
+{
+  "v3": {
+    "features": 3,
+    "pbis": 5,
+    "tasks": 20,
+    "pts": 26,
+    "horas": 70
+  },
+  "v4": {
+    "features": 3,
+    "pbis": 4,
+    "tasks": 15,
+    "pts": 19,
+    "horas": 47
+  },
+  "v5": {
+    "features": 3,
+    "pbis": 6,
+    "tasks": 22,
+    "pts": 29,
+    "horas": 79
+  },
+  "v6": {
+    "features": 3,
+    "pbis": 5,
+    "tasks": 18,
+    "pts": 28,
+    "horas": 64
+  }
+}

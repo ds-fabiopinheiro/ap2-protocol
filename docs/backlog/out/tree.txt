@@ -1,0 +1,111 @@
+📊 EP-V3 · v3 · Merchant Agent e Merchant Payment Processor Agent publicados via A2A  (branch homolog-v3)
+├── 🎯 F-V3.1 · Ambiente e branch da v3
+│   └── 📋 F-V3.1.1 · Ambiente de homologação v3 publicado a partir do branch homolog-v3 · 8 pts
+│       ├── ✅ [Infra] Criar o branch homolog-v3 a partir de homolog-deploy · 1 h
+│       ├── ✅ [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v3 (Docker, CPU Basic, Protected) · 3 h
+│       ├── ✅ [Back] Isolar o estado de cada versão no Supabase (AP2_ENV) · 8 h
+│       ├── ✅ [Infra] Aplicar a migration de isolamento no projeto ap2-homolog-db · 2 h
+│       ├── ✅ [Infra] Incluir o mapeamento homolog-v3 → ds-fabiopinheiro/ap2-homolog-v3 no workflow de rebuild · 3 h
+│       ├── ✅ [QA] Verificar que as versões anteriores continuam funcionando após a criação da v3 · 3 h
+│       └── ✅ [Docs] Registrar a v3 no CLAUDE.md e no deploy/README.md · 2 h
+├── 🎯 F-V3.2 · Merchant Agent publicado como serviço A2A
+│   ├── 📋 F-V3.2.1 · Merchant Agent acessível por A2A com agent card público · 5 pts
+│   │   ├── ✅ [Back] Iniciar o Merchant Agent no start.sh da v3 · 3 h
+│   │   ├── ✅ [Back] Reescrever a URL do agent card do Merchant Agent · 2 h
+│   │   ├── ✅ [Infra] Adicionar a rota /a2a/merchant_agent no nginx com limite de requisições · 3 h
+│   │   └── ✅ [QA] Testar agent card, limite e reinício do Merchant Agent · 3 h
+│   └── 📋 F-V3.2.2 · Busca de produto no Merchant Agent com resposta assinada · 5 pts
+│       ├── ✅ [QA] Escrever script de teste A2A para o Merchant Agent · 8 h
+│       ├── ✅ [Back] Levar o watch.log dos agentes para LOGS_DIR · 2 h
+│       ├── ✅ [Back] Registrar no Supabase os mandates emitidos pelo Merchant Agent · 5 h
+│       └── ✅ [QA] Executar o teste 3 vezes e medir o consumo do Gemini · 2 h
+└── 🎯 F-V3.3 · Merchant Payment Processor Agent e modelo configurável nos agentes A2A
+    ├── 📋 F-V3.3.1 · Merchant Payment Processor Agent em execução interna com desafio OTP · 3 pts
+    │   ├── ✅ [Back] Iniciar o Processor Agent no start.sh da v3 · 2 h
+    │   └── ✅ [QA] Verificar isolamento e reinício do Processor Agent · 2 h
+    └── 📋 F-V3.3.2 · Modelo dos agentes A2A definido por AGENT_MODEL · 5 pts
+        ├── ✅ [Back] Ler AGENT_MODEL em function_call_resolver.py e base_server_executor.py · 8 h
+        ├── ✅ [Back] Aplicar a regra de nova tentativa em erro 503 nos agentes A2A · 5 h
+        └── ✅ [QA] Testar a troca de modelo e a nova tentativa nos agentes A2A · 3 h
+📊 EP-V4 · v4 · Shopping Agent v1 e Credentials Provider Agent com jornada assistida no ADK Web  (branch homolog-v4)
+├── 🎯 F-V4.1 · Ambiente e branch da v4
+│   └── 📋 F-V4.1.1 · Ambiente de homologação v4 publicado a partir do branch homolog-v4 · 5 pts
+│       ├── ✅ [Infra] Criar o branch homolog-v4 a partir de homolog-v3 · 1 h
+│       ├── ✅ [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v4 (Docker, CPU Basic, Protected) · 3 h
+│       ├── ✅ [Infra] Incluir o mapeamento homolog-v4 → ds-fabiopinheiro/ap2-homolog-v4 no workflow de rebuild · 3 h
+│       ├── ✅ [QA] Verificar que as versões anteriores continuam funcionando após a criação da v4 · 3 h
+│       └── ✅ [Docs] Registrar a v4 no CLAUDE.md e no deploy/README.md · 2 h
+├── 🎯 F-V4.2 · Credentials Provider Agent publicado internamente
+│   └── 📋 F-V4.2.1 · Credentials Provider Agent lista as formas de pagamento da conta de demonstração · 3 pts
+│       ├── ✅ [Back] Iniciar o Credentials Provider Agent no start.sh da v4 · 2 h
+│       ├── ✅ [Back] Incluir os arquivos do Credentials Provider no espelhamento do Supabase · 3 h
+│       └── ✅ [QA] Testar a listagem e a falha do Credentials Provider · 2 h
+└── 🎯 F-V4.3 · Compra assistida com o Shopping Agent v1 no ADK Web
+    ├── 📋 F-V4.3.1 · Spike: forma de publicar o ADK Web atrás do nginx · 3 pts
+    │   ├── ✅ [Back] Testar ADK Web em subcaminho e em diretório de agentes dedicado · 5 h
+    │   └── ✅ [Docs] Registrar a decisão sobre o ADK Web · 2 h
+    └── 📋 F-V4.3.2 · Compra assistida ponta a ponta pelo ADK Web · 8 pts
+        ├── ✅ [Back] Iniciar o ADK Web restrito ao Shopping Agent v1 · 5 h
+        ├── ✅ [Infra] Rota e limite de requisições do ADK Web no nginx · 3 h
+        ├── ✅ [Back] Persistir os mandates da jornada assistida no Supabase · 5 h
+        ├── ✅ [Back] Alinhar o RetryingLlmAgent do Shopping Agent v1 à regra de retry da v2 · 3 h
+        └── ✅ [QA] Executar os cenários de compra assistida · 5 h
+📊 EP-V5 · v5 · Jornada assistida (human-present) no web client React  (branch homolog-v5)
+├── 🎯 F-V5.1 · Ambiente e branch da v5
+│   └── 📋 F-V5.1.1 · Ambiente de homologação v5 publicado a partir do branch homolog-v5 · 5 pts
+│       ├── ✅ [Infra] Criar o branch homolog-v5 a partir de homolog-v4 · 1 h
+│       ├── ✅ [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v5 (Docker, CPU Basic, Protected) · 3 h
+│       ├── ✅ [Infra] Criar o projeto Vercel ap2-homolog-v5-frontend · 3 h
+│       ├── ✅ [Infra] Incluir o mapeamento homolog-v5 → ds-fabiopinheiro/ap2-homolog-v5 no workflow de rebuild · 3 h
+│       ├── ✅ [QA] Verificar que as versões anteriores continuam funcionando após a criação da v5 · 3 h
+│       └── ✅ [Docs] Registrar a v5 no CLAUDE.md e no deploy/README.md · 2 h
+├── 🎯 F-V5.2 · Integração do web client com o Shopping Agent v1
+│   ├── 📋 F-V5.2.1 · Spike: protocolo entre web client e Shopping Agent v1 · 3 pts
+│   │   ├── ✅ [Back] Avaliar expor o Shopping Agent v1 por A2A com run_server próprio · 5 h
+│   │   ├── ✅ [Front] Avaliar o reaproveitamento de a2aClient.ts para o v1 · 3 h
+│   │   └── ✅ [Docs] Registrar o contrato de artifacts da jornada assistida · 2 h
+│   └── 📋 F-V5.2.2 · Escolha entre jornada autônoma e assistida na tela inicial · 3 pts
+│       ├── ✅ [Front] Criar seletor de jornada e roteamento de agente · 5 h
+│       ├── ✅ [Infra] Cadastrar VITE_ASSISTED_AGENT_URL no projeto Vercel da v5 · 1 h
+│       └── ✅ [QA] Testar troca de jornada e regressão da autônoma · 3 h
+└── 🎯 F-V5.3 · Telas da jornada assistida no web client
+    ├── 📋 F-V5.3.1 · Seleção das opções de compra do Merchant · 5 pts
+    │   ├── ✅ [Front] Criar o cartão de opções de compra · 5 h
+    │   ├── ✅ [Back] Emitir o artifact de opções no Shopping Agent v1 · 5 h
+    │   └── ✅ [QA] Testar seleção e lista vazia · 3 h
+    ├── 📋 F-V5.3.2 · Escolha da forma de pagamento e assinatura do Payment Mandate na Trusted Surface · 8 pts
+    │   ├── ✅ [Front] Criar o cartão de formas de pagamento · 5 h
+    │   ├── ✅ [Front] Adaptar a Trusted Surface para o Payment Mandate da jornada assistida · 8 h
+    │   ├── ✅ [Back] Emitir os artifacts de formas de pagamento e de pedido de assinatura · 5 h
+    │   └── ✅ [QA] Testar assinatura e recusa · 3 h
+    └── 📋 F-V5.3.3 · Desafio OTP e recibo da compra assistida · 5 pts
+        ├── ✅ [Front] Criar o cartão de OTP e reaproveitar o ReceiptCard · 5 h
+        ├── ✅ [Back] Aplicar o limite de tentativas de OTP (se RN02 for confirmada) · 3 h
+        └── ✅ [QA] Testar OTP correto, errado e limite · 3 h
+📊 EP-V6 · v6 · Agentes em Go e app Android de demonstração  (branch homolog-v6)
+├── 🎯 F-V6.1 · Ambiente e branch da v6
+│   └── 📋 F-V6.1.1 · Ambiente de homologação v6 publicado a partir do branch homolog-v6 · 5 pts
+│       ├── ✅ [Infra] Criar o branch homolog-v6 a partir de homolog-v5 · 1 h
+│       ├── ✅ [Infra] Criar o Space ds-fabiopinheiro/ap2-homolog-v6 (Docker, CPU Basic, Protected) · 3 h
+│       ├── ✅ [Infra] Incluir o mapeamento homolog-v6 → ds-fabiopinheiro/ap2-homolog-v6 no workflow de rebuild · 3 h
+│       ├── ✅ [QA] Verificar que as versões anteriores continuam funcionando após a criação da v6 · 3 h
+│       └── ✅ [Docs] Registrar a v6 no CLAUDE.md e no deploy/README.md · 2 h
+├── 🎯 F-V6.2 · Agentes Go como backend alternativo do cenário assistido
+│   ├── 📋 F-V6.2.1 · Binários Go no container com seleção de backend · 5 pts
+│   │   ├── ✅ [Infra] Adicionar estágio de build Go ao Dockerfile · 5 h
+│   │   ├── ✅ [Back] Selecionar Python ou Go no start.sh por AP2_BACKEND_LANG · 3 h
+│   │   └── ✅ [QA] Testar os três valores de AP2_BACKEND_LANG · 2 h
+│   └── 📋 F-V6.2.2 · Compra assistida com backend Go · 5 pts
+│       ├── ✅ [QA] Executar o roteiro de compra assistida com backend Go · 5 h
+│       └── ✅ [Docs] Registrar diferenças observadas entre Python e Go · 2 h
+└── 🎯 F-V6.3 · App Android de homologação usando o backend público
+    ├── 📋 F-V6.3.1 · App Android configurado para o backend público sem chave no APK · 8 pts
+    │   ├── ✅ [Mobile] Parametrizar as URLs do backend no build do app · 5 h
+    │   ├── ✅ [Back] Criar endpoint de proxy do Gemini para o app, com limite de requisições · 8 h
+    │   ├── ✅ [Mobile] Trocar a chamada direta ao Gemini pelo proxy · 5 h
+    │   ├── ✅ [Segurança] Verificar o APK contra segredos embutidos · 2 h
+    │   └── ✅ [Infra] Expor as rotas do Merchant e do Credentials Provider do cenário Android no nginx · 3 h
+    └── 📋 F-V6.3.2 · APK de homologação publicado no GitHub Releases · 5 pts
+        ├── ✅ [Infra] Criar workflow de build do APK (Gradle) e publicação no Releases · 5 h
+        ├── ✅ [QA] Testar instalação e compra com DPC em aparelho físico · 5 h
+        └── ✅ [Docs] Escrever instruções de instalação do APK de homologação · 2 h
