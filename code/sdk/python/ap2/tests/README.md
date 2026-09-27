@@ -1,15 +1,15 @@
-## how to test it:
+## Como executar os testes:
 
-Run from the repository root:
+Execute a partir da raiz do repositório:
 
 ```bash
-# Remove the broken virtual environment
+# Remove o ambiente virtual quebrado
 rm -rf .venv
 
-# Optional: Clean the uv cache to ensure fresh wheels
+# Opcional: limpa o cache do uv para garantir wheels novas
 uv cache clean
 
-# Rebuild environment and run tests
+# Recria o ambiente e executa os testes
 uv sync
 uv run python -m pytest code/sdk/python/ap2/tests/ -v
 ```

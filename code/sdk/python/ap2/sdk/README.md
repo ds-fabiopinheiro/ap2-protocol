@@ -1,35 +1,35 @@
 # AP2 Python SDK
 
-Runtime for the Agent Payments Protocol: mandate issuance, presentation,
-verification, and receipts. Built on SD-JWT / KB-JWT with dSD-JWT
-delegation chains of arbitrary depth.
+Runtime do Agent Payments Protocol: emissão, apresentação e verificação
+de mandates (autorizações assinadas) e receipts (comprovantes). Baseado em
+SD-JWT / KB-JWT, com cadeias de delegação dSD-JWT de profundidade arbitrária.
 
-## Layout
+## Organização dos arquivos
 
-The SD-JWT implementation lives under `sdjwt/`; the AP2 facade wires it into
-mandate creation, presentation, and verification:
+A implementação de SD-JWT fica em `sdjwt/`; a fachada do AP2 a conecta à
+criação, apresentação e verificação de mandates:
 
-- `sdjwt/sd_jwt.py` — root, issuer-signed SD-JWT (RFC 9901 §4). Owns
-  root token `create` and `verify`; hash helpers are exported from
-  `ap2.sdk.sdjwt`.
-- `sdjwt/kb_sd_jwt.py` — KB-SD-JWT hops (draft §5.1.4). Intermediate hops
-  use `typ=kb+sd-jwt+kb` and require `cnf`; terminal hops use
-  `typ=kb+sd-jwt` and must not carry `cnf`.
-- `sdjwt/chain.py` — `verify_chain`: walks the `~~`-joined chain, follows
-  `cnf`, dispatches per-hop to the right primitive.
-- `sdjwt/common.py` — parsing, hashing, and shared SD-JWT helpers.
-- `mandate.py` — `MandateClient` facade (`create` / `present` /
-  `verify`) + `SdJwtMandate[T]` typed wrapper.
-- `receipt_wrapper.py` — `ReceiptClient` (create / verify receipts).
-- `disclosure_metadata.py` — selective-disclosure rules.
+- `sdjwt/sd_jwt.py` — SD-JWT raiz, assinado pelo emissor (RFC 9901 §4).
+  Contém `create` e `verify` do token raiz; os helpers de hash são
+  exportados por `ap2.sdk.sdjwt`.
+- `sdjwt/kb_sd_jwt.py` — hops (saltos da cadeia) KB-SD-JWT (draft §5.1.4).
+  Hops intermediários usam `typ=kb+sd-jwt+kb` e exigem `cnf`; hops
+  terminais usam `typ=kb+sd-jwt` e não podem conter `cnf`.
+- `sdjwt/chain.py` — `verify_chain`: percorre a cadeia unida por `~~`,
+  segue o `cnf` e encaminha cada hop para a primitiva correta.
+- `sdjwt/common.py` — parsing, hashing e helpers de SD-JWT compartilhados.
+- `mandate.py` — fachada `MandateClient` (`create` / `present` /
+  `verify`) + wrapper tipado `SdJwtMandate[T]`.
+- `receipt_wrapper.py` — `ReceiptClient` (cria / verifica receipts).
+- `disclosure_metadata.py` — regras de divulgação seletiva.
 - `constraints.py`, `payment_mandate_chain.py`,
-  `checkout_mandate_chain.py` — typed chain wrappers and
-  constraint checking.
-- `jwt_helper.py` — plain ES256 JWTs (used for receipt signing).
-- `utils.py` — `compute_sha256_b64url`, etc.
-- `generated/` — Pydantic models emitted from the JSON schemas.
+  `checkout_mandate_chain.py` — wrappers tipados de cadeia e
+  verificação de constraints.
+- `jwt_helper.py` — JWTs ES256 simples (usados para assinar receipts).
+- `utils.py` — `compute_sha256_b64url` etc.
+- `generated/` — modelos Pydantic gerados a partir dos JSON schemas.
 
-### How the primitives slot into the flow
+### Onde cada primitiva entra no fluxo
 
 ```mermaid
 sequenceDiagram
@@ -56,51 +56,51 @@ sequenceDiagram
     Merchant->>Merchant: sd_jwt.verify(hop 0)<br/>kb_sd_jwt.verify(KB hops, aud/nonce on final)
 ```
 
-### Hiding disclosures from the next delegate
+### Ocultar disclosures do próximo delegado
 
-Each KB-SD-JWT hop binds to the preceding token with either
-`sd_hash` (covers the preceding JWT *and* disclosures) or
-`issuer_jwt_hash` (covers only the preceding JWT, so disclosures
-are free to change). Pick the mode via
+Cada hop KB-SD-JWT se vincula ao token anterior com
+`sd_hash` (cobre o JWT anterior *e* as disclosures) ou
+`issuer_jwt_hash` (cobre só o JWT anterior, então as disclosures
+podem mudar). O modo é escolhido em
 `MandateClient.present(..., hash_mode="sd_hash" | "issuer_jwt_hash")`.
 
-- `"sd_hash"` (default): locks in the exact disclosures the current
-  hop forwards. Next delegate cannot further redact them.
-- `"issuer_jwt_hash"`: lets the next delegate drop disclosures
-  from the preceding SD-JWT without breaking chain integrity. Use
-  when the current hop wants to permit downstream privacy-minimization.
+- `"sd_hash"` (padrão): fixa exatamente as disclosures que o hop atual
+  repassa. O próximo delegado não pode removê-las.
+- `"issuer_jwt_hash"`: permite que o próximo delegado descarte disclosures
+  do SD-JWT anterior sem quebrar a integridade da cadeia. Use quando o
+  hop atual quiser permitir minimização de dados nos hops seguintes.
 
-### Deviations from draft-gco-oauth-delegate-sd-jwt-00
+### Diferenças em relação a draft-gco-oauth-delegate-sd-jwt-00
 
-- **No dSD-JWT+KB shape.** AP2 always terminates with a
-  `typ=kb+sd-jwt` KB-SD-JWT whose payload carries
-  `aud`/`nonce`/`sd_hash` by spec (a KB-SD-JWT IS a KB-JWT).
-  The alternative outer `+KB` shape with a separate trailing
-  plain KB-JWT is not emitted and not accepted.
+- **Sem o formato dSD-JWT+KB.** O AP2 sempre termina com um KB-SD-JWT
+  `typ=kb+sd-jwt` cujo payload contém `aud`/`nonce`/`sd_hash`, conforme
+  a spec (um KB-SD-JWT É um KB-JWT).
+  O formato alternativo com `+KB` externo e um KB-JWT simples separado
+  no final não é emitido nem aceito.
 
-## Public API
+## API pública
 
 ### `MandateClient`
 
-| Method | What it does |
+| Método | O que faz |
 | --- | --- |
-| `create(payloads, issuer_key, sd=None)` | Sign a root SD-JWT via `sd_jwt.create`. `sd=None` auto-derives selective disclosure from the payload model's `x-selectively-disclosable-*` annotations. |
-| `present(holder_key, mandate_token, payloads, claims_to_disclose=None, nonce=None, aud=None, hash_mode="sd_hash")` | Append one delegation hop on top of `mandate_token` via `kb_sd_jwt.create`. Open mandates with `cnf` create intermediate hops; closed mandates create terminal hops. Pass `hash_mode="issuer_jwt_hash"` to let the next delegate redact disclosures from the preceding SD-JWT. Call again on the result for more hops. |
-| `verify(token, key_or_provider, payload_type=None, expected_aud=None, expected_nonce=None, ...)` | Unified verifier via `chain.verify_chain`. `token` can be a single SD-JWT or any-depth `~~`-joined chain. Returns `SdJwtMandate[T]` for single, `list[dict]` of per-token effective payloads for chains. |
-| `get_closed_mandate_jwt(token)` | The leaf JWT of the chain (last `~~` segment, before any `~`). Its `sha256` is the canonical receipt `reference` — stable across depth and disclosure choices. |
+| `create(payloads, issuer_key, sd=None)` | Assina um SD-JWT raiz via `sd_jwt.create`. Com `sd=None`, a divulgação seletiva é derivada automaticamente das anotações `x-selectively-disclosable-*` do modelo do payload. |
+| `present(holder_key, mandate_token, payloads, claims_to_disclose=None, nonce=None, aud=None, hash_mode="sd_hash")` | Acrescenta um hop de delegação sobre `mandate_token` via `kb_sd_jwt.create`. Open mandates com `cnf` criam hops intermediários; closed mandates criam hops terminais. Passe `hash_mode="issuer_jwt_hash"` para permitir que o próximo delegado remova disclosures do SD-JWT anterior. Chame de novo sobre o resultado para mais hops. |
+| `verify(token, key_or_provider, payload_type=None, expected_aud=None, expected_nonce=None, ...)` | Verificador unificado via `chain.verify_chain`. `token` pode ser um SD-JWT único ou uma cadeia unida por `~~` de qualquer profundidade. Retorna `SdJwtMandate[T]` para token único e `list[dict]` com os payloads efetivos de cada token para cadeias. |
+| `get_closed_mandate_jwt(token)` | O JWT folha da cadeia (último segmento `~~`, antes de qualquer `~`). Seu `sha256` é a `reference` canônica do receipt — estável independentemente da profundidade e das disclosures escolhidas. |
 
-`claims_to_disclose` in `present()`: `None` → reveal all, `{}` → reveal
-nothing, dict → reveal named fields.
+`claims_to_disclose` em `present()`: `None` → revela tudo, `{}` → não
+revela nada, dict → revela os campos indicados.
 
 ### `ReceiptClient`
 
-| Method | What it does |
+| Método | O que faz |
 | --- | --- |
-| `create_payment_receipt(payment_mandate_content, reference)` | Build a `PaymentReceipt` model. Sign separately with `create_jwt`. |
-| `create_checkout_receipt(merchant, reference, order_id)` | Build a `CheckoutReceipt` model. Sign separately with `create_jwt`. |
-| `verify_receipt(receipt_jwt, receipt_issuer_public_key, has_reference_in_store_cb=None, is_payment_receipt=True)` | Verify the ES256 signature and, if the callback is supplied, that `reference` points to a known closed mandate. |
+| `create_payment_receipt(payment_mandate_content, reference)` | Monta um modelo `PaymentReceipt`. A assinatura é feita à parte com `create_jwt`. |
+| `create_checkout_receipt(merchant, reference, order_id)` | Monta um modelo `CheckoutReceipt`. A assinatura é feita à parte com `create_jwt`. |
+| `verify_receipt(receipt_jwt, receipt_issuer_public_key, has_reference_in_store_cb=None, is_payment_receipt=True)` | Verifica a assinatura ES256 e, se o callback for informado, se `reference` aponta para um closed mandate conhecido. |
 
-Canonical receipt reference:
+Reference canônica do receipt:
 
 ```python
 reference = compute_sha256_b64url(
@@ -108,20 +108,20 @@ reference = compute_sha256_b64url(
 )
 ```
 
-## Data models (`generated/`)
+## Modelos de dados (`generated/`)
 
-| Model | `vct` | Role |
+| Modelo | `vct` | Papel |
 | --- | --- | --- |
 | `OpenPaymentMandate` | `mandate.payment.open` | Open payment mandate + constraints |
-| `OpenCheckoutMandate` | `mandate.checkout.open` | Open checkout mandate + line-item rules |
+| `OpenCheckoutMandate` | `mandate.checkout.open` | Open checkout mandate + regras de itens |
 | `PaymentMandate` | `mandate.payment` | Closed payment mandate |
 | `CheckoutMandate` | `mandate.checkout` | Closed checkout mandate |
-| `PaymentReceipt` / `CheckoutReceipt` | — | Receipt payloads (discriminated success/error) |
-| `Amount`, `Merchant`, `PaymentInstrument`, … | — | Shared types in `ap2.sdk.generated.types` |
+| `PaymentReceipt` / `CheckoutReceipt` | — | Payloads de receipt (sucesso/erro discriminados) |
+| `Amount`, `Merchant`, `PaymentInstrument`, … | — | Tipos compartilhados em `ap2.sdk.generated.types` |
 
-Selective-disclosure annotations on the models:
+Anotações de divulgação seletiva nos modelos:
 
-| Field | Model | Annotation |
+| Campo | Modelo | Anotação |
 | --- | --- | --- |
 | `checkout_jwt` | `CheckoutMandate` | `x-selectively-disclosable-field` |
 | `allowed` | `AllowedPayees` | `x-selectively-disclosable-array` |
@@ -129,33 +129,34 @@ Selective-disclosure annotations on the models:
 | `allowed_merchants` | `AllowedMerchants` | `x-selectively-disclosable-array` |
 | `acceptable_items` | `LineItemRequirements` | `x-selectively-disclosable-array` |
 
-## Wire format
+## Formato de transmissão
 
-A dSD-JWT chain has arbitrary depth. Hops are joined by `~~`:
+Uma cadeia dSD-JWT tem profundidade arbitrária. Os hops são unidos por `~~`:
 
 ```
 <root_SD-JWT>~<disc…>~~<KB-SD-JWT+KB_1>~<disc…>~~…~~<closed_KB-SD-JWT>~<disc…>~
 ```
 
-- **Root SD-JWT** — issued by the root of trust (in AP2, typically the
-  bank / agent provider). Contains `cnf` so the next hop can sign on top.
-- **Intermediate KB-SD-JWT+KBs** (`typ=kb+sd-jwt+kb`) — each signed by
-  the previous hop's `cnf.jwk` and carrying its own `cnf`. Any number of
-  them (zero or more). Binds to the preceding hop via `sd_hash` or
-  `issuer_jwt_hash`, and carries `iat`, `aud`, `nonce`.
-- **Closed mandate (leaf)** (`typ=kb+sd-jwt`) — final KB-SD-JWT with a
-  `PaymentMandate` or `CheckoutMandate` payload and no outgoing `cnf`.
-  Binds to the preceding hop via `sd_hash` or `issuer_jwt_hash`, and
-  carries `iat` plus (optionally) `aud`/`nonce`.
+- **SD-JWT raiz** — emitido pela raiz de confiança (no AP2, normalmente o
+  banco / provedor do agente). Contém `cnf` para que o próximo hop possa
+  assinar por cima.
+- **KB-SD-JWT+KBs intermediários** (`typ=kb+sd-jwt+kb`) — cada um assinado
+  pelo `cnf.jwk` do hop anterior e com seu próprio `cnf`. Pode haver
+  qualquer quantidade (zero ou mais). Vincula-se ao hop anterior via
+  `sd_hash` ou `issuer_jwt_hash` e contém `iat`, `aud`, `nonce`.
+- **Closed mandate (folha)** (`typ=kb+sd-jwt`) — KB-SD-JWT final com um
+  payload `PaymentMandate` ou `CheckoutMandate` e sem `cnf` de saída.
+  Vincula-se ao hop anterior via `sd_hash` ou `issuer_jwt_hash` e contém
+  `iat` e, opcionalmente, `aud`/`nonce`.
 
-A KB-SD-JWT *is* a KB-JWT (draft §5.1.4), so the binding/transaction
-claims live in its payload — AP2 does not emit the dSD-JWT+KB variant
-with a separate trailing plain KB-JWT.
+Um KB-SD-JWT *é* um KB-JWT (draft §5.1.4), então as claims de
+vinculação/transação ficam no seu payload — o AP2 não emite a variante
+dSD-JWT+KB com um KB-JWT simples separado no final.
 
-Header `typ`: `kb+sd-jwt+kb` when the payload contains `cnf` (open,
-further delegation possible), `kb+sd-jwt` otherwise (closed, terminal).
+`typ` do header: `kb+sd-jwt+kb` quando o payload contém `cnf` (aberto,
+nova delegação possível), `kb+sd-jwt` caso contrário (fechado, terminal).
 
-## Trust chain
+## Cadeia de confiança
 
 ```
 Root issuer
@@ -181,12 +182,12 @@ Root issuer
                                                  └─────────────────────────────┘
 ```
 
-Verifier trusts only the root issuer key. Every hop is validated by the
-preceding hop's `cnf.jwk`; the closed mandate's `sd_hash` binds to the
-entire preceding chain; the receipt's `reference = sha256(closed leaf JWT)`
-binds the post-settlement receipt to the authorized mandate.
+O verificador confia apenas na chave do emissor raiz. Cada hop é validado
+pelo `cnf.jwk` do hop anterior; o `sd_hash` do closed mandate se vincula a
+toda a cadeia anterior; a `reference = sha256(closed leaf JWT)` do receipt
+vincula o receipt pós-liquidação ao mandate autorizado.
 
-## Example
+## Exemplo
 
 ```python
 import json, time
@@ -260,35 +261,35 @@ assert not violations
 reference = compute_sha256_b64url(client.get_closed_mandate_jwt(chain))
 ```
 
-Add another hop by calling `client.present()` again with the returned
-`chain` as `mandate_token`; verification and the receipt reference stay
-identical in shape.
+Para acrescentar outro hop, chame `client.present()` de novo passando a
+`chain` retornada como `mandate_token`; a verificação e a reference do
+receipt mantêm o mesmo formato.
 
-## Verification (under the hood)
+## Como a verificação funciona internamente
 
-`chain.verify_chain` (called by `MandateClient.verify`) walks the chain:
+`chain.verify_chain` (chamado por `MandateClient.verify`) percorre a cadeia:
 
-1. Split on `~~`; normalize each segment so its on-wire form matches what
-   the signer saw.
-2. Token 0 uses `sd_jwt.verify(token, key_or_provider(parsed_token))`.
-   Providers that need `x5c` certificate validation should own their trusted
-   roots, for example via `X5cOrKidPublicKeyProvider`.
-3. KB-SD-JWT hops dispatch to `kb_sd_jwt.verify`, which validates either
-   `typ=kb+sd-jwt+kb` (`cnf` required) or `typ=kb+sd-jwt` (no `cnf`).
-   Each hop checks either `sd_hash` or `issuer_jwt_hash` against the
-   preceding token.
-4. The final token additionally enforces `expected_aud` / `expected_nonce`
-   when provided.
-5. Return the per-token effective payloads (extracted from
-   `delegate_payload[0]` when present). Feed them to
-   `PaymentMandateChain.parse` / `CheckoutMandateChain.parse` for typed
-   access and `verify(...)` for constraint checks.
+1. Divide em `~~`; normaliza cada segmento para que sua forma transmitida
+   corresponda ao que o assinante viu.
+2. O token 0 usa `sd_jwt.verify(token, key_or_provider(parsed_token))`.
+   Providers que precisam validar certificados `x5c` devem manter suas
+   próprias raízes confiáveis, por exemplo via `X5cOrKidPublicKeyProvider`.
+3. Hops KB-SD-JWT são encaminhados para `kb_sd_jwt.verify`, que valida
+   `typ=kb+sd-jwt+kb` (`cnf` obrigatório) ou `typ=kb+sd-jwt` (sem `cnf`).
+   Cada hop confere `sd_hash` ou `issuer_jwt_hash` contra o token
+   anterior.
+4. O token final também aplica `expected_aud` / `expected_nonce`
+   quando informados.
+5. Retorna os payloads efetivos de cada token (extraídos de
+   `delegate_payload[0]` quando presente). Passe-os para
+   `PaymentMandateChain.parse` / `CheckoutMandateChain.parse` para acesso
+   tipado e para `verify(...)` para verificar as constraints.
 
-## Receipt binding
+## Vínculo do receipt
 
-Every receipt creator and every mandate store in the AP2 samples routes
-through the same helper, so receipts stay valid regardless of delegation
-depth or disclosure selection:
+Todos os criadores de receipt e todos os armazenamentos de mandates nos
+samples do AP2 passam pelo mesmo helper, então os receipts continuam válidos
+independentemente da profundidade de delegação ou das disclosures escolhidas:
 
 ```python
 reference = compute_sha256_b64url(

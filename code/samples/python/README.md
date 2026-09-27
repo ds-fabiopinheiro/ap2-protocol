@@ -1,67 +1,68 @@
-# Python Samples for the Agent Payments Protocol (AP2)
+# Exemplos em Python do Agent Payments Protocol (AP2)
 
-Python reference implementations of the AP2 roles (merchant, credentials
-provider, payment processor, shopping agent) and end-to-end scenarios that
-tie them together.
+Implementações de referência em Python dos papéis do AP2 (merchant,
+credentials provider, payment processor, shopping agent) e cenários de ponta a
+ponta que os integram.
 
-All paths below are relative to the repository root.
+Todos os caminhos abaixo são relativos à raiz do repositório.
 
-## Layout
+## Estrutura
 
-- [`scenarios/`](./scenarios) — runnable end-to-end flows. Each scenario has a
-  `run.sh` (or `run_*.sh`) that brings up every agent/server it needs.
-- [`src/roles/`](./src/roles) — the individual role implementations used by
-  those scenarios.
-- [`src/common/`](./src/common) — shared utilities (A2A client, message
-  builders, server bootstrap, etc.).
+- [`scenarios/`](./scenarios) — fluxos de ponta a ponta executáveis. Cada
+  cenário tem um `run.sh` (ou `run_*.sh`) que sobe todos os agentes/servidores
+  de que precisa.
+- [`src/roles/`](./src/roles) — as implementações de cada papel usadas por
+  esses cenários.
+- [`src/common/`](./src/common) — utilitários compartilhados (cliente A2A,
+  construtores de mensagens, inicialização de servidor etc.).
 
-For samples in other languages, see [`../go/`](../go) and
-[`../android/`](../android). Test certificates used across the samples live
-in [`../certs/`](../certs).
+Para exemplos em outras linguagens, veja [`../go/`](../go) e
+[`../android/`](../android). Os certificados de teste usados pelos exemplos
+ficam em [`../certs/`](../certs).
 
-## Prerequisites
+## Pré-requisitos
 
 - Python 3.11+
 - [`uv`](https://docs.astral.sh/uv/)
-- A Google API key from [Google AI Studio](https://aistudio.google.com/apikey),
-  or Vertex AI ADC (`GOOGLE_GENAI_USE_VERTEXAI=true`).
+- Uma chave de API do Google do [Google AI Studio](https://aistudio.google.com/apikey),
+  ou ADC do Vertex AI (`GOOGLE_GENAI_USE_VERTEXAI=true`).
 
-## Configuration
+## Configuração
 
-Create a `.env` file at the repository root with at least your API key:
+Crie um arquivo `.env` na raiz do repositório com pelo menos a sua chave de API:
 
 ```
 GOOGLE_API_KEY=<your_api_key>
 ```
 
-Some scenarios (e.g. `shopping_agent_v2`) read additional variables from a
-local `.env` inside their role directory — see the scenario's own README
-when applicable. For example:
+Alguns cenários (por exemplo, `shopping_agent_v2`) leem variáveis adicionais de
+um `.env` local dentro do diretório do papel — veja o README do cenário quando
+for o caso. Por exemplo:
 
 ```
 GOOGLE_API_KEY=<your_api_key>
 AGENT_MODEL=gemini-3.1-flash-lite-preview
 ```
 
-## Running a scenario
+## Como executar um cenário
 
-Pick a scenario and run its script from the repository root. Each script
-creates/updates the `uv` virtual environment and starts every agent it
-needs.
+Escolha um cenário e execute o script dele a partir da raiz do repositório.
+Cada script cria/atualiza o ambiente virtual do `uv` e inicia todos os agentes
+de que precisa.
 
-Human-present (interactive, browser-based shopping agent):
+Human-present (shopping agent interativo, no navegador):
 
 ```bash
 ./code/samples/python/scenarios/a2a/human-present/cards/run.sh
 ./code/samples/python/scenarios/a2a/human-present/cards/run.sh --payment-method x402
 ```
 
-Human-not-present (automated / recurring flows):
+Human-not-present (fluxos automatizados / recorrentes):
 
 ```bash
 ./code/samples/python/scenarios/a2a/human-not-present/cards/run.sh
 ./code/samples/python/scenarios/a2a/human-not-present/x402/run.sh
 ```
 
-See the README inside each scenario directory for a walkthrough of the
-flow and the expected interactions.
+Veja o README dentro do diretório de cada cenário para o passo a passo do
+fluxo e as interações esperadas.

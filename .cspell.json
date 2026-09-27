@@ -11,7 +11,20 @@
     ".cspell.json",
     "**/go.sum",
     "CLAUDE.md",
-    "deploy/**"
+    "deploy/**",
+    "code/README.md",
+    "code/samples/android/README.md",
+    "code/samples/android/scenarios/digital-payment-credentials/README.md",
+    "code/samples/go/README.md",
+    "code/samples/go/scenarios/a2a/human-present/cards/README.md",
+    "code/samples/python/README.md",
+    "code/samples/python/scenarios/a2a/human-not-present/cards/README.md",
+    "code/samples/python/scenarios/a2a/human-not-present/x402/README.md",
+    "code/samples/python/scenarios/a2a/human-present/cards/README.md",
+    "code/samples/python/scenarios/a2a/human-present/x402/README.md",
+    "code/sdk/python/ap2/sdk/README.md",
+    "code/sdk/python/ap2/tests/README.md",
+    "code/sdk/schemas/README.md"
   ],
   "dictionaryDefinitions": [
     {
