@@ -1,101 +1,105 @@
-# Agent Payments Protocol Sample: Human Not Present Purchases with x402
+# Exemplo do Agent Payments Protocol: compras human-not-present com x402
 
-This sample demonstrates a **Human-Not-Present** transaction using payment
-methods compatible with **x402**.
+Este exemplo mostra uma transação **human-not-present** (sem o usuário presente
+no momento da compra) que usa meios de pagamento compatíveis com **x402**.
 
-## Scenario
+## Cenário
 
-Human-Not-Present flows refer to all commerce flows where the user is **not
-actively present** to confirm the details of what is being purchased at the
-exact moment of the transaction. Instead, the user has pre-authorized the
-transaction details and payment method (e.g., by setting up a specific intent or
-agreeing to a purchase condition like a price drop).
+Fluxos human-not-present são todos os fluxos de comércio em que o usuário **não
+está presente** para confirmar os detalhes do que está sendo comprado no
+momento exato da transação. Em vez disso, o usuário autorizou antes os detalhes
+da transação e o meio de pagamento (por exemplo, ao definir uma intenção
+específica ou aceitar uma condição de compra, como uma queda de preço).
 
-In this scenario, the flow is triggered by a mock "price drop" or "item drop"
-event from the merchant. Once the price drops to a level acceptable to the agent
-(based on user intent), the Shopping Agent autonomously completes the purchase
-using the pre-authorized credentials and mandates, without asking the user for
-real-time confirmation.
+Neste cenário, o fluxo é disparado por um evento simulado de "queda de preço"
+ou "disponibilidade do item" enviado pelo merchant. Quando o preço cai para um
+valor aceitável para o agente (com base na intenção do usuário), o Shopping
+Agent (agente de compras que atua em nome do usuário) conclui a compra de forma
+autônoma, usando as credenciais e os mandates autorizados previamente, sem
+pedir confirmação ao usuário em tempo real.
 
-## Key Actors
+## Principais atores
 
-This sample consists of:
+Este exemplo é composto por:
 
-- **Shopping Agent (v2):** The main orchestrator that handles the user's
-  shopping requests and acts autonomously when a trigger condition is met.
-- **Merchant Agent (MCP):** An agent that handles product queries and
-  advertises support for x402 purchases.
-- **x402 Merchant Payment Processor Agent (MCP):** An agent that takes
-  payments on behalf of the merchant.
-- **x402 Credentials Provider Agent (MCP):** The holder of the user's payment
-  credentials, facilitating payment between the shopping agent and the
-  merchant's payment processor.
+- **Shopping Agent (v2):** o orquestrador principal, que trata os pedidos de
+  compra do usuário e age de forma autônoma quando uma condição de disparo é
+  atendida.
+- **Merchant Agent (MCP):** um agente que responde a consultas de produtos e
+  anuncia suporte a compras com x402.
+- **x402 Merchant Payment Processor Agent (MCP):** um agente que recebe
+  pagamentos em nome do merchant.
+- **x402 Credentials Provider Agent (MCP):** o detentor das credenciais de
+  pagamento do usuário, que intermedeia o pagamento entre o shopping agent e o
+  processador de pagamentos do merchant.
 
-## Key Features
+## Principais funcionalidades
 
-**1. Autonomous Purchase on Trigger**
+**1. Compra autônoma a partir de um disparo**
 
-- The flow is initiated by an external trigger (a mock price drop or item drop)
-  rather than a direct user command at the moment of purchase.
-- The agent evaluates the condition and proceeds with the purchase if it matches
-  the user's intent.
+- O fluxo começa por um disparo externo (uma queda de preço ou disponibilidade
+  de item simulada), e não por um comando direto do usuário no momento da
+  compra.
+- O agente avalia a condição e segue com a compra se ela corresponder à
+  intenção do usuário.
 
-**2. x402 Purchase Integration**
+**2. Integração de compras com x402**
 
-- The Merchant Agent advertises support for x402 purchases through its agent
-  card and CartMandate.
-- The flow uses x402 compatible payment methods and typically skips manual steps
-  like OTP challenges, making it suitable for autonomous agent interactions.
+- O Merchant Agent anuncia suporte a compras com x402 no seu agent card e no
+  CartMandate.
+- O fluxo usa meios de pagamento compatíveis com x402 e normalmente dispensa
+  etapas manuais, como desafios de OTP, o que o torna adequado para interações
+  autônomas de agentes.
 
-## Executing the Example
+## Como executar o exemplo
 
-### Setup
+### Configuração
 
-Ensure you have obtained a Google API key from
-[Google AI Studio](https://aistudio.google.com/apikey). Then declare the
-GOOGLE_API_KEY variable in one of two ways:
+Obtenha uma chave de API do Google no
+[Google AI Studio](https://aistudio.google.com/apikey). Depois, declare a
+variável GOOGLE_API_KEY de uma das duas formas:
 
-- **Option 1:** Declare it as an environment variable:
+- **Opção 1:** declare-a como variável de ambiente:
   `export GOOGLE_API_KEY=your_key`
-- **Option 2:** Put it into an `.env` file at the root of your repository:
+- **Opção 2:** coloque-a em um arquivo `.env` na raiz do repositório:
   `echo "GOOGLE_API_KEY=your_key" > .env`
 
-### Execution
+### Execução
 
-You can execute the following command to run all services (Merchant Trigger,
-x402 PSP Trigger, Shopping Agent, and Web Client) in one terminal:
+Execute o comando abaixo para iniciar todos os serviços (Merchant Trigger, x402
+PSP Trigger, Shopping Agent e Web Client) em um único terminal:
 
 ```sh
 bash code/samples/python/scenarios/a2a/human-not-present/x402/run.sh
 ```
 
-To enable blockchain broadcast simulation (if supported by the scenario), you
-can pass the flag:
+Para ativar a simulação de transmissão na blockchain (se o cenário oferecer
+suporte), passe a flag:
 
 ```sh
 bash code/samples/python/scenarios/a2a/human-not-present/x402/run.sh \
   --enable_broadcast_on_chain
 ```
 
-This script will start the services on the following ports:
+O script inicia os serviços nas seguintes portas:
 
 - Agent: `8080`
 - Merchant Trigger: `8081`
 - x402 PSP Trigger: `8084`
 - Web Client: `5173`
 
-The script will automatically open the web client in your browser. If not, you
-can open `http://localhost:5173` manually.
+O script abre o web client no navegador automaticamente. Se isso não
+acontecer, abra `http://localhost:5173` manualmente.
 
-### Triggering the Flow
+### Como disparar o fluxo
 
-To simulate the trigger condition (e.g., a price drop), open a separate terminal
-and run the following command (replace `<item_id>` and `<price>` with
-appropriate test values):
+Para simular a condição de disparo (por exemplo, uma queda de preço), abra outro
+terminal e execute o comando abaixo (substitua `<item_id>` e `<price>` por
+valores de teste adequados):
 
 ```sh
 curl -X POST \
   "http://localhost:8081/trigger-price-drop?item_id=<item_id>&price=<price>&stock=10"
 ```
 
-Observe the web client to see the autonomous purchase in action.
+Acompanhe o web client para ver a compra autônoma acontecendo.

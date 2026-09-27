@@ -1,27 +1,27 @@
-# Android Samples for the Agent Payments Protocol AP2
+# Samples Android do Agent Payments Protocol AP2
 
-This directory contains Android samples demonstrating how to use AP2.
+Este diretório contém samples Android que mostram como usar o AP2.
 
-## Getting Started
+## Primeiros passos
 
-*   **Explore Scenarios**: To understand what these samples can do, see the
-    [scenarios](./scenarios) directory for detailed examples.
-*   **Review the Code**: Dive into the implementation by reviewing the code in
-    the [shopping_assistant](./shopping_assistant) directory.
-*   **All Samples**: Return to the main [samples](..) directory to see examples
-    in other languages.
+*   **Cenários**: para entender o que estes samples fazem, veja o diretório
+    [scenarios](./scenarios), com exemplos detalhados.
+*   **Código**: para ver a implementação, revise o código no diretório
+    [shopping_assistant](./shopping_assistant).
+*   **Todos os samples**: volte ao diretório principal de [samples](..) para
+    ver exemplos em outras linguagens.
 
-### Prerequisites
+### Pré-requisitos
 
 - Python 3.10+
 - `uv`
 
-### Installation
+### Instalação
 
-Set up your virtual environment and install packages:
+Configure o ambiente virtual e instale os pacotes:
 
 ```
 uv sync
 ```
 
-(Note: Each scenario has a run.sh script that will do this automatically.)
+(Observação: cada cenário tem um script run.sh que faz isso automaticamente.)
