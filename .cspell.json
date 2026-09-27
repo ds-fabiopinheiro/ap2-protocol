@@ -11,7 +11,10 @@
     ".cspell.json",
     "**/go.sum",
     "CLAUDE.md",
-    "deploy/**"
+    "deploy/**",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/consent_agent.md",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/monitoring_agent.md",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/purchase_agent.md"
   ],
   "dictionaryDefinitions": [
     {
