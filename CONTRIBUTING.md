@@ -1,36 +1,36 @@
-# How to Contribute
+# Como contribuir
 
-The core specification has been donated to
+A especificação principal foi doada à
 [FIDO](https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/).
-Please get involved to continue to develop the specification.
+Participe para continuar o desenvolvimento da especificação.
 
-Contributions to this repo going forward are to the samples and sdk only.
+A partir de agora, as contribuições a este repositório se limitam aos exemplos e ao SDK.
 
-## Before you begin
+## Antes de começar
 
-### Sign our Contributor License Agreement
+### Assine nosso Contributor License Agreement
 
-Contributions to this project must be accompanied by a
+As contribuições a este projeto precisam ser acompanhadas de um
 [Contributor License Agreement](https://cla.developers.google.com/about) (CLA).
-You (or your employer) retain the copyright to your contribution; this simply
-gives us permission to use and redistribute your contributions as part of the
-project.
+Você (ou seu empregador) mantém os direitos autorais da contribuição; o CLA
+apenas nos dá permissão para usar e redistribuir suas contribuições como parte
+do projeto.
 
-If you or your current employer have already signed the Google CLA (even if it
-was for a different project), you probably don't need to do it again.
+Se você ou seu empregador atual já assinaram o Google CLA (mesmo que para outro
+projeto), provavelmente não é preciso assinar de novo.
 
-Visit <https://cla.developers.google.com/> to see your current agreements or to
-sign a new one.
+Acesse <https://cla.developers.google.com/> para ver seus acordos atuais ou
+assinar um novo.
 
-### Review our Community Guidelines
+### Leia nossas diretrizes da comunidade
 
-This project follows [Google's Open Source Community
+Este projeto segue as [Google's Open Source Community
 Guidelines](https://opensource.google/conduct/).
 
-## Contribution process
+## Processo de contribuição
 
-### Code Reviews
+### Revisão de código
 
-All submissions, including submissions by project members, require review. We
-use [GitHub pull requests](https://docs.github.com/articles/about-pull-requests)
-for this purpose.
+Todas as contribuições, inclusive as de membros do projeto, precisam de revisão.
+Usamos [pull requests do GitHub](https://docs.github.com/articles/about-pull-requests)
+para isso.

@@ -1,11 +1,11 @@
-# Description
+# Descrição
 
-Thank you for opening a Pull Request!
-Before submitting your PR, there are a few things you can do to make sure it goes smoothly:
+Obrigado por abrir um Pull Request!
+Antes de enviar o PR, algumas verificações ajudam o processo a correr sem problemas:
 
-- [ ] Follow the [`CONTRIBUTING` Guide](https://github.com/google-agentic-commerce/AP2?tab=contributing-ov-file#how-to-contribute).
-- [ ] Make your Pull Request title in the <https://www.conventionalcommits.org/> specification.
-- [ ] Ensure the tests and linter pass
-- [ ] Appropriate docs were updated (if necessary)
+- [ ] Siga o [guia `CONTRIBUTING`](https://github.com/google-agentic-commerce/AP2?tab=contributing-ov-file#how-to-contribute).
+- [ ] Escreva o título do Pull Request no padrão <https://www.conventionalcommits.org/>.
+- [ ] Garanta que os testes e o linter passem
+- [ ] A documentação pertinente foi atualizada (se necessário)
 
 Fixes #<issue_number_goes_here> 🦕

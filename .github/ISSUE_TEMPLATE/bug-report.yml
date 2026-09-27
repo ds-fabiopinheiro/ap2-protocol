@@ -1,32 +1,32 @@
-name: 🐞 Bug Report
-description: File a bug report
+name: 🐞 Relatório de bug
+description: Registre um relatório de bug
 title: "[Bug]: "
 type: "Bug"
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for stopping by to let us know something could be better!
+        Obrigado por nos avisar sobre algo que pode melhorar!
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
-      description: Also tell us what you expected to happen and how to reproduce the issue.
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      label: O que aconteceu?
+      description: Informe também o que você esperava que acontecesse e como reproduzir o problema.
+      placeholder: Descreva o que você está vendo.
+      value: "Ocorreu um bug."
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      label: Saída de log relevante
+      description: Copie e cole qualquer saída de log relevante. Ela será formatada automaticamente como código, então não é preciso usar crases.
       render: shell
   - type: checkboxes
     id: terms
     attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/google-agentic-commerce/AP2?tab=coc-ov-file#readme)
+      label: Código de Conduta
+      description: Ao enviar esta issue, você concorda em seguir nosso [Código de Conduta](https://github.com/google-agentic-commerce/AP2?tab=coc-ov-file#readme)
       options:
-        - label: I agree to follow this project's Code of Conduct
+        - label: Concordo em seguir o Código de Conduta deste projeto
           required: true

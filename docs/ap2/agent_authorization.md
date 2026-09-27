@@ -1,24 +1,27 @@
-# Agent Authorization
+# Autorização de agentes
 
-Due to their non-deterministic processes, even well-behaving Agents need to
-have their behavior tightly constrained above what a normal authorization
-model would require of human users.
+Tradução para pt-BR. Em caso de divergência, vale o texto original em inglês em <https://github.com/google-agentic-commerce/AP2>.
 
-In this document we provide a model for Agentic Authorization to provide
-clarity to the final Verifier as to what the User approved the Agent to do.
-AP2 makes use of this model for the payments use case, but the model could be
-applied more generally in the future.
+Como os processos dos agentes não são determinísticos, mesmo agentes que se
+comportam bem precisam ter o comportamento restringido de forma mais rígida do
+que um modelo de autorização comum exigiria de usuários humanos.
 
-The authorization process is broken into two steps:
+Este documento apresenta um modelo de autorização agêntica que deixa claro para
+o Verifier (verificador) final o que o usuário aprovou que o agente fizesse.
+O AP2 usa esse modelo para o caso de uso de pagamentos, mas o modelo pode ser
+aplicado de forma mais geral no futuro.
 
-  - **Mandate Delegation**: A User authorizes an Agent to perform some action
-    (or actions) on their behalf. This is done by having the User approve the
-    Mandate Content on a Trusted Surface and delegate the resulting Mandate to
-    the Agent.
-  - **Action Authorization**: Here a Verifier challenges an Agent to provide
-    proof that it is authorized to perform an action on behalf of a User. The
-    Agent does so by presenting a relevant Mandate to the Verifier. Upon
-    completion, the Verifier returns the Agent a Receipt.
+O processo de autorização é dividido em duas etapas:
+
+  - **Mandate Delegation** (delegação de Mandate): o usuário autoriza um agente
+    a executar uma ou mais ações em seu nome. Para isso, o usuário aprova o
+    conteúdo do Mandate (autorização assinada que serve de prova de intenção) em
+    uma Trusted Surface (interface confiável onde o usuário revisa e assina) e
+    delega o Mandate resultante ao agente.
+  - **Action Authorization** (autorização de ação): um Verifier exige que o
+    agente prove que está autorizado a executar uma ação em nome de um usuário.
+    O agente faz isso apresentando ao Verifier um Mandate pertinente. Ao final,
+    o Verifier devolve ao agente um Receipt (comprovante assinado).
 
 <div style="display: flex; justify-content: space-around;">
   <figure>
@@ -31,97 +34,96 @@ The authorization process is broken into two steps:
   </figure>
 </div>
 
-## Mandate Delegation
+## Delegação de Mandate
 
-Mandate Delegation is performed as follows:
+A delegação de Mandate é feita assim:
 
-  - The Agent creates Mandate Content that it wishes to be authorized by the User.
-  - The User is shown the Mandate Content on a Trusted Surface.
-  - After authorization and consent from the user, a Mandate is created and
-    passed back to the Agent.
-  - The Agent stores the Mandate for future use.
+  - O agente cria o conteúdo do Mandate que deseja que o usuário autorize.
+  - O conteúdo do Mandate é exibido ao usuário em uma Trusted Surface.
+  - Após a autorização e o consentimento do usuário, um Mandate é criado e
+    devolvido ao agente.
+  - O agente armazena o Mandate para uso futuro.
 
-This document defines the following models for Mandate Delegation:
+Este documento define os seguintes modelos de delegação de Mandate:
 
-  - User Credential
-  - Trusted Agent Provider
+  - User Credential (credencial do usuário)
+  - Trusted Agent Provider (provedor do agente, confiável para o Verifier)
 
-The User Credential approach makes use of an Issuer external to the Agent that
-the Verifier trusts to guarantee the Trusted Surface. This has the benefit
-of a single User Credential being able to delegate Mandates to many different
-Agents, without the Verifier needing to have an explicit trust relationship with
-each Agent.
+A abordagem de User Credential usa um Issuer (emissor) externo ao agente, no
+qual o Verifier confia para garantir a Trusted Surface. A vantagem é que uma
+única User Credential pode delegar Mandates a vários agentes diferentes, sem
+que o Verifier precise ter uma relação de confiança explícita com cada agente.
 
-The Trusted Agent Provider approach makes the provider of the Agent
-the party trusted by the Verifier. This allows for a simpler trust model, but
-requires Verifiers to establish trust with every Agent Provider. An Agent
-Provider could also be an Issuer of User Credentials, blending the two
-approaches.
+A abordagem de Trusted Agent Provider faz do provedor do agente a parte em que
+o Verifier confia. Isso permite um modelo de confiança mais simples, mas exige
+que os Verifiers estabeleçam confiança com cada Agent Provider. Um Agent
+Provider também pode ser Issuer de User Credentials, combinando as duas
+abordagens.
 
-> NOTE:
-> In the future, other approaches to establishing trust in the Delegated
-> Mandates can be explored. The Mandate Content itself functions independent
-> of the means used to establish trust in its integrity.
+> NOTA:
+> No futuro, outras formas de estabelecer confiança nos Mandates delegados podem
+> ser exploradas. O conteúdo do Mandate funciona de forma independente do meio
+> usado para estabelecer confiança na sua integridade.
 >
-> Some other models include a directly trusted user key, rather than a full
-> credential, such as a passkey or hardware-attested key.
+> Outros modelos incluem uma chave do usuário com confiança direta, em vez de
+> uma credencial completa, como uma passkey ou uma chave atestada por hardware.
 
 ### User Credential
 
-This is a three-party model involving:
+Este é um modelo de três partes, que envolve:
 
-  - The User Credential Issuer
-  - The Trusted Surface as a Holder of the User Credential
-  - The Agent
+  - O Issuer da User Credential
+  - A Trusted Surface, como Holder (portadora) da User Credential
+  - O agente
 
-In this model, the Issuer of the User Credential is being trusted by the Verifier
-to ensure that the Trusted Surface constructs Mandates only after obtaining
-appropriate user consent and authorization.
+Neste modelo, o Verifier confia no Issuer da User Credential para garantir que
+a Trusted Surface só construa Mandates depois de obter o consentimento e a
+autorização adequados do usuário.
 
 <figure>
   <img src="../../assets/mandate_delegation_user_credential.svg" style="width:100%" alt="Mandate Delegation: User Credential">
   <figcaption align="center">Mandate Delegation: User Credential</figcaption>
 </figure>
 
-In advance of this flow, the Issuer issues the User
-Credential to the Holder. The mechanism for issuance is outside the scope of
-this document; one standard approach can be seen in the [OpenID4VCI](#references)
-specification.
+Antes deste fluxo, o Issuer emite a User Credential para o Holder. O mecanismo
+de emissão está fora do escopo deste documento; uma abordagem padronizada pode
+ser vista na especificação [OpenID4VCI](#references).
 
-This model performs the creation and delegation of the mandate as part of the
-presentation of a User's VDC.
+Este modelo faz a criação e a delegação do Mandate como parte da apresentação
+de uma VDC (credencial digital verificável) do usuário.
 
-> NOTE:
-> While this document specifies using OpenID4VP with SD-JWT VCs, other VDC formats such as [ISO mDocs (ISO18013-5)](#references) and protocols such as [18013-7 Annex C](#references) could be made to fulfill the same role.
+> NOTA:
+> Embora este documento especifique o uso de OpenID4VP com SD-JWT VCs, outros formatos de VDC, como [ISO mDocs (ISO18013-5)](#references), e protocolos, como [18013-7 Annex C](#references), podem ser adaptados para cumprir o mesmo papel.
 
-#### Delegation using OpenID4VP
+#### Delegação com OpenID4VP
 
-[OpenID4VP](#references) provides a standard protocol for presenting VDCs
-from a holder to a verifier. One feature of the protocol is `transaction_data`,
-which allows additional information to be approved and signed by the holder of
-the digital credential.
+O [OpenID4VP](#references) é um protocolo padronizado para apresentar VDCs de
+um holder para um verifier. Um dos recursos do protocolo é `transaction_data`,
+que permite que informações adicionais sejam aprovadas e assinadas pelo holder
+da credencial digital.
 
-To perform User Credential Delegation with OpenID4VP, the Agent constructs an Authorization Request where the `transaction_data` array contains base64url-encoded JSON objects. The mandate delegation object MUST contain the following properties before encoding:
+Para fazer a delegação por User Credential com OpenID4VP, o agente monta uma Authorization Request em que o array `transaction_data` contém objetos JSON codificados em base64url. O objeto de delegação do Mandate MUST (obrigatório) conter as seguintes propriedades antes da codificação:
 
-  - **type**: **REQUIRED**. MUST be the string value "*delegate*".
-  - **format**: **REQUIRED**. The required VDC format of the returned Mandate.
-  - **delegate_payload**: **REQUIRED**. An array containing the Mandate Content
-    payloads as JSON Objects.
-  - **delegate_disclosures**: **OPTIONAL**. An array that contains any Selective
-    Disclosures in the `delegate_payload`.
+  - **type**: **REQUIRED** (obrigatório). MUST ser o valor de string "*delegate*".
+  - **format**: **REQUIRED**. O formato de VDC exigido para o Mandate devolvido.
+  - **delegate_payload**: **REQUIRED**. Um array com os payloads do conteúdo do
+    Mandate como objetos JSON.
+  - **delegate_disclosures**: **OPTIONAL** (opcional). Um array com as
+    Selective Disclosures (divulgações seletivas) contidas em `delegate_payload`.
 
-When constructing the Authorization Response, the `delegate_payload` MUST be
-included as part of the Key Binding. See [Delegate SD-JWT](#references) for details.
+Ao montar a Authorization Response, o `delegate_payload` MUST ser incluído
+como parte do Key Binding. Consulte [Delegate SD-JWT](#references) para detalhes.
 
-Other fields in the Authorization Request MAY be set as normal, such as using
-the DCQL query to specify the required User Credential.
+Os demais campos da Authorization Request MAY (opcional) ser preenchidos
+normalmente, por exemplo usando a consulta DCQL para especificar a User
+Credential exigida.
 
-It is RECOMMENDED to use the Digital Credentials API for delegation with
-OpenID4VP where available to provide higher security and the best quality user
-experience.
+É RECOMMENDED (recomendado) usar a Digital Credentials API para delegação com
+OpenID4VP, quando disponível, para obter mais segurança e a melhor experiência
+de usuário.
 
-Below is a non-normative example of an OpenID4VP Authorization Request to
-delegate Checkout and Payment Mandates. Base64url-encoded strings are truncated for readability.
+Abaixo está um exemplo não normativo de uma Authorization Request do OpenID4VP
+para delegar Checkout Mandate e Payment Mandate. As strings em base64url foram truncadas para facilitar a leitura.
 
 ```json
 {
@@ -167,12 +169,12 @@ delegate Checkout and Payment Mandates. Base64url-encoded strings are truncated 
 }
 ```
 
-**Decoded `transaction_data` Payloads (Informative)**
+**Payloads de `transaction_data` decodificados (informativo)**
 
-The `transaction_data` array contains two base64url-encoded JSON objects:
+O array `transaction_data` contém dois objetos JSON codificados em base64url:
 
-**Index 0 — Payment Card (UI Data)**: Defines the confirmation UI displayed to
-the user before they approve the payment.
+**Índice 0 — Payment Card (dados de interface)**: define a interface de
+confirmação exibida ao usuário antes de ele aprovar o pagamento.
 
 ```json
 {
@@ -185,8 +187,8 @@ the user before they approve the payment.
 }
 ```
 
-**Index 1 — Delegate (Cryptographic Mandates)**: Binds the payment to the
-specific Checkout and Payment Mandate content via the `delegate_payload`.
+**Índice 1 — Delegate (Mandates criptográficos)**: vincula o pagamento ao
+conteúdo específico do Checkout Mandate e do Payment Mandate por meio de `delegate_payload`.
 
 ```json
 {
@@ -228,8 +230,8 @@ specific Checkout and Payment Mandate content via the `delegate_payload`.
 }
 ```
 
-Below is a non-normative OpenID4VP Authorization Response containing the
-user-signed Checkout and Payment Mandates. Long strings have been truncated for readability.
+Abaixo está uma Authorization Response não normativa do OpenID4VP com os
+Checkout Mandate e Payment Mandate assinados pelo usuário. As strings longas foram truncadas para facilitar a leitura.
 
 ```json
 {
@@ -244,9 +246,9 @@ user-signed Checkout and Payment Mandates. Long strings have been truncated for 
 }
 ```
 
-The `dpc_credential` is a `~`-separated SD-JWT. The decoded components are:
+O `dpc_credential` é um SD-JWT separado por `~`. Os componentes decodificados são:
 
-**Core SD-JWT Payload (Issuer Credential)**
+**Payload principal do SD-JWT (credencial do Issuer)**
 
 ```json
 {
@@ -272,8 +274,8 @@ The `dpc_credential` is a `~`-separated SD-JWT. The decoded components are:
 }
 ```
 
-**Selective Disclosures** (Only the three claims requested by the merchant are
-revealed; remaining fields stay hidden in the undisclosed `_sd` hashes):
+**Selective Disclosures** (somente os três claims solicitados pelo Merchant são
+revelados; os demais campos continuam ocultos nos hashes `_sd` não divulgados):
 
 ```json
 [
@@ -283,38 +285,38 @@ revealed; remaining fields stay hidden in the undisclosed `_sd` hashes):
 ]
 ```
 
-Multiple Mandate Delegations MAY be requested in a single Authorization Request
-by providing multiple elements in the `delegate_payload` array.
+Várias delegações de Mandate MAY ser solicitadas em uma única Authorization
+Request, com vários elementos no array `delegate_payload`.
 
 ### Trusted Agent Provider
 
-In this model, the Agent Provider is being trusted by Verifiers directly to
-construct Mandates only after obtaining appropriate user consent and
-authorization. This model does not require a pre-issued credential. The
-following steps occur:
+Neste modelo, os Verifiers confiam diretamente no Agent Provider para construir
+Mandates somente depois de obter o consentimento e a autorização adequados do
+usuário. Este modelo não exige uma credencial emitida previamente. As etapas
+são as seguintes:
 
 <figure>
   <img src="../../assets/mandate_delegation_trusted_agent_provider.svg" style="width:100%" alt="Mandate Delegation: Trusted Agent Provider">
   <figcaption align="center">Mandate Delegation: Trusted Agent Provider</figcaption>
 </figure>
 
-  - The Agent constructs the Mandate Content and passes it to a Trusted Surface
-    controlled by the Agent Provider.
-      - *For example another, deterministic, part of their application.*
-  - The Agent Provider’s Trusted Surface displays the Mandate Content to the
-    user and obtains any necessary user authorization and consent.
-  - The Agent Provider uses a securely stored signing key to create the Mandate.
-      - *For example, by having the Trusted Surface communicate with the Agent
-        Provider backend to have the mandate signed.*
+  - O agente constrói o conteúdo do Mandate e o envia a uma Trusted Surface
+    controlada pelo Agent Provider.
+      - *Por exemplo, outra parte, determinística, da aplicação do provedor.*
+  - A Trusted Surface do Agent Provider exibe o conteúdo do Mandate ao usuário
+    e obtém a autorização e o consentimento necessários.
+  - O Agent Provider usa uma chave de assinatura armazenada com segurança para criar o Mandate.
+      - *Por exemplo, a Trusted Surface se comunica com o backend do Agent
+        Provider para que o Mandate seja assinado.*
 
-The Agent Provider MUST ensure that the Agent is not able to access the
-Agent Provider signing key, or use it without the Trusted Surface. See
-Security and Privacy Considerations for more details of the risks.
+O Agent Provider MUST garantir que o agente não consiga acessar a chave de
+assinatura do Agent Provider nem usá-la sem a Trusted Surface. Consulte
+Security and Privacy Considerations para mais detalhes sobre os riscos.
 
-Below is a non-normative example of an Agent Provider creating a Checkout
-Mandate as an `sd-jwt-vc` payload.
+Abaixo está um exemplo não normativo de um Agent Provider criando um Checkout
+Mandate como payload `sd-jwt-vc`.
 
-*Decoded Top-Level Payload:*
+*Payload de nível superior decodificado:*
 ```json
 {
   "iss": "https://agent-provider.example.com",
@@ -327,8 +329,8 @@ Mandate as an `sd-jwt-vc` payload.
 }
 ```
 
-*Decoded Disclosure (The Open Mandate):*
-The hash ending in `uq0EE` reveals the mandate. Notice how the acceptable items and allowed merchants are also hidden behind hashes inside the constraints array:
+*Disclosure decodificada (o open Mandate):*
+O hash que termina em `uq0EE` revela o Mandate. Observe que os itens aceitáveis e os Merchants permitidos também ficam ocultos atrás de hashes dentro do array de constraints:
 ```json
 [
   "8rGxzvzfSEW7fw4nb_dYx_w",
@@ -361,8 +363,8 @@ The hash ending in `uq0EE` reveals the mandate. Notice how the acceptable items 
 ]
 ```
 
-*Decoded Disclosures (Nested Array Items):*
-The Agent can selectively disclose the specific line item and merchant authorized by the constraints array above:
+*Disclosures decodificadas (itens de array aninhados):*
+O agente pode divulgar seletivamente o item de linha e o Merchant específicos autorizados pelo array de constraints acima:
 ```json
 [
   "vK5dz2nnVpgtoC9dZy9uHw",
@@ -383,168 +385,172 @@ The Agent can selectively disclose the specific line item and merchant authorize
 ]
 ```
 
-## Mandate Structure
+## Estrutura do Mandate
 
-Mandates form a cryptographically verifiable chain from the original
-user-approved Mandate through to the closed Mandate used to authorize a
-particular Verifier’s action.
+Os Mandates formam uma cadeia verificável criptograficamente, que vai do
+Mandate original aprovado pelo usuário até o closed Mandate usado para
+autorizar a ação de um Verifier específico.
 
-Mandates can be thought of being in two states:
+Os Mandates podem estar em dois estados:
 
-  - **Closed**: When the Mandate is bound to a particular transaction with a
-    Verifier to authorize the agent to perform an action. This is achieved by the Agent generating a Key Binding JWT (Proof-of-Possession) using the key endorsed in the open Mandate's `cnf` claim.
-  - **Open**: When the Mandate has not yet been bound to a particular
-    transaction. It instead has a set of constraints on the valid content for
-    the closed Mandate, as well as being bound to a particular Agent who is
-    allowed to use the Mandate.
+  - **Closed**: quando o Mandate está vinculado a uma transação específica com
+    um Verifier, para autorizar o agente a executar uma ação. Isso é feito pelo agente ao gerar um Key Binding JWT (prova de posse) com a chave endossada no claim `cnf` do open Mandate.
+  - **Open**: quando o Mandate ainda não foi vinculado a uma transação
+    específica. Em vez disso, ele tem um conjunto de constraints (restrições)
+    sobre o conteúdo válido do closed Mandate e está vinculado a um agente
+    específico autorizado a usar o Mandate.
 
-Open Mandates are necessary to allow the Agent to perform autonomous actions on
-the User’s behalf, while still appropriately constraining their behavior.
+Open Mandates são necessários para permitir que o agente execute ações
+autônomas em nome do usuário, mantendo o comportamento dele restrito de forma
+adequada.
 
 <figure>
   <img src="../../assets/mandate_chain_example.svg" style="width:800px" alt="Examples of open and closed Mandate Chains">
   <figcaption align="center">Example: Mandate Chains</figcaption>
 </figure>
 
-The above diagram illustrates two examples of a Mandate providing human
-authorization of the same action (doX with A). In the ‘Human Present’ case, the
-User directly signs closed Mandate Content, while in the second case, the User signs
-open Mandate Content. The Agent then signs closed Mandate Content on the user’s behalf,
-and provides the entire Mandate chain to demonstrate the authorization.
+O diagrama acima mostra dois exemplos de um Mandate que fornece autorização
+humana para a mesma ação (doX com A). No caso ‘Human Present’, o usuário
+assina diretamente o conteúdo de um closed Mandate; no segundo caso, o usuário assina
+o conteúdo de um open Mandate. Em seguida, o agente assina o conteúdo de um closed Mandate em nome do usuário
+e fornece a cadeia completa de Mandates para demonstrar a autorização.
 
-Because Open Mandates need to be bound to a particular transaction before use,
-they MUST support cryptographic Key Binding.
+Como os open Mandates precisam ser vinculados a uma transação específica antes
+do uso, eles MUST oferecer suporte a Key Binding criptográfico.
 
-### Mandates using SD-JWT VCs
+### Mandates com SD-JWT VCs
 
-[SD-JWT](#references)s provide a convenient structure for cryptographically securing JSON and a
-number of useful properties for Mandates:
+[SD-JWT](#references)s oferecem uma estrutura prática para proteger JSON criptograficamente e
+várias propriedades úteis para Mandates:
 
-  - The Key Binding mechanism allows for the Agent to provide Proof-of-Possession
-    and transaction binding when the user is no longer present.
-  - Selective Disclosure can be used to preserve User privacy while providing
-    the Agent flexibility in decision making by only disclosing the applicable
-    parts of the constraint.
+  - O mecanismo de Key Binding permite que o agente forneça prova de posse e
+    vinculação à transação quando o usuário não está mais presente.
+  - A Selective Disclosure pode ser usada para preservar a privacidade do
+    usuário e, ao mesmo tempo, dar ao agente flexibilidade de decisão, divulgando
+    apenas as partes aplicáveis da constraint.
 
-> NOTE:
-> While this document uses SD-JWT VCs, other VDCs such as ISO mDocs COULD
-> be used in their place.
+> NOTA:
+> Embora este documento use SD-JWT VCs, outras VDCs, como ISO mDocs, COULD
+> (poderiam) ser usadas no lugar.
 
-The Mandate Content for SD-JWTs contains the following claims:
+O conteúdo do Mandate para SD-JWTs contém os seguintes claims:
 
-  - *vct*: **REQUIRED**. A String uniquely identifying the Mandate Type, in
-    addition to the credential type.
-  - *constraints*: **OPTIONAL**. An array of extensible Objects
-    providing Constraints on what is allowed to be present in the closed Mandate.
-      - *type*: **REQUIRED**. A unique String identifying this constraint.
-      - Other properties are present based on the constraint type.
-  - *cnf*: **OPTIONAL**. Contains the confirmation method identifying the Proof-of-Possession key as
-    defined in [RFC7800](#references). This claim is **REQUIRED** if the Mandate is still open.
+  - *vct*: **REQUIRED**. Uma String que identifica de forma única o tipo do
+    Mandate, além do tipo da credencial.
+  - *constraints*: **OPTIONAL**. Um array de objetos extensíveis que
+    definem constraints sobre o que pode estar presente no closed Mandate.
+      - *type*: **REQUIRED**. Uma String única que identifica esta constraint.
+      - Outras propriedades estão presentes conforme o tipo da constraint.
+  - *cnf*: **OPTIONAL**. Contém o método de confirmação que identifica a chave de prova de posse, conforme
+    definido na [RFC7800](#references). Este claim é **REQUIRED** se o Mandate ainda estiver open.
 
-Other properties MAY be included in the Mandate based on the Mandate Type. A
-Mandate that is still open is NOT REQUIRED to have all of the required fields of a
-particular Mandate Type, but the eventually closed Mandate MUST include them.
-Additionally, any claim in SD-JWT-VC MAY also be used.
+Outras propriedades MAY ser incluídas no Mandate conforme o tipo do Mandate. Para
+um Mandate que ainda está open, é NOT REQUIRED (não obrigatório) ter todos os campos obrigatórios de um
+tipo de Mandate específico, mas o closed Mandate resultante MUST incluí-los.
+Além disso, qualquer claim de SD-JWT-VC MAY também ser usado.
 
-The AP2 specification provides mandate types and constraint types for use with
-payments. New mandate types and new constraint types MAY be defined in addition
-to these to meet other use cases. It is RECOMMENDED to use a collision-resistant
-naming approach, for example via a rDNS prefix controlled by the specifying
-entity, or an appropriate URN.
+A especificação AP2 define tipos de Mandate e tipos de constraint para uso com
+pagamentos. Novos tipos de Mandate e novos tipos de constraint MAY ser definidos
+além desses para atender a outros casos de uso. É RECOMMENDED usar uma
+convenção de nomes resistente a colisões, por exemplo um prefixo rDNS
+controlado pela entidade que especifica, ou uma URN adequada.
 
-#### Verification and Processing Rules
+<a id="verification-and-processing-rules"></a>
 
-The verification and processing rules for a chain of SD-JWT mandates are as
-follows:
+#### Regras de verificação e processamento
 
-  1. Verify and process the SD-JWT chain according to [Delegate SD-JWT](#references).
-  2. Extract claims from open Mandate Content and verify the closed Mandate
-     Content has these values unchanged.
-  3. Extract each Constraint from each open Mandate Content and evaluate them
-     against the closed Mandate Content based on the Constraint Type.
-     - Any unknown Constraints MUST be treated as failing evaluation.
+As regras de verificação e processamento de uma cadeia de Mandates SD-JWT são as
+seguintes:
 
-## Action Authorization
+  1. Verifique e processe a cadeia SD-JWT conforme o [Delegate SD-JWT](#references).
+  2. Extraia os claims do conteúdo do open Mandate e verifique se o conteúdo do
+     closed Mandate mantém esses valores sem alteração.
+  3. Extraia cada constraint de cada conteúdo de open Mandate e avalie-a em
+     relação ao conteúdo do closed Mandate, de acordo com o tipo da constraint.
+     - Qualquer constraint desconhecida MUST ser tratada como falha na avaliação.
 
-Action Authorization happens between an Agent and a Verifier. It is performed
-when a Verifier needs an Agent to prove that it has the appropriate
-authorization to perform a particular action (such as executing a purchase).
+## Autorização de ação
 
-Action Authorization is performed as follows:
+A autorização de ação acontece entre um agente e um Verifier. Ela é feita
+quando um Verifier precisa que o agente prove que tem a autorização adequada
+para executar uma ação específica (como concluir uma compra).
 
-1.  The Verifier and the Agent interact until the Verifier needs proof of human
-    authorization from the Agent.
-2.  The Verifier requests a Mandate to be presented that will demonstrate that
-    the Agent is authorized to perform that action.
-3.  The Agent selects an appropriate Mandate and presents it to the Verifier. If
-    the Mandate is open, then the Agent uses the key endorsed by that Mandate to
-    bind it to the transaction.
-4.  The Verifier verifies both the integrity of the Mandate and that the
-    Mandate Content allows the Agent to perform the action that they wish to
-    perform.
+A autorização de ação é feita assim:
 
-As part of presenting a Mandate, if it contains selective disclosures, the Agent
-MUST choose which disclosures to include so as to maximize user privacy while
-still providing authorization.
+1.  O Verifier e o agente interagem até que o Verifier precise de uma prova de
+    autorização humana vinda do agente.
+2.  O Verifier solicita a apresentação de um Mandate que demonstre que o agente
+    está autorizado a executar essa ação.
+3.  O agente seleciona um Mandate adequado e o apresenta ao Verifier. Se o
+    Mandate estiver open, o agente usa a chave endossada por esse Mandate para
+    vinculá-lo à transação.
+4.  O Verifier verifica a integridade do Mandate e se o conteúdo do Mandate
+    permite que o agente execute a ação pretendida.
 
-*Note: the mechanism of selecting the appropriate Mandate is an implementation
-detail of the Shopping Agent and outside the scope of this specification.*
+Ao apresentar um Mandate que contém selective disclosures, o agente MUST
+escolher quais disclosures incluir de modo a maximizar a privacidade do usuário
+e ainda assim fornecer a autorização.
 
-The Verifier performs Verification of the Mandate (see
-[Verification](#verification-and-processing-rules)).
+*Observação: o mecanismo de seleção do Mandate adequado é um detalhe de
+implementação do Shopping Agent e está fora do escopo desta especificação.*
 
-Upon acceptance or rejection of the Mandate, the Verifier MUST return a signed
-Mandate Receipt.
-Upon receipt of a successful Mandate Receipt, the Agent stores the
-open Mandate-closed Mandate-Mandate Receipt tuple. The agent reduces the scope
-of the open mandate based on the receipt, often preventing future presentations
-entirely.
+O Verifier faz a verificação do Mandate (consulte
+[Verificação](#verification-and-processing-rules)).
 
-A Mandate Receipt is a Verifier-signed JWT with the following properties:
+Ao aceitar ou rejeitar o Mandate, o Verifier MUST devolver um Mandate Receipt
+assinado.
+Ao receber um Mandate Receipt de sucesso, o agente armazena a tupla
+open Mandate–closed Mandate–Mandate Receipt. O agente reduz o escopo do open
+Mandate com base no Receipt, o que muitas vezes impede totalmente novas
+apresentações.
 
-  - *iss*: **REQUIRED**. A String containing the issuer of the JWT, which
-    MUST be the Verifier.
-  - *result*: **REQUIRED**. An Enum with value `["success", "error"]`
-    indicating the result of the action authorization.
-  - *reference*: **REQUIRED**. A String value that is the base64url-encoded
-    hash of the received Mandate. When receiving a chain of Mandates, it is
-    a hash over the final SD-JWT in the chain. It is calculated in the same
-    manner as `sd_hash`. The algorithm used MUST be the same as the
-    `_sd_alg` specified for the SD-JWT, or `sha-256` if not specified.
-  - *error*: **OPTIONAL**. A String error code identifying the error. MUST be
-    present when the result is `"error"`.
-  - *error_description*: **OPTIONAL**. A human-readable error description String.
+Um Mandate Receipt é um JWT assinado pelo Verifier com as seguintes propriedades:
 
-It MAY contain additional use-case specific properties, based on the action that
-was authorized, and the Mandate Type received.
+  - *iss*: **REQUIRED**. Uma String com o emissor do JWT, que MUST ser o
+    Verifier.
+  - *result*: **REQUIRED**. Um Enum com valor `["success", "error"]` que
+    indica o resultado da autorização da ação.
+  - *reference*: **REQUIRED**. Uma String com o hash, codificado em base64url,
+    do Mandate recebido. Ao receber uma cadeia de Mandates, é o hash do último
+    SD-JWT da cadeia. É calculado da mesma forma que `sd_hash`. O algoritmo
+    usado MUST ser o mesmo `_sd_alg` especificado para o SD-JWT, ou `sha-256`
+    se não for especificado.
+  - *error*: **OPTIONAL**. Uma String com o código que identifica o erro. MUST
+    estar presente quando o resultado for `"error"`.
+  - *error_description*: **OPTIONAL**. Uma String com a descrição do erro legível por humanos.
 
-### Errors
-The following errors are defined for all action authorizations:
+Ele MAY conter propriedades adicionais específicas do caso de uso, conforme a
+ação autorizada e o tipo de Mandate recebido.
 
-  - `invalid_credential`: Returned when the Mandate fails verification. This
-    represents a terminal error.
-  - `unresolved_constraint`: Returned when the Mandate contains an unknown
-    constraint, or the Verifier is unable to verify that the closed Mandate conforms to the
-    provided constraints. This MAY be used as a signal to fallback
-    to either a directly approved closed Mandate, or other non-agentic
-    flows.
-  - `invalid_mandate`: Returned when the provided Mandate fails to approve the
-    requested action. This represents a terminal error.
-  - `mandates_not_supported`: Indicates that the Verifier does not support
-    mandates for approving this action. This MAY be used as a signal to fallback
-    to non-agentic flows.
+### Erros
+Os seguintes erros são definidos para todas as autorizações de ação:
 
-## References
+  - `invalid_credential`: devolvido quando o Mandate falha na verificação. É
+    um erro terminal.
+  - `unresolved_constraint`: devolvido quando o Mandate contém uma constraint
+    desconhecida, ou quando o Verifier não consegue verificar se o closed Mandate atende às
+    constraints fornecidas. Isso MAY ser usado como sinal para recorrer
+    a um closed Mandate aprovado diretamente ou a outros fluxos não
+    agênticos.
+  - `invalid_mandate`: devolvido quando o Mandate fornecido não aprova a
+    ação solicitada. É um erro terminal.
+  - `mandates_not_supported`: indica que o Verifier não aceita Mandates para
+    aprovar esta ação. Isso MAY ser usado como sinal para recorrer a fluxos
+    não agênticos.
 
-### Normative
+<a id="references"></a>
+
+## Referências
+
+### Normativas
 
 - [OpenID4VP]: T. Lodderstedt, K. Yasuda, T. Looker. "[OpenID for Verifiable Presentations](https://openid.net/specs/openid4vp-1_0.html)", OpenID Foundation, 2024.
-- [SD-JWT]: D. Fett, B. Campbell, K. Yasuda, M. B. Jones. "[Selective Disclosure for JWTs (SD-JWT)](https://datatracker.ietf.org/doc/rfc9901/)", February 2025.
+- [SD-JWT]: D. Fett, B. Campbell, K. Yasuda, M. B. Jones. "[Selective Disclosure for JWTs (SD-JWT)](https://datatracker.ietf.org/doc/rfc9901/)", fevereiro de 2025.
 - [Delegate SD-JWT]: G. Oliver. "[Delegate SD-JWT (Individual Draft)](https://github.com/GarethCOliver/gco-delegate-sd-jwt)", 2026.
-- [RFC7800]: M. B. Jones, J. Bradley, H. Tschofenig. "[Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs)](https://datatracker.ietf.org/doc/html/rfc7800)", April 2016.
+- [RFC7800]: M. B. Jones, J. Bradley, H. Tschofenig. "[Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs)](https://datatracker.ietf.org/doc/html/rfc7800)", abril de 2016.
 
-### Informative
+### Informativas
 
 - [OpenID4VCI]: T. Lodderstedt, K. Yasuda, T. Looker. "[OpenID for Verifiable Credential Issuance](https://openid.net/specs/openid4vc-issuance-1_0.html)", OpenID Foundation, 2024.
-- [ISO18013-5]: ISO/IEC JTC 1/SC 17. "[ISO/IEC 18013-5:2021 Personal identification — ISO-compliant driving licence — Part 5: Mobile driving licence (mDL) application](https://www.iso.org/standard/69084.html)", September 2021.
-- [ISO18013-7]: ISO/IEC JTC 1/SC 17. "[ISO/IEC 18013-7:2024 Personal identification — ISO-compliant driving licence — Part 7: Mobile driving licence (mDL) add-on functions](https://www.iso.org/standard/82763.html)", October 2024.
+- [ISO18013-5]: ISO/IEC JTC 1/SC 17. "[ISO/IEC 18013-5:2021 Personal identification — ISO-compliant driving licence — Part 5: Mobile driving licence (mDL) application](https://www.iso.org/standard/69084.html)", setembro de 2021.
+- [ISO18013-7]: ISO/IEC JTC 1/SC 17. "[ISO/IEC 18013-7:2024 Personal identification — ISO-compliant driving licence — Part 7: Mobile driving licence (mDL) add-on functions](https://www.iso.org/standard/82763.html)", outubro de 2024.

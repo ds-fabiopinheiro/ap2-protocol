@@ -1,155 +1,153 @@
-# Frequently Asked Questions
+# Perguntas frequentes
 
-1. What can I do with this protocol today?
+1. O que posso fazer com este protocolo hoje?
 
-    - We built sample agents around the core AP2 python library that demonstrate
-      a rich shopping experience. Launch the agents, and try shopping for your
-      favorite products\! These samples mock actual payment service providers so
-      you can explore with no dependencies. Specifically, watch for the mandates
-      as the agents do their thing. We will be publishing more samples and SDKs
-      soon, and we'd love to see your ideas\! You can use the code samples to
-      create your own implementation of a payment taking place between multiple
-      AI Agents or extend the protocol to show new kinds of payment scenarios
-      _(e.g., showing a payment made by a different payment method or using a
-      different way of authentication)_. 
+    - Criamos agentes de exemplo com base na biblioteca Python principal do AP2
+      que demonstram uma experiência de compra completa. Inicie os agentes e
+      experimente comprar seus produtos favoritos\! Estes exemplos simulam
+      provedores de serviços de pagamento reais, então você pode explorá-los sem
+      dependências. Em especial, observe os Mandates (autorizações assinadas)
+      enquanto os agentes trabalham. Publicaremos mais exemplos e SDKs em breve,
+      e queremos conhecer suas ideias\! Você pode usar os exemplos de código para
+      criar sua própria implementação de um pagamento entre vários agentes de IA
+      ou estender o protocolo para mostrar novos tipos de cenário de pagamento
+      _(por exemplo, um pagamento feito com outro método de pagamento ou com
+      outra forma de autenticação)_.
 
-1. Can I build my own agent for any of these roles, taking one of these as a
-   template?
+1. Posso criar meu próprio agente para algum destes papéis, usando um deles
+   como modelo?
 
-    - Yes you can build your own agent using any of the
-      [roles](ap2/implementation_considerations.md). Get started building with
-      [ADK](https://google.github.io/adk-docs/) and
-      [Agent Builder](https://cloud.google.com/products/agent-builder) from
-      Google Cloud, or any other platform you choose to build agents.
+    - Sim, você pode criar seu próprio agente para qualquer um dos
+      [papéis](ap2/implementation_considerations.md). Comece a construir com o
+      [ADK](https://google.github.io/adk-docs/) e o
+      [Agent Builder](https://cloud.google.com/products/agent-builder) do
+      Google Cloud, ou com qualquer outra plataforma de agentes que preferir.
 
-1. Can I build my own agent to participate in this protocol?
+1. Posso criar meu próprio agente para participar deste protocolo?
 
-    - Yes, you can build an agent for any of the defined
-      [roles](ap2/implementation_considerations.md). Any agent, on any framework
-      (like LangGraph, AG2 or CrewAI), or on any runtime, is capable of
-      implementing AP2.
+    - Sim, você pode criar um agente para qualquer um dos
+      [papéis](ap2/implementation_considerations.md) definidos. Qualquer agente,
+      em qualquer framework (como LangGraph, AG2 ou CrewAI) ou em qualquer
+      runtime, pode implementar o AP2.
 
-1. Can I try this out without actually making a payment?
+1. Posso testar sem fazer um pagamento de verdade?
 
-    - You can consider setting this up in your internal environments where you
-      may already have ways to invoke fake payment methods which do not require
-      real money movement.
+    - Você pode configurar o protocolo nos seus ambientes internos, onde talvez
+      já existam formas de acionar métodos de pagamento fictícios que não
+      movimentam dinheiro real.
 
-1. Is there a MCP server or a SDK which is ready for "my framework of choice"?
+1. Existe um servidor MCP ou um SDK pronto para o "meu framework preferido"?
 
-    - We are working on an SDK and a MCP server right now, in collaboration with
-      payment service providers. Check back soon.
+    - Estamos trabalhando em um SDK e em um servidor MCP neste momento, em
+      colaboração com provedores de serviços de pagamento. Volte em breve.
 
-1. Does this work with x402 standard for crypto payments?
+1. Isso funciona com o padrão x402 para pagamentos com cripto?
 
-    - We designed AP2 to be a payment-agnostic protocol, so that agentic
-      commerce can securely take place across all types of payment systems. It
-      provides a secure, auditable foundation whether an agent is using a credit
-      card or transacting with stablecoins. This flexible design allows us to
-      extend its core principles to new ecosystems, ensuring a consistent
-      standard for trust everywhere.
+    - Projetamos o AP2 para ser um protocolo independente do meio de pagamento,
+      de modo que o comércio por agentes possa acontecer com segurança em todos
+      os tipos de sistema de pagamento. Ele fornece uma base segura e auditável,
+      seja quando o agente usa um cartão de crédito, seja quando faz transações
+      com stablecoins. Esse desenho flexível permite estender seus princípios
+      a novos ecossistemas, com um padrão de confiança consistente em todos eles.
 
-        As a first step, check out
+        Como primeiro passo, veja
         [google-agentic-commerce/a2a-x402](https://github.com/google-agentic-
-commerce/a2a-x402/)
-        which is an implementation of A2A in conjunction with the x402 standard.
-        We will be aligning this closely with AP2 over time to make it easy to
-        compose solutions which include all payment methods, including
+commerce/a2a-x402/),
+        uma implementação do A2A em conjunto com o padrão x402.
+        Com o tempo, vamos alinhá-la ao AP2 para facilitar a composição de
+        soluções que incluam todos os métodos de pagamento, inclusive
         stablecoins.
 
-1. What are verifiable credentials?
+1. O que são verifiable credentials?
 
-    - These are standardized, cryptographically secure data objects (like the
-      Checkout Mandate and Payment Mandate) that serve as tamper-evident,
-      non-disputable, and cryptographically signed building blocks for a
-      transaction.
+    - São objetos de dados padronizados e criptograficamente seguros (como o
+      Checkout Mandate e o Payment Mandate) que servem como blocos de
+      construção de uma transação: assinados criptograficamente, com
+      adulteração detectável e não contestáveis.
 
-1. How does the protocol ensure user control and privacy?
+1. Como o protocolo garante controle e privacidade ao usuário?
 
-    - The protocol is designed to ensure the user is always the ultimate
-      authority and has granular control over their agents' activities. It
-      protects sensitive user information, such as conversational prompts and
-      personal payment details, by preventing shopping agents from accessing
-      sensitive PCI or PII data through payload encryption and selective 
-      disclosure to ensure data minimization.
+    - O protocolo foi projetado para que o usuário seja sempre a autoridade
+      final e tenha controle detalhado sobre as atividades dos seus agentes. Ele
+      protege informações sensíveis do usuário, como prompts da conversa e dados
+      pessoais de pagamento, impedindo que os shopping agents acessem dados
+      sensíveis de PCI ou PII por meio de criptografia do payload e de selective
+      disclosure (divulgação seletiva), para garantir a minimização de dados.
 
-1. How does AP2 address transaction accountability?
+1. Como o AP2 trata a responsabilização das transações?
 
-    - A primary objective is to provide supporting evidence that helps payment
-      networks establish accountability and liability principles. In a dispute,
-      the network adjudicator (e.g., Card Network) can use the user-signed
-      Checkout Mandate and compare the details of what was agreed upon between
-the
-      agent and the consumer against the details in the dispute to help
-      determine transaction accountability.
+    - Um dos objetivos principais é fornecer evidências que ajudem as redes de
+      pagamento a estabelecer princípios de responsabilização e de
+      responsabilidade. Em uma disputa, o árbitro da rede (por exemplo, a
+      bandeira do cartão) pode usar o Checkout Mandate assinado pelo usuário e
+      comparar os detalhes do que foi combinado entre o agente e o consumidor
+      com os detalhes da disputa, para ajudar a determinar a responsabilização
+      pela transação.
 
-1. What prevents an agent from "hallucinating" and making an incorrect purchase?
+1. O que impede um agente de "alucinar" e fazer uma compra incorreta?
 
-    - The principle of Verifiable Intent, Not Inferred Action addresses this
-      risk. Transactions must be anchored to deterministic, non-repudiable proof
-      of intent from all parties, such as the user-signed Checkout Mandate,
-rather than relying only on interpreting the probabilistic and
-      ambiguous outputs of a language model.
+    - O princípio da intenção verificável, e não da ação inferida, trata esse
+      risco. As transações devem se apoiar em uma prova determinística e
+      irrefutável da intenção de todas as partes, como o Checkout Mandate
+      assinado pelo usuário, em vez de depender só da interpretação das saídas
+      probabilísticas e ambíguas de um modelo de linguagem.
 
-1. Why was crypto and Web3 support included from day one?
+1. Por que o suporte a cripto e Web3 foi incluído desde o início?
 
-    - Supporting a broad range of payment types, including digital payment
-      methods ensures the protocol is future-proof. Collaboration with partners
-      like Coinbase, Ethereum Foundation, and Metamask validates AP2's
-      flexibility and bridges the gap between the traditional and Web3
-      economies, enabling novel use cases like micropayments.
+    - Aceitar uma ampla variedade de tipos de pagamento, inclusive métodos de
+      pagamento digitais, prepara o protocolo para o futuro. A colaboração com
+      parceiros como Coinbase, Ethereum Foundation e Metamask valida a
+      flexibilidade do AP2 e aproxima a economia tradicional da economia Web3,
+      permitindo novos casos de uso, como micropagamentos.
 
-1. How can I get involved?
+1. Como posso participar?
 
-    - AP2 is an open source project created by Google, similar to the A2A
-      protocol. Contributions are welcome on Github as discussions, bugs,
-      feature requests, and PRs. Collaboration is happening right now, with new
-      samples, integrations and SDKs being developed – Github is the best way to
-communicate with the AP2 team.
+    - O AP2 é um projeto de código aberto criado pelo Google, assim como o
+      protocolo A2A. Contribuições são bem-vindas no GitHub na forma de
+      discussões, bugs, solicitações de funcionalidade e PRs. A colaboração já
+      está acontecendo, com novos exemplos, integrações e SDKs em
+      desenvolvimento – o GitHub é a melhor forma de se comunicar com a equipe
+      do AP2.
 
-1. How is UCP different from AP2? And how does it relate to your agentic
-checkout feature?
+1. Qual é a diferença entre UCP e AP2? E qual a relação com o recurso de
+   checkout por agente de vocês?
 
-    - AP2: Agent Payments Protocol (AP2) is designed to provide a common
-      language for agents to transact with security and accountability. While
-      the Universal Commerce Protocol orchestrates the broader purchase
-      lifecycle, AP2 is the specialized payment layer responsible for
-      authorizing and signing transactions. AP2 becomes critical in the flow
-      when, in the near future, the transactions become truly agentic and users
-      delegate purchases to their AI Agents. This modular design fosters trust
-      among buyers, merchants, and providers while retaining flexibility.
-      Merchants will be able to integrate AP2 as an extension within the
-      Universal Commerce Protocol for transactions which are driven by AI
-      Agents.
-    
-    - Agentic checkout: Our agentic checkout feature buys things on your behalf
-      directly on a store's website at your direction. The Universal Commerce
-      Protocol is different in that it enables native buying on AI Mode and
-      Gemini. Users are connected directly with the merchant when they natively
-      buy on AI Mode and Gemini, which unlocks additional features such as
-      important post-purchase signals, like order status updates. Soon-to-be
-      available benefits include using loyalty points, and shopping from a
-      previous cart.
+    - AP2: o Agent Payments Protocol (AP2) foi projetado para oferecer uma
+      linguagem comum para que agentes façam transações com segurança e
+      responsabilização. Enquanto o Universal Commerce Protocol orquestra o
+      ciclo de vida da compra como um todo, o AP2 é a camada de pagamento
+      especializada, responsável por autorizar e assinar as transações. O AP2
+      se torna essencial no fluxo quando, em um futuro próximo, as transações
+      passarem a ser de fato feitas por agentes e os usuários delegarem compras
+      aos seus agentes de IA. Esse desenho modular promove confiança entre
+      compradores, merchants e provedores, mantendo a flexibilidade.
+      Os merchants poderão integrar o AP2 como extensão do Universal Commerce
+      Protocol para transações conduzidas por agentes de IA.
 
-1. How do I know when to use AP2?
+    - Checkout por agente: nosso recurso de checkout por agente compra itens em
+      seu nome diretamente no site de uma loja, conforme suas instruções. O
+      Universal Commerce Protocol é diferente porque permite a compra nativa
+      no AI Mode e no Gemini. Quando compram de forma nativa no AI Mode e no
+      Gemini, os usuários são conectados diretamente ao merchant, o que
+      habilita recursos adicionais, como sinais importantes de pós-compra (por
+      exemplo, atualizações de status do pedido). Benefícios que estarão
+      disponíveis em breve incluem o uso de pontos de fidelidade e a compra a
+      partir de um carrinho anterior.
 
-    - If you are a merchant who would like to showcase products and allow users
-    to complete inline checkout on Google’s AI surfaces like AI Mode and Gemini,
-    then you should use Universal Commerce Protocol. You can enhance the
-    protocol with the AP2 extension if you plan to build autonomous purchase
-    scenarios where AI Agents can make purchases in the user’s absence.
+1. Como sei quando usar o AP2?
 
-    - Outside of Google’s discovery surfaces, if you would like to enable a
-    payments flow between two AI Agents or you want to add verifiable
-    credentials to payment flows between your discovery surface and an AI Agent
-    then you can continue to leverage AP2.
+    - Se você é um merchant que quer exibir produtos e permitir que os usuários
+    concluam o checkout diretamente nas superfícies de IA do Google, como o AI
+    Mode e o Gemini, use o Universal Commerce Protocol. Você pode complementar
+    o protocolo com a extensão AP2 se pretende criar cenários de compra
+    autônoma, em que agentes de IA fazem compras na ausência do usuário.
 
-1. What’s next for AP2?
+    - Fora das superfícies de descoberta do Google, se você quer habilitar um
+    fluxo de pagamento entre dois agentes de IA ou adicionar verifiable
+    credentials aos fluxos de pagamento entre sua superfície de descoberta e um
+    agente de IA, você pode continuar usando o AP2.
 
-    - The core specification work will continue in [FIDO](https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/), ensuring it continues as an open, interoperable protocol for all agentic payments.
-    - The code samples and SDK will continue to be enhanced, remaining a state-of-the-art implementation of the AP2 specification.
+1. Quais são os próximos passos do AP2?
 
-
-
-
-
+    - O trabalho na especificação principal continuará na [FIDO](https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/), para que ela continue sendo um protocolo aberto e interoperável para todos os pagamentos feitos por agentes.
+    - Os exemplos de código e o SDK continuarão sendo aprimorados e seguirão como uma implementação atualizada da especificação do AP2.
