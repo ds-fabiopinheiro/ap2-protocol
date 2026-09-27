@@ -18,6 +18,7 @@ BVNK
 celerybeat
 classpath
 CLASSPATH
+claude
 CMSPI
 cmwallet
 cncf
@@ -94,6 +95,7 @@ ktor
 Ktor
 KXMYBJWNQ
 Lazada
+levelname
 libpeerconnection
 Lightspark
 linenums
