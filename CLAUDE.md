@@ -122,9 +122,10 @@ Detalhes dos arquivos de deploy:
   - `VITE_AGENT_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/a2a/shopping_agent`
   - `VITE_MERCHANT_TRIGGER_URL=https://ds-fabiopinheiro-ap2-homolog-backend.hf.space/merchant`
   - `VITE_FLOW=card`
-  - `VITE_AUTO_POLL_MS=60000` (tipo Config, cadastrada em Production, Preview
-    e Development; o bundle de produção contém `60000`; padrão no código
-    também `60000`): intervalo
+  - `VITE_AUTO_POLL_MS=30000` (tipo Config, cadastrada em Production, Preview
+    e Development; alterada de `60000` para `30000` em 26/09/2026 com redeploy
+    de produção; o bundle de produção contém `"30000"`; padrão no código
+    continua `60000`): intervalo
     em ms do "auto-poll fallback" de `src/hooks/useChat.ts`, que envia
     `check_product_now` ao agente (uma chamada ao LLM por envio) enquanto o
     monitoramento está ativo. `0` desliga. Valor inválido usa `60000`. Lida em
@@ -309,6 +310,17 @@ depois com o usuário.
    23/15 RPM, com erros 429 RESOURCE_EXHAUSTED.
 6. **Faturamento Google:** bloqueado por retenção OR_CCR_53 na conta Google,
    caso 5-7433000041726, retorno previsto até 03/10/2026.
+7. **Teste de consumo (26/09/2026, 16:29–16:37 UTC, `VITE_AUTO_POLL_MS=60000`,
+   um usuário):** mesmo pedido; compra concluída na primeira tentativa
+   (pedido `694c5a09…`, US$ 450, cartão de teste •••4242, queda de preço
+   simulada pelo `/merchant/trigger-price-drop`). AI Studio: pico 7/15 RPM,
+   55,4K/250K TPM, 33 RPD no fim do teste. Estimativa de chamadas ao modelo:
+   cerca de 9 no pedido + confirmação + aprovação, cerca de 4 por
+   `check_product_now` e cerca de 12 na compra. A queda (16:35:23) só foi
+   verificada às 16:35:51 (28 s); a aba do demo estava em segundo plano,
+   causa não confirmada. Depois do teste o usuário informou que só ele testa
+   e que não passa de 500 RPD; por isso o intervalo foi reduzido para
+   `30000` (pico estimado cerca de 11 RPM, ainda não medido).
 
 ## 7. Regras para as próximas sessões
 
