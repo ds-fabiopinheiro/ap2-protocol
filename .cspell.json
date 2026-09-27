@@ -26,6 +26,9 @@
     "code/web-client/src/config.ts",
     "code/web-client/src/hooks/useChat.ts",
     "code/web-client/src/utils/parsing.ts",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/consent_agent.md",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/monitoring_agent.md",
+    "code/samples/python/src/roles/shopping_agent_v2/shopping_agent/prompts/purchase_agent.md",
     "docs/backlog/**"
   ],
   "dictionaryDefinitions": [
