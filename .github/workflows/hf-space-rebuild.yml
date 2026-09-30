@@ -1,12 +1,15 @@
 name: HF Space rebuild
 
-# Reconstrói o Space ds-fabiopinheiro/ap2-homolog-backend quando o código do
-# backend muda no branch homolog-deploy. Requer o secret HF_TOKEN (token
-# fine-grained do Hugging Face com escrita só nesse Space).
+# Reconstrói o Space da versão correspondente ao branch em que o código do
+# backend mudou:
+#   homolog-deploy -> ds-fabiopinheiro/ap2-homolog-backend (v2)
+#   homolog-v3     -> ds-fabiopinheiro/ap2-homolog-v3
+# Um push num branch reconstrói só o Space desse branch. Requer o secret
+# HF_TOKEN (token fine-grained do Hugging Face com escrita nesses Spaces).
 
 on:
   push:
-    branches: [homolog-deploy]
+    branches: [homolog-deploy, homolog-v3]
     paths:
       - "code/samples/python/**"
       - "code/sdk/**"
@@ -18,13 +21,28 @@ permissions:
   contents: read
 
 concurrency:
-  group: hf-space-rebuild
+  group: hf-space-rebuild-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   rebuild:
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve the Space of this branch
+        id: space
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          case "$BRANCH" in
+            homolog-deploy) space="ds-fabiopinheiro/ap2-homolog-backend" ;;
+            homolog-v3)     space="ds-fabiopinheiro/ap2-homolog-v3" ;;
+            *)
+              echo "No Space is mapped to branch '$BRANCH'"
+              exit 1
+              ;;
+          esac
+          echo "Branch $BRANCH -> Space $space"
+          echo "space=$space" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -33,6 +51,7 @@ jobs:
       - name: Factory rebuild
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          SPACE_ID: ${{ steps.space.outputs.space }}
         run: |
           python - <<'EOF'
           import os
@@ -41,7 +60,7 @@ jobs:
           if not os.environ.get("HF_TOKEN"):
               raise SystemExit("HF_TOKEN secret is not set")
           runtime = HfApi(token=os.environ["HF_TOKEN"]).restart_space(
-              "ds-fabiopinheiro/ap2-homolog-backend", factory_reboot=True
+              os.environ["SPACE_ID"], factory_reboot=True
           )
-          print(f"Space stage: {runtime.stage}")
+          print(f"Space {os.environ['SPACE_ID']} stage: {runtime.stage}")
           EOF
