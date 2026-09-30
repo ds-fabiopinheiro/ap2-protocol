@@ -23,7 +23,9 @@ export AGENT_PUBLIC_KEY_PATH="$TEMP_DB_DIR/agent_signing_key.pub"
 export MERCHANT_SIGNING_KEY_PATH="$TEMP_DB_DIR/merchant_signing_key.pem"
 mkdir -p "$TEMP_DB_DIR" "$LOGS_DIR"
 
-echo "[start] FLOW=$FLOW AGENT_MODEL=$AGENT_MODEL TEMP_DB_DIR=$TEMP_DB_DIR"
+# AP2_ENV separa o estado desta versão no Supabase (vazio na v2); AP2_REF é o
+# branch clonado pelo Dockerfile.
+echo "[start] FLOW=$FLOW AGENT_MODEL=$AGENT_MODEL TEMP_DB_DIR=$TEMP_DB_DIR AP2_ENV=${AP2_ENV:-} AP2_REF=${AP2_REF:-}"
 if [ -z "${GOOGLE_API_KEY:-}" ] && [[ "$AGENT_MODEL" != */* ]]; then
   echo "[start] WARNING: GOOGLE_API_KEY is not set and AGENT_MODEL uses Gemini directly."
 fi

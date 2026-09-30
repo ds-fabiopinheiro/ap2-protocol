@@ -16,6 +16,8 @@ ENV HOME=/home/user \
 
 ARG AP2_OWNER_REPO=ds-fabiopinheiro/ap2-protocol
 ARG AP2_REF=homolog-deploy
+# Disponível em tempo de execução para o start.sh registrar o branch clonado.
+ENV AP2_REF=${AP2_REF}
 # O conteúdo desta URL muda a cada commit no branch, o que invalida o cache
 # do Docker e força um clone novo no rebuild do Space.
 ADD https://api.github.com/repos/${AP2_OWNER_REPO}/commits/${AP2_REF} /tmp/ap2-ref.json
