@@ -20,6 +20,12 @@ Variáveis de ambiente:
                           legada; também aceita SUPABASE_SERVICE_ROLE_KEY.
   TEMP_DB_DIR             diretório espelhado.
   AP2_SYNC_INTERVAL       intervalo do watch em segundos (padrão 2).
+  AP2_ENV                 nome do ambiente (ex.: v3). Definido, o estado vai
+                          para as tabelas ap2_env_state_files, ap2_env_mandates
+                          e ap2_env_events, sempre filtrado por
+                          environment=AP2_ENV, separado das outras versões.
+                          Vazio (v2), usa ap2_state_files, ap2_mandates e
+                          ap2_events como antes.
 
 Sem SUPABASE_URL ou chave, o script avisa e sai com código 0: o backend
 continua funcionando, apenas sem persistência.
@@ -52,6 +58,8 @@ SUPABASE_KEY = os.environ.get("SUPABASE_SECRET_KEY") or os.environ.get(
 )
 TEMP_DB = Path(os.environ.get("TEMP_DB_DIR", ".temp-db"))
 INTERVAL = float(os.environ.get("AP2_SYNC_INTERVAL", "2"))
+# Ambiente desta versão (v3, v4...). Vazio na v2 (homolog-deploy).
+AP2_ENV = os.environ.get("AP2_ENV", "").strip()
 
 # Prefixos usados pelo shopping_agent_v2 ao gravar mandates (mandate_tools.py).
 _MANDATE_PREFIXES = (
@@ -92,6 +100,30 @@ def _request(method: str, path: str, body=None, prefer: str | None = None):
     raise SupabaseError(f"{method} {path} -> {e.reason}") from e
 
 
+def _table(base: str) -> str:
+  """Nome da tabela: ap2_env_<base> com AP2_ENV, ap2_<base> sem (v2)."""
+  return f"ap2_env_{base}" if AP2_ENV else f"ap2_{base}"
+
+
+def _env_filter() -> str:
+  """Condição PostgREST que restringe a consulta ao ambiente atual."""
+  if not AP2_ENV:
+    return ""
+  return f"&environment=eq.{urllib.parse.quote(AP2_ENV, safe='')}"
+
+
+def _env_row(row: dict) -> dict:
+  """Acrescenta a coluna environment quando o ambiente está definido."""
+  if AP2_ENV:
+    row["environment"] = AP2_ENV
+  return row
+
+
+def _key(column: str) -> str:
+  """Colunas do on_conflict: chave composta (environment, coluna) com AP2_ENV."""
+  return f"environment,{column}" if AP2_ENV else column
+
+
 def _now() -> str:
   return datetime.now(timezone.utc).isoformat()
 
@@ -104,8 +136,8 @@ def _event(event: str, **detail) -> None:
   try:
     _request(
         "POST",
-        "ap2_events",
-        {"source": "hf-space", "event": event, "detail": detail},
+        _table("events"),
+        _env_row({"source": "hf-space", "event": event, "detail": detail}),
         prefer="return=minimal",
     )
   except SupabaseError as e:
@@ -139,13 +171,13 @@ def _mandate_row(name: str, content: str) -> dict | None:
   mandate_id = name[: -len(".sdjwt")]
   for prefix, kind, stage in _MANDATE_PREFIXES:
     if mandate_id.startswith(prefix):
-      return {
+      return _env_row({
           "id": mandate_id,
           "kind": kind,
           "stage": stage,
           "sdjwt": content.strip(),
           "sha256": _sha256(content),
-      }
+      })
   return None
 
 
@@ -153,7 +185,8 @@ def restore() -> int:
   TEMP_DB.mkdir(parents=True, exist_ok=True)
   rows = _request(
       "GET",
-      "ap2_state_files?select=name,content&deleted_at=is.null",
+      f"{_table('state_files')}?select=name,content&deleted_at=is.null"
+      f"{_env_filter()}",
   ) or []
   for row in rows:
     target = (TEMP_DB / row["name"]).resolve()
@@ -171,7 +204,9 @@ def watch() -> None:
   known: dict[str, str] = {}  # nome -> sha256 já enviado
   try:
     rows = _request(
-        "GET", "ap2_state_files?select=name,sha256&deleted_at=is.null"
+        "GET",
+        f"{_table('state_files')}?select=name,sha256&deleted_at=is.null"
+        f"{_env_filter()}",
     ) or []
     known = {r["name"]: r["sha256"] for r in rows}
   except SupabaseError as e:
@@ -187,19 +222,19 @@ def watch() -> None:
       for name, content in current.items():
         digest = _sha256(content)
         if known.get(name) != digest:
-          changed.append({
+          changed.append(_env_row({
               "name": name,
               "content": content,
               "sha256": digest,
               "size_bytes": len(content.encode()),
               "updated_at": _now(),
               "deleted_at": None,
-          })
+          }))
 
       if changed:
         _request(
             "POST",
-            "ap2_state_files?on_conflict=name",
+            f"{_table('state_files')}?on_conflict={_key('name')}",
             changed,
             prefer="resolution=merge-duplicates,return=minimal",
         )
@@ -210,7 +245,7 @@ def watch() -> None:
         if mandates:
           _request(
               "POST",
-              "ap2_mandates?on_conflict=id",
+              f"{_table('mandates')}?on_conflict={_key('id')}",
               mandates,
               prefer="resolution=ignore-duplicates,return=minimal",
           )
@@ -226,7 +261,8 @@ def watch() -> None:
       for name in removed:
         _request(
             "PATCH",
-            f"ap2_state_files?name=eq.{urllib.parse.quote(name, safe='')}",
+            f"{_table('state_files')}?name=eq."
+            f"{urllib.parse.quote(name, safe='')}{_env_filter()}",
             {"deleted_at": _now()},
             prefer="return=minimal",
         )
@@ -250,6 +286,10 @@ def main() -> int:
         " persistence"
     )
     return 0
+  if AP2_ENV:
+    log.info("environment %s: using tables ap2_env_*", AP2_ENV)
+  else:
+    log.info("AP2_ENV not set: using tables ap2_* (v2)")
   if sys.argv[1] == "restore":
     try:
       restore()
